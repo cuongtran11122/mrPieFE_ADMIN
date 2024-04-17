@@ -207,7 +207,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
     };
 
     //update user
-    const { data } = await axios.put(`/api/users/${user.id}`, user, config);
+    const { data } = await axios.put(`/api/v1/admin/customer/${user.id}`, user, config);
     dispatch({
       type: USER_UPDATE_SUCCESS,
       payload: data,

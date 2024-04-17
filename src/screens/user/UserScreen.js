@@ -136,12 +136,7 @@ const UserScreen = ({ history }) => {
                         >
                             Edit
                         </Link>
-                        <Link
-                            to={`/user/${user.id}/edit`}
-                            className="custom_create_btn"
-                        >
-                            View
-                        </Link>
+                        
                         </td>
                     </tr>
                 ))}
