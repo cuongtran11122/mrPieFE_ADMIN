@@ -7,364 +7,570 @@ import HeaderContent from "../../components/HeaderContent";
 import Modal from "react-modal";
 import Input from "../../components/form/Input";
 import FileInput from "../../components/form/FileInput";
-import ModalButton from "../../components/ModalButton";
+
 import DataTableLoader from "../../components/loader/DataTableLoader";
 import Select from "../../components/Select";
 
 /* Actions */
-import { listProducts, createProduct, deleteProduct } from "../../actions/productActions";
+import {
+  listProducts,
+  createProduct,
+  deleteProduct,
+} from "../../actions/productActions";
 import { listCategories } from "../../actions/categoryActions";
 
 /* Styles */
-import { modalStyles } from "../../utils/styles";
+
 import Search from "../../components/Search";
 import LoaderHandler from "../../components/loader/LoaderHandler";
 import Pagination from "../../components/Pagination";
 import Message from "../../components/Message";
+import "../../style/product.css";
+import CustomInput from "../../components/form/CustomInput";
+
+import "../../../src/style/confirmModal.css"
 
 Modal.setAppElement("#root");
 
 const ProductScreen = ({ history }) => {
-    const [name, setName] = useState("");
-    const [name_en, setNameEn] = useState("");
-    const [price, setPrice] = useState(0);
-    const [size, setSize] = useState("");
-    const [quantity, setQuantity] = useState(0);
-    const [category, setCategory] = useState(null);
-    const [description, setDescription] = useState("");
-    const [image, setImage] = useState("");
-    const [uploading, setUploading] = useState(false);
-    const [errors, setErrors] = useState({});
+  const [name, setName] = useState("");
+  const [name_en, setNameEn] = useState("");
 
-    const [keyword, setKeyword] = useState("");
-    const [pageNumber, setPageNumber] = useState(1);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [size, setSize] = useState({ S: "", M: "", L: "", J: "" });
+  const [quantity, setQuantity] = useState(0);
+  const [category, setCategory] = useState(null);
+  const [description, setDescription] = useState("");
+  const [image, setImage] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [errors, setErrors] = useState({});
 
-    const dispatch = useDispatch();
+  const [productID,setProductID] = useState(null);
 
-    const categoryList = useSelector((state) => state.categoryList);
-    const { categories } = categoryList;
+  const [keyword, setKeyword] = useState("");
+  const [pageNumber, setPageNumber] = useState(1);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
-    const productList = useSelector((state) => state.productList);
-    const { loading, error, products, page, pages } = productList;
+  const dispatch = useDispatch();
 
-    const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+  const categoryList = useSelector((state) => state.categoryList);
+  const { categories } = categoryList;
 
-    const productCreate = useSelector((state) => state.productCreate);
-    const {
-        loading: createLoading,
-        success: createSuccess,
-        error: createError,
-    } = productCreate;
+  const productList = useSelector((state) => state.productList);
+  const { loading, error, products, page, pages } = productList;
 
-    useEffect(() => {
-        if (createSuccess) {
-            setName("");
-            setNameEn("");
-            setPrice(0);
-            setQuantity(0);
-            setCategory(null);
-            setNameEn("");
-            setModalIsOpen(false);
-            setDescription("");
-        }
-        dispatch(listProducts(keyword, pageNumber));
-    }, [dispatch, history, userInfo, pageNumber, keyword, createSuccess]);
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+  const productCreate = useSelector((state) => state.productCreate);
+  const {
+    loading: createLoading,
+    success: createSuccess,
+    error: createError,
+  } = productCreate;
 
-        let errorsCheck = {};
 
-        if (!name) {
-            errorsCheck.name = "Name is required";
-        }
-        // if (!name) {
-        //     errorsCheck.name_en = "English Name is required";
-        // }
-        if (!price) {
-            errorsCheck.price = "Price is required";
-        }
-        if (!size) {
-            errorsCheck.size = "Size is required";
-        }
+  const openModal = () => {
+    setModalIsOpen(true);
+  };
 
-        if (!quantity) {
-            errorsCheck.quantity = "Quantity is required";
-        }
-        // if (!category) {
-        //     errorsCheck.category = "Category is required";
-        // }
+  const closeModal = () => {
+    setModalIsOpen(false);
+  };
 
-        if (Object.keys(errorsCheck).length > 0) {
-            setErrors(errorsCheck);
-        } else {
-            setErrors({});
-        }
+  useEffect(() => {
+    if (createSuccess) {
+      setName("");
+      setNameEn("");
+      setSize({ S: "", M: "", L: "", J: "" });
+      setQuantity(0);
+      setCategory(null);
+      setNameEn("");
+      setModalIsOpen(false);
+      setDescription("");
+    }
+    dispatch(listProducts(keyword, pageNumber));
+  }, [dispatch, history, userInfo, pageNumber, keyword, createSuccess]);
 
-        if (Object.keys(errorsCheck).length === 0) {
-            const product = {
-                name: name,
-                name_en: name_en,
-                price: price,
-                size: size,
-                quantity: quantity,
-                category_id: category,
-                image:image,
-                description: description
-            };
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-            dispatch(createProduct(product));
-        }
-    };
+    let errorsCheck = {};
 
-    const deleteRow = (id) => {
-        dispatch(deleteProduct(id));
+    if (!name) {
+      errorsCheck.name = "Name is required";
+    }
+    if (!name) {
+      errorsCheck.name_en = "English Name is required";
     }
 
-    const searchCategories = (e) => {
-        dispatch(listCategories(e.target.value));
-    };
+    // if (!size.S || !size.M || !size.L || !size.J) {
+    //     errorsCheck.size = "Price for each size is required";
+    //   } else {
+    //     // Check if any of the size inputs are empty
+    //     for (let key in size) {
+    //       if (!size[key]) {
+    //         errorsCheck.size = "Price for each size is required";
+    //         break;
+    //       }
+    //     }
+    //   }
 
-    const renderCategoriesSelect = () => (
-        <Select
-            data={category}
-            setData={setCategory}
-            items={categories}
-            search={searchCategories}
-        />
-    );
+    // if (!size.S) {
+    //   errorsCheck.size_S = "Price size value is required";
+    // }
 
-    const renderModalCreateProduct = () => (
-        <>
-            <ModalButton
-                modal={modalIsOpen}
-                setModal={setModalIsOpen}
-                classes={"btn-success btn-lg mb-2"}
+    // if (!size.M) {
+    //   errorsCheck.size_M = "Price size value is required";
+    // }
+
+    // if (!size.L) {
+    //   errorsCheck.size_L = "Price size value is required";
+    // }
+
+    // if (!size.J) {
+    //   errorsCheck.size_J = "Price size value is required";
+    // }
+
+    if (!quantity) {
+      errorsCheck.quantity = "Quantity is required";
+    }
+
+    if (!category) {
+      errorsCheck.category = "Category is required";
+    }
+
+    if (Object.keys(errorsCheck).length > 0) {
+      setErrors(errorsCheck);
+    } else {
+      setErrors({});
+    }
+
+    if (Object.keys(errorsCheck).length === 0) {
+      const product = {
+        name: name,
+        name_en: name_en,
+        size: size,
+        quantity: quantity,
+        category_id: category,
+        image: image,
+        description: description,
+      };
+
+      dispatch(createProduct(product));
+      refershForm();
+    }
+  };
+
+  const deleteRow = (id) => {
+    dispatch(deleteProduct(id));
+    dispatch(listProducts(keyword, pageNumber));
+  };
+
+  const searchCategories = (e) => {
+    dispatch(listCategories(e.target.value));
+  };
+
+  const renderCategoriesSelect = () => (
+    <>
+      <h1 style={{ fontSize: 16, fontWeight: "bold" }}>Category</h1>
+      <Select
+        data={category}
+        setData={setCategory}
+        items={categories}
+        search={searchCategories}
+      />
+    </>
+  );
+
+  const refershForm = () => {
+    setName("");
+    setNameEn("");
+    setSize({ "S": "", "M": "", "L": "", "J": "" });
+    setQuantity(0);
+    setCategory(null);
+    setNameEn("");
+    setModalIsOpen(false);
+    setDescription("");
+  };
+
+  const renderModalCreateProduct = () => (
+    <>
+      {/* <ModalButton
+        modal={modalIsOpen}
+        setModal={setModalIsOpen}
+        classes={"btn-success btn-md mb-2 fw-bolder"}
+      /> */}
+      <button id="createBtn" className="custom_create_btn" onClick={openModal}>
+        Create
+      </button>
+
+      {/* This is modal */}
+      {modalIsOpen && (
+        <div id="modal" className="registration-form">
+          {/* <img src="../../../public/plugins/close.png" className="w-25 h-25"/> */}
+
+          <form style={{ position: "relative" }} onSubmit={handleSubmit}>
+            <img
+              onClick={closeModal}
+              style={{
+                width: 20,
+                height: 20,
+                cursor: "pointer",
+                position: "absolute",
+                right: 0,
+                top: 0,
+                margin: 25,
+              }}
+              src={"/close.png"}
+              alt="User profile picture"
             />
-            <Modal
-                style={modalStyles}
-                isOpen={modalIsOpen}
-                onRequestClose={() => setModalIsOpen(false)} overflow="overflow"
+            <span>
+              <h1 className="text-center mb-4">Creat product</h1>
+            </span>
+            <div className="form-group">
+              {/* <input
+              type="text"
+              
+              class="form-control item"
+              id="username"
+              placeholder="Username"
+            /> */}
+              <Input
+                className="form-control item"
+                name={"name"}
+                type={"text"}
+                data={name}
+                setData={setName}
+                errors={errors}
+              />
+            </div>
+            <div className="form-group">
+              <Input
+                class="form-control item"
+                name={"name_en"}
+                type={"text"}
+                data={name_en}
+                setData={setNameEn}
+                errors={errors}
+              />
+            </div>
+            <div className="form-group">
+              <Input
+                class="form-control item"
+                name={"description"}
+                type={"text"}
+                data={description}
+                setData={setDescription}
+                errors={errors}
+              />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: 4,
+                justifyContent: "space-between",
+              }}
             >
-                <LoaderHandler loading={createLoading} error={createError} />
-                <h2>Create Form</h2>
-                <form onSubmit={handleSubmit}>
-                    <Input
-                        name={"name"}
-                        type={"text"}
-                        data={name}
-                        setData={setName}
-                        errors={errors}
-                    />
-                    <Input
-                        name={"name_en"}
-                        type={"text"}
-                        data={name_en}
-                        setData={setNameEn}
-                        errors={errors}
-                    />
-                    <Input
-                        name={"description"}
-                        type={"text"}
-                        data={description}
-                        setData={setDescription}
-                        errors={errors}
-                    />
-                    <Input
-                        name={"size"}
-                        type={"string"}
-                        data={size}
-                        setData={setSize}
-                        errors={errors}
-                    />
-                    <Input
-                        name={"price"}
-                        type={"number"}
-                        data={price}
-                        setData={setPrice}
-                        errors={errors}
-                    />
-                    <Input
-                        name={"quantity"}
-                        type={"number"}
-                        data={quantity}
-                        setData={setQuantity}
-                        errors={errors}
-                    />
-                    {renderCategoriesSelect()}
-                    {errors.category && (
-                        <Message message={errors.category} color={"warning"} />
-                    )}
-                    <hr />
-                    <div className="">
-                         
-                        <img
-                            className="profile-user-img img-fluid  "
-                            src={image.length > 0 ? image : 'https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg'}
-                            alt="User profile picture"
-                        />
-                    </div>
-                    <FileInput
-                        fileHandler={uploadingFileHandler}
-                        name={"photo"}
-                        image={imageName(image)}
-                        uploading={uploading}
-                    />
-                    <button type="submit" className="btn btn-primary">
-                        Submit
-                    </button>
-                    <ModalButton
-                        modal={modalIsOpen}
-                        setModal={setModalIsOpen}
-                        classes={"btn-danger float-right"}
-                    />
-                </form>
-            </Modal>
-        </>
-    );
+              <div className="form-group">
+                <CustomInput
+                  class="form-control item"
+                  name={"size_S"}
+                  type={"text"}
+                  placeholder={"price"}
+                  data={size.S}
+                  setData={(newValue) =>
+                    setSize({ ...size, S: parseFloat(newValue) || "" })
+                  }
+                  errors={errors}
+                />
+              </div>
+              <div className="form-group">
+                <CustomInput
+                  class="form-control item"
+                  name={"size_M"}
+                  type={"text"}
+                  placeholder={"price"}
+                  data={size.M}
+                  setData={(newValue) =>
+                    setSize({ ...size, M: parseFloat(newValue) || "" })
+                  }
+                  errors={errors}
+                />
+              </div>
+            </div>
 
-    // upload file
-    const uploadingFileHandler = async (e) => {
-        //get first element from files which one is the image
-        const file = e.target.files[0];
-        //form instance
-        const formData = new FormData();
-        //add file
-        formData.append("image", file);
-        //start loader
-        setUploading(true);
-        try {
-            //form config
-            const config = {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            };
-            //console.log(file);return false;
-            //api call to upload image
-            const { data } = await axios.post("/api/v1/upload", formData, config);
-            //set image path
-            setImage(data);
-            //stop loader
-            setUploading(false);
-        } catch (error) {
-            console.error(error);
-            setUploading(false);
-        }
-    };
-    const imageName = (image) => {
-        const imageArray = image.split(`uploads`);
-        return imageArray[1];
-    };
+            <div
+              style={{
+                display: "flex",
+                gap: 4,
+                justifyContent: "space-between",
+              }}
+            >
+              <div className="form-group">
+                <CustomInput
+                  class="form-control item"
+                  name={"size_L"}
+                  type={"text"}
+                  placeholder={"price"}
+                  data={size.L}
+                  setData={(newValue) =>
+                    setSize({ ...size, L: parseFloat(newValue) || "" })
+                  }
+                  errors={errors}
+                />
+              </div>
+              <div className="form-group">
+                <CustomInput
+                  class="form-control item"
+                  name={"size_J"}
+                  type={"text"}
+                  placeholder={"price"}
+                  data={size.J}
+                  setData={(newValue) =>
+                    setSize({ ...size, J: parseFloat(newValue) || "" })
+                  }
+                  errors={errors}
+                />
+              </div>
+            </div>
 
-    const renderProductsTable = () => (
-        <table className="table table-hover text-nowrap">
-            <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th className="d-none d-sm-table-cell">Category</th>
-                    <th className="d-none d-sm-table-cell">Image</th>
-                    <th></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {products.map((product) => (
-                    <tr key={product.id}>
-                        <td>{product.name}</td>
-                        <td>{product.price}</td>
-                        <td>{product.quantity}</td>
-                        <td className="d-none d-sm-table-cell">
-                            {product.category.name}
-                        </td>
-                        <td className="d-none d-sm-table-cell">
-                            {/* {product.createdAt.slice(0, 10)} */}
-                            <div className="">
-                                <img
-                                    className="profile-user-img img-fluid img-circle"
-                                    src={product.image}
-                                    alt="User profile picture"
-                                />
-                            </div>
-                        </td>
-                        <td>
-                            <Link
-                                to={`/product/${product.id}/edit`}
-                                className="btn btn-warning btn-lg"
-                            >
-                                Edit
-                            </Link>
-                        </td>
-                        <td>
-                        <button
-                                type="button"
-                                className="btn btn-danger btn-lg btn-mdf"
-                                onClick={(e) => {
-                                    deleteRow(`${product.id}`)
-                                }}
-                            >
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    );
+            <div className="form-group">
+              <CustomInput
+                class="form-control item"
+                name={"quantity"}
+                type={"number"}
+                data={quantity}
+                setData={setQuantity}
+                errors={errors}
+              />
+            </div>
+            {renderCategoriesSelect()}
+            {errors.category && (
+              <Message message={errors.category} color={"warning"} />
+            )}
+            <hr />
+            <div className="form-group d-flex">
+              <img
+                className="profile-user-img img-fluid  "
+                src={
+                  image.length > 0
+                    ? image
+                    : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                }
+                alt="User profile picture"
+              />
+              <FileInput
+                fileHandler={uploadingFileHandler}
+                name={"photo"}
+                image={imageName(image)}
+                uploading={uploading}
+              />
+            </div>
+            <div className="form-group">
+              <button
+                type="submit"
+                className="custom_submit_btn"
+                style={{ width: "100%" }}
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+    </>
+  );
 
-    return (
-        <>
-            <HeaderContent name={"Products"} />
-            {/* Main content */}
+  // upload file
+  const uploadingFileHandler = async (e) => {
+    //get first element from files which one is the image
+    const file = e.target.files[0];
+    //form instance
+    const formData = new FormData();
+    //add file
+    formData.append("image", file);
+    //start loader
+    setUploading(true);
+    try {
+      //form config
+      const config = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      //console.log(file);return false;
+      //api call to upload image
+      const { data } = await axios.post("/api/v1/upload", formData, config);
+      //set image path
+      setImage(data);
+      //stop loader
+      setUploading(false);
+    } catch (error) {
+      console.error(error);
+      setUploading(false);
+    }
+  };
+  const imageName = (image) => {
+    const imageArray = image.split(`uploads`);
+    return imageArray[1];
+  };
 
-            <section className="content">
-                <div className="container-fluid">
-                    {renderModalCreateProduct()}
 
-                    <div className="row">
-                        <div className="col-12">
-                            <div className="card">
-                                <div className="card-header">
-                                    <h3 className="card-title">
-                                        Products table
-                                    </h3>
-                                    <div className="card-tools">
-                                        <Search
-                                            keyword={keyword}
-                                            setKeyword={setKeyword}
-                                            setPage={setPageNumber}
-                                        />
-                                    </div>
-                                </div>
-                                {/* /.card-header */}
-                                <div className="card-body table-responsive p-0">
-                                    <LoaderHandler
-                                        loading={loading}
-                                        error={error}
-                                        loader={<DataTableLoader />}
-                                        render={renderProductsTable}
-                                    />
-                                </div>
-                                {/* /.card-body */}
-                            </div>
-                            <Pagination
-                                page={page}
-                                pages={pages}
-                                setPage={setPageNumber}
-                            />
-                        </div>
-                        {/* /.col */}
-                    </div>
-                    {/* /.row */}
+  const renderConfirmModal = (productID) =>(
+    <div id="myModal" className="modal fade">
+      <div className="modal-dialog modal-confirm">
+        <div className="modal-content">
+          <div className="modal-header flex-column">
+            <div className="icon-box">
+              <i className="material-icons">&#xE5CD;</i>
+            </div>
+            <h4 className="modal-title w-100">Are you sure?</h4>
+            <button
+              type="button"
+              className="close"
+              data-dismiss="modal"
+              aria-hidden="true"
+            >
+              &times;
+            </button>
+          </div>
+          <div className="modal-body">
+            <p>
+              Do you really want to delete these records? This process cannot be
+              undone.
+              
+            </p>
+          </div>
+          <div className="modal-footer justify-content-center">
+            <button
+              type="button"
+              className="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Cancel
+            </button>
+            <button type="button" className="btn btn-danger" data-dismiss="modal" onClick={(e) => {
+                  deleteRow(productID);
+                  setProductID(null);
+                }}>Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const renderProductsTable = () => (
+    <table className="table table-hover text-nowrap">
+      <thead>
+        <tr className="bg-success">
+          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+            Name
+          </th>
+          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+            Price
+          </th>
+          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+            Quantity
+          </th>
+          <th className="d-none d-sm-table-cell border-right border-bottom-0 border-left-0 border-top-0 ">
+            Category
+          </th>
+          {/* <th className="d-none d-sm-table-cell">Image</th> */}
+          <th className="border-right border-bottom-0 border-left-0 border-top-0"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {products.map((product) => (
+          
+          <tr className="border-right border border-light" key={product.id}>
+            <td className="py-4 border-right border border-light">
+              {product.name}
+            </td>
+
+            <td className="py-4 border-right border border-light">
+              {product.price}
+            </td>
+            <td className="py-4 border-right border border-light ">
+              {product.quantity}
+            </td>
+            <td className="d-none d-sm-table-cell py-4 border-right border border-light ">
+              {product.category.name}
+            </td>
+
+            <td className="py-4 border-right border border-light d-flex justify-content-center align items-center">
+              <Link
+                to={`/product/${product.id}/edit`}
+                className="btn btn-warning btn-md px-4 rounded text-white custom_edit_btn"
+              >
+                Edit
+              </Link>
+
+              <button
+                type="button"
+                className=" btn btn-danger btn-md rounded ml-5 custom_delete_btn"
+                href="#myModal" data-toggle="modal"
+                onClick={(e) => {
+                  console.log(product.id)
+                  setProductID(product.id)
+                }}
+              >
+                Delete
+              </button>
+              
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+
+  return (
+    <>
+      <HeaderContent name={"Products"} />
+      {/* Main content */}
+
+      <section className="content">
+        <div className="container-fluid">
+          {renderModalCreateProduct()}
+          {renderConfirmModal(productID)}
+          <div className="row">
+            <div className="col-12">
+              <div className="card">
+                <div className="card-header">
+                  <h3 className="card-title fw-bold">Products table</h3>
+                  <div className="card-tools">
+                    <Search
+                      keyword={keyword}
+                      setKeyword={setKeyword}
+                      setPage={setPageNumber}
+                    />
+                  </div>
+                  <div class="text-center">
+      <a href="#myModal" class="trigger-btn" data-toggle="modal">Click to Open Confirm Modal</a>
+    </div>
+
                 </div>
-                {/* /.container-fluid */}
-            </section>
-        </>
-    );
+                {/* /.card-header */}
+                <div className="card-body table-responsive p-0">
+                  <LoaderHandler
+                    loading={loading}
+                    error={error}
+                    loader={<DataTableLoader />}
+                    render={renderProductsTable}
+                  />
+                </div>
+                {/* /.card-body */}
+              </div>
+              <Pagination page={page} pages={pages} setPage={setPageNumber} />
+            </div>
+            {/* /.col */}
+          </div>
+          {/* /.row */}
+        </div>
+        {/* /.container-fluid */}
+      </section>
+    </>
+  );
 };
 
 export default ProductScreen;
