@@ -7,11 +7,12 @@ import HeaderContent from "../../components/HeaderContent";
 import Input from "../../components/form/Input";
 import ModalButton from "../../components/ModalButton";
 import Modal from "react-modal";
-import Checkbox from "../../components/form/Checkbox";
+
 import DataTableLoader from "../../components/loader/DataTableLoader";
 import Search from "../../components/Search";
 import Pagination from "../../components/Pagination";
 import LoaderHandler from "../../components/loader/LoaderHandler";
+import "../../style/product.css"
 
 /* Actions */
 import { listUsers, register } from "../../actions/userActions";
@@ -95,45 +96,47 @@ const UserScreen = ({ history }) => {
     const renderTable = () => (
         <table className="table table-hover text-nowrap">
             <thead>
-                <tr>
+                <tr className="bg-success">
                     {/* <th className="d-none d-sm-table-cell">ID</th> */}
-                    <th>Name</th>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Address</th>
-                 
-                    <th className="d-none d-sm-table-cell">Type</th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Name</th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Username</th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Email</th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Phone</th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Address</th>
+                    <th className="d-none d-sm-table-cell border-right border-bottom-0 border-left-0 border-top-0">Type</th>
                     
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 {users.map((user) => (
-                    <tr key={user.id}>
+                    <tr className="border-right border border-light" key={user.id}>
                         {/* <td className="d-none d-sm-table-cell">{user.id}</td> */}
-                        <td>{user.name}</td>
-                        <td>{user.username}</td>
-                        <td>{user.email}</td>
-                        <td>{user.phone}</td>
-                        <td>{user.address}</td>
+                        <td className="py-4 border-right border border-light">{user.name}</td>
+                        <td className="py-4 border-right border border-light">{user.username}</td>
+                        <td className="py-4 border-right border border-light">{user.email}</td>
+                        <td className="py-4 border-right border border-light">{user.phone}</td>
+                        <td className="py-4 border-right border border-light">{user.address}</td>
                         
-                        <td className="d-none d-sm-table-cell">
+                        <td className="d-none d-sm-table-cell py-4 border-right border border-light">
                             {user.username ? 'registered' : 'unregistered'}
                         </td>
-                        <td>
+                        <td className=" border-right border border-light d-flex justify-content-center align items-center">
                         <Link
                             to={`/user/${user.id}/edit`}
-                            className="btn btn-warning btn-lg"
+                            className="custom_submit_btn"
+                            
                         >
+                            
                             List Orders
                         </Link>
                         <Link
                             to={`/user/${user.id}/edit`}
-                            className="btn btn-warning btn-lg"
+                            className="custom_edit_btn margin_lr"
                         >
                             Edit
                         </Link>
+                        
                         </td>
                     </tr>
                 ))}

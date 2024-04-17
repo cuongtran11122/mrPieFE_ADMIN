@@ -1,7 +1,7 @@
 import React from "react";
 import { capitalize } from "../../utils/functions";
 
-const CustomInput = ({ name, type, data, setData, errors, classes = "",placeholder = "" }) => {
+const DisabledInput = ({ name, type, data, setData, errors, classes = "",placeholder = "" }) => {
     return (
         <div className="form-group">
             <label htmlFor={name}>{capitalize(name)}</label>
@@ -17,10 +17,11 @@ const CustomInput = ({ name, type, data, setData, errors, classes = "",placehold
                 className={`form-control ${classes}`}
                 placeholder={placeholder}
                 id={name}
+                disabled
                 aria-describedby={name}
                 value={data===null ? '' : data}
                 onChange={(e) => setData(parseInt(e.target.value))}
-                style={{cursor:"pointer"}}
+                style={{cursor:"not-allowed",backgroundColor:"#F4F4F4"}}
             />
 
             {errors[name] && (
@@ -30,4 +31,4 @@ const CustomInput = ({ name, type, data, setData, errors, classes = "",placehold
     );
 };
 
-export default CustomInput;
+export default DisabledInput;
