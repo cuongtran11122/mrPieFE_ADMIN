@@ -7,6 +7,7 @@ import Input from "../../components/form/Input";
 import Checkbox from "../../components/form/Checkbox";
 import ButtonGoBack from "../../components/ButtonGoBack";
 import LoaderHandler from "../../components/loader/LoaderHandler";
+import DisabledInput from "../../components/form/DisabledInput";
 
 /* Constants */
 import {
@@ -17,15 +18,19 @@ import {
 
 /* Actions */
 import { listUserDetails, updateUser } from "../../actions/userActions";
+import { listProductDetails } from "../../actions/productActions";
 
 const UserEditScreen = ({ history, match }) => {
     const userId = parseInt(match.params.id);
 
     const [name, setName] = useState("");
-    const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-    const [isAdmin, setIsAdmin] = useState(false);
-    const [avatar, setAvatar] = useState(false);
+    const [username, setUsername] = useState("");
+    const [phone,setPhone] = useState("");
+    const [address,setAddress] = useState(""); 
+
+
+
 
     const [errors, setErrors] = useState({});
 
@@ -47,15 +52,9 @@ const UserEditScreen = ({ history, match }) => {
     } = userUpdate;
 
     useEffect(() => {
-        if (user) {
-            if (user.isAdmin) {
-                dispatch({ type: USER_UPDATE_RESET });
-                dispatch({ type: USER_DETAILS_RESET });
-                dispatch({ type: USER_DELETE_RESET });
-                history.push("/not-authorized");
-            }
-        }
+        
         //after update redirect to users
+        console.log(userId)
         if (successUpdate) {
             dispatch({ type: USER_UPDATE_RESET });
             dispatch({ type: USER_DETAILS_RESET });
@@ -65,12 +64,16 @@ const UserEditScreen = ({ history, match }) => {
         //load product data
         if (!user || !user.name || user.id !== userId) {
             dispatch(listUserDetails(userId));
+            
         } else {
-            //set states s
-            setName(user.name);
-            setEmail(user.email);
-            setIsAdmin(user.isAdmin);
+            setName(user.name)
+            setUsername(user.username)
+            setEmail(user.email)
+            setPhone(user.phone)
+            setAddress(user.address)
+
         }
+
     }, [dispatch, history, userId, user, successUpdate]);
 
     const handleSubmit = (e) => {
@@ -80,10 +83,7 @@ const UserEditScreen = ({ history, match }) => {
         if (!name) {
             errorsCheck.name = "Name is required.";
         }
-        if (password > 1 && password < 6) {
-            errorsCheck.password =
-                "Password must be at least 6 characters long.";
-        }
+
 
         if (!email) {
             errorsCheck.email = "Email is required.";
@@ -100,10 +100,7 @@ const UserEditScreen = ({ history, match }) => {
                 updateUser({
                     id: userId,
                     name,
-                    email,
-                    password,
-                    avatar,
-                    isAdmin,
+                    address
                 })
             );
         }
@@ -118,24 +115,49 @@ const UserEditScreen = ({ history, match }) => {
                 setData={setName}
                 errors={errors}
             />
-            <Input
-                name={"email"}
-                type={"email"}
-                data={email}
-                setData={setEmail}
-                errors={errors}
+            <DisabledInput
+                  class="form-control item"
+                  name={"username"}
+                  type={"text"}
+                  placeholder={"username"}
+                  data={username}
+                  setData={setUsername
+                  }
+                  errors={errors}
+            />
+            <DisabledInput
+                  class="form-control item"
+                  name={"email"}
+                  type={"text"}
+                  placeholder={"email"}
+                  data={email}
+                  setData={setEmail
+                  }
+                  errors={errors}
+            />
+            <DisabledInput
+                  class="form-control item"
+                  name={"phone"}
+                  type={"text"}
+                  placeholder={"phone"}
+                  data={phone}
+                  setData={setPhone
+                  }
+                  errors={errors}
             />
             <Input
-                name={"password"}
-                type={"password"}
-                data={password}
-                setData={setPassword}
+                name={"address"}
+                type={"text"}
+                data={address}
+                setData={setAddress}
                 errors={errors}
             />
-            <Checkbox name={"Reset Avatar"} data={avatar} setData={setAvatar} />
+            
+            
+            {/* <Checkbox name={"Reset Avatar"} data={avatar} setData={setAvatar} />
             <hr />
             <Checkbox name={"Admin"} data={isAdmin} setData={setIsAdmin} />
-            <hr />
+            <hr /> */}
             <button type="submit" className="btn btn-success">
                 Submit
             </button>

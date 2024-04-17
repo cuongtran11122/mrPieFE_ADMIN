@@ -545,10 +545,6 @@ const ProductScreen = ({ history }) => {
                       setPage={setPageNumber}
                     />
                   </div>
-                  <div class="text-center">
-      <a href="#myModal" class="trigger-btn" data-toggle="modal">Click to Open Confirm Modal</a>
-    </div>
-
                 </div>
                 {/* /.card-header */}
                 <div className="card-body table-responsive p-0">

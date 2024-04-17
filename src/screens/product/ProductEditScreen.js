@@ -10,6 +10,7 @@ import HeaderContent from "../../components/HeaderContent";
 import ButtonGoBack from "../../components/ButtonGoBack";
 import LoaderHandler from "../../components/loader/LoaderHandler";
 import CustomInput from "../../components/form/CustomInput";
+import "../../style/product.css";
 
 /* Constants */
 import {
@@ -75,15 +76,19 @@ const ProductEditScreen = ({ history, match }) => {
         //set states
         setName(product.name);
         setNameEn(product.name_en);
-
-        setSize(product.size_S)
-        setSize(product.size_M)
-        setSize(product.size_L)
-        setSize(product.size_J)
         setQuantity(product.quantity);
         setCategory(product.category_id);
         setImage(product.image);
         setDescription(product.description);
+
+        const sizePrices = { S: "", M: "", L: "", J: "" };
+        product.attributes.forEach((attribute) => {
+          sizePrices[attribute.product_size] = attribute.product_price;
+        });
+
+        // Update the size state object with the extracted product prices
+        setSize(sizePrices);
+        
       }
     }
   }, [dispatch, history, productId, product, successUpdate]);
@@ -236,7 +241,7 @@ const ProductEditScreen = ({ history, match }) => {
           />
         </div>
         <div className="form-group">
-        <CustomInput
+          <CustomInput
             class="form-control item"
             name={"size_M"}
             type={"text"}
@@ -276,13 +281,13 @@ const ProductEditScreen = ({ history, match }) => {
             placeholder={"price"}
             data={size && size.L} // Check if size is not null or undefined before accessing its properties
             setData={
-            (newValue) => setSize({ ...size, L: parseFloat(newValue) || "" }) // Update only the 'S' property
+              (newValue) => setSize({ ...size, L: parseFloat(newValue) || "" }) // Update only the 'S' property
             }
             errors={errors}
           />
         </div>
         <div className="form-group">
-        <CustomInput
+          <CustomInput
             class="form-control item"
             name={"size_J"}
             type={"text"}
@@ -297,15 +302,15 @@ const ProductEditScreen = ({ history, match }) => {
       </div>
 
       <div className="form-group">
-              <CustomInput
-                class="form-control item"
-                name={"quantity"}
-                type={"number"}
-                data={quantity}
-                setData={setQuantity}
-                errors={errors}
-              />
-            </div>
+        <CustomInput
+          class="form-control item"
+          name={"quantity"}
+          type={"number"}
+          data={quantity}
+          setData={setQuantity}
+          errors={errors}
+        />
+      </div>
 
       {/* <Input
         name={"quantity"}
@@ -326,14 +331,14 @@ const ProductEditScreen = ({ history, match }) => {
           alt="User profile picture"
         /> */}
         <img
-                className="profile-user-img img-fluid  "
-                src={
-                  image.length > 0
-                    ? image
-                    : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
-                }
-                alt="User profile picture"
-              />
+          className="profile-user-img img-fluid  "
+          src={
+            image.length > 0
+              ? image
+              : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+          }
+          alt="User profile picture"
+        />
       </div>
       <FileInput
         fileHandler={uploadingFileHandler}
@@ -343,7 +348,7 @@ const ProductEditScreen = ({ history, match }) => {
       />
 
       <hr />
-      <button type="submit" className="btn btn-success">
+      <button type="submit" className="custom_submit_btn">
         Submit
       </button>
     </form>
