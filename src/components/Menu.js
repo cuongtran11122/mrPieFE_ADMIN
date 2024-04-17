@@ -27,9 +27,13 @@ const Menu = ({ history }) => {
     };
 
     return (
-        <aside className="main-sidebar sidebar-dark-primary elevation-4">
+        <aside className="main-sidebar min-vh-100 h-100 d-flex justify-content-center  sidebar-dark-primary elevation-4">
             {/* Brand Logo */}
-            <Link to={"/dashboard"} className="brand-link">
+            
+            {/* Sidebar */}
+            <div className="sidebar w-100  ">
+                {/* Sidebar user panel (optional) */}
+                <Link to={"/dashboard"}  className="brand-link  d-flex justify-content-center " >
                 <img
                     src="/logo.png"
                     alt="AdminLTE Logo"
@@ -38,10 +42,7 @@ const Menu = ({ history }) => {
                 />
                 <span className="brand-text font-weight-light"></span>
             </Link>
-            {/* Sidebar */}
-            <div className="sidebar">
-                {/* Sidebar user panel (optional) */}
-                <div className="user-panel mt-3 pb-3 mb-3 d-flex">
+                <div className="user-panel w-full mt-3 pb-3 mb-3 d-flex ">
                     <div className="image">
                         <img
                             // src={userInfo ? userInfo.image : "/avatar.png"}

@@ -9,7 +9,7 @@ import FileInput from "../../components/form/FileInput";
 import HeaderContent from "../../components/HeaderContent";
 import ButtonGoBack from "../../components/ButtonGoBack";
 import LoaderHandler from "../../components/loader/LoaderHandler";
-import PrivateRoute from "./../../auth/PrivateRoute";
+
 /* Constants */
 import {
     PRODUCT_UPDATE_RESET,

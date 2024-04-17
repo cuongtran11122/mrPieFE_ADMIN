@@ -7,6 +7,7 @@ const Input = ({ name, type, data, setData, errors, classes = "" }) => {
             <label htmlFor={name}>{capitalize(name)}</label>
             <input
                 type={type}
+                min={0}
                 className={`form-control ${classes}`}
                 id={name}
                 aria-describedby={name}

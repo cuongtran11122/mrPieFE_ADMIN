@@ -4,13 +4,15 @@ import Loader from "../Loader";
 
 const FileInput = ({ fileHandler, name, image, uploading }) => {
     return (
-        <div className="form-group">
+        <div className="form-group" >
             <label htmlFor={name}>{capitalize(name)}</label>
-            <div className="input-group">
+            <div className="input-group" >
                 <label htmlFor={name} className="custom-file-label">
                     {image}
                 </label>
                 <input
+                    
+                    style={{ position: "relative", zIndex: 1 }} // Set zIndex to a positive value
                     type="file"
                     className="custom-file-input"
                     aria-describedby={name}
