@@ -28,7 +28,7 @@ import Message from "../../components/Message";
 import "../../style/product.css";
 import CustomInput from "../../components/form/CustomInput";
 
-import "../../../src/style/confirmModal.css";
+import "../../../src/style/confirmModal.css"
 
 Modal.setAppElement("#root");
 
