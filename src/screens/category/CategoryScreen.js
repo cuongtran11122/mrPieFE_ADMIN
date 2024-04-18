@@ -86,7 +86,7 @@ const CategoryScreen = ({ history, match }) => {
             <ModalButton
                 modal={modalIsOpen}
                 setModal={setModalIsOpen}
-                classes={"btn-success btn-lg mb-2"}
+                classes={"custom_create_btn"}
             />
             <Modal
                 style={modalStyles}
@@ -129,20 +129,20 @@ const CategoryScreen = ({ history, match }) => {
     const renderTable = () => (
         <table className="table table-hover text-nowrap">
             <thead>
-                <tr>
+                <tr className="bg-success">
                     {/* <th>ID</th> */}
-                    <th>Name</th>
-                    <th>Status</th>
-                    <th className="d-none d-sm-table-cell">Created At</th>
-                    <th></th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Name</th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Status</th>
+                    <th className="d-none d-sm-table-cell border-right border-bottom-0 border-left-0 border-top-0">Created At</th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 "></th>
                 </tr>
             </thead>
             <tbody>
                 {categories.map((category) => (
-                    <tr key={category.id}>
+                    <tr className="border-right border border-light" key={category.id}>
                         {/* <td>{category.id}</td> */}
-                        <td>{category.name}</td>
-                        <td> 
+                        <td className="py-4 border-right border border-light">{category.name}</td>
+                        <td className="py-4 border-right border border-light"> 
                             {/* <div class="radio-box">
                                 <label class="switch">
                                 <input type="checkbox" />
@@ -166,13 +166,13 @@ const CategoryScreen = ({ history, match }) => {
                             )}
                             
                         </td>
-                        <td className="d-none d-sm-table-cell">
+                        <td className="d-none d-sm-table-cell py-4 border-right border border-light">
                             {category.createdAt.slice(0, 10)}
                         </td>
-                        <td>
+                        <td className=" border-right border border-light">
                             <Link
                                 to={`/category/${category.id}/edit`}
-                                className="btn btn-warning btn-lg"
+                                className="custom_edit_btn"
                             >
                                 Edit
                             </Link>

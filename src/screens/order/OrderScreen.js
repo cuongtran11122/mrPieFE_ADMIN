@@ -43,25 +43,26 @@ const OrderScreen = ({ history }) => {
     const renderTable = () => (
         <table className="table table-hover text-nowrap">
             <thead>
-                <tr>
-                    <th>Customer name</th>
-                    <th>Phone</th>
-                    <th className="d-none d-sm-table-cell">Total mount</th>
-                    <th>Status</th>
-                    <th>Total</th>
-                    <th>Created date</th>
+                <tr className="bg-success">
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Customer name</th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Phone</th>
+                    <th className="d-none d-sm-table-cell border-right border-bottom-0 border-left-0 border-top-0">Total mount</th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Status</th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Total</th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Created date</th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0 "></th>
                 </tr>
             </thead>
             <tbody>
                 {orders.map((order) => (
                     <tr key={order.id}>
-                        <td>{order.user ? order.user.name : ''}</td>
-                        <td>{order.user ? order.user.phone : ''}</td>
+                        <td className="py-4 border-right border border-light">{order.user ? order.user.name : ''}</td>
+                        <td className="py-4 border-right border border-light">{order.user ? order.user.phone : ''}</td>
                         
-                        <td>
+                        <td className="py-4 border-right border border-light">
                             {order.total_amount}
                         </td>
-                        <td>
+                        <td className="py-4 border-right border border-light">
                             {order.status}
                             {/* {order.isPaid ? (
                                 <h4 className="text-success">
@@ -73,16 +74,16 @@ const OrderScreen = ({ history }) => {
                                 </h4>
                             )} */}
                         </td>
-                        <td className="d-none d-sm-table-cell h4">
+                        <td className="d-none d-sm-table-cell h4 py-4 border-right border border-light">
                             <span className={"badge bg-success"}>
                                 ${order.total_amount}
                             </span>
                         </td>
-                        <td>{order.createdAt.slice(0, 10)}</td>
-                        <td>
+                        <td className="py-4 border-right border border-light">{order.createdAt.slice(0, 10)}</td>
+                        <td className=" border-right border border-light">
                             <Link
                                 to={`/order/${order.id}/view`}
-                                className="btn btn-info btn-lg"
+                                className="custom_submit_btn"
                             >
                                 View
                             </Link>
