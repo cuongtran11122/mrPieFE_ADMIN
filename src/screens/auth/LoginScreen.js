@@ -102,7 +102,6 @@ const LoginScreen = ({ history }) => {
                                     data-dismiss="alert"
                                     aria-hidden="true"
                                 >
-                                    ×
                                 </button>
                                 <h5>
                                     <i className="icon fas fa-info" /> Test

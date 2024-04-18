@@ -28,7 +28,7 @@ import Message from "../../components/Message";
 import "../../style/product.css";
 import CustomInput from "../../components/form/CustomInput";
 
-import "../../../src/style/confirmModal.css"
+import "../../../src/style/confirmModal.css";
 
 Modal.setAppElement("#root");
 
@@ -44,11 +44,13 @@ const ProductScreen = ({ history }) => {
   const [uploading, setUploading] = useState(false);
   const [errors, setErrors] = useState({});
 
-  const [productID,setProductID] = useState(null);
+  const [productID, setProductID] = useState(null);
 
   const [keyword, setKeyword] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const [isAlert, setIsAlert] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -68,13 +70,13 @@ const ProductScreen = ({ history }) => {
     error: createError,
   } = productCreate;
 
-
   const openModal = () => {
     setModalIsOpen(true);
   };
 
   const closeModal = () => {
     setModalIsOpen(false);
+    refershForm();
   };
 
   useEffect(() => {
@@ -185,12 +187,13 @@ const ProductScreen = ({ history }) => {
   const refershForm = () => {
     setName("");
     setNameEn("");
-    setSize({ "S": "", "M": "", "L": "", "J": "" });
+    setSize({ S: "", M: "", L: "", J: "" });
     setQuantity(0);
     setCategory(null);
     setNameEn("");
     setModalIsOpen(false);
     setDescription("");
+    setImage("")
   };
 
   const renderModalCreateProduct = () => (
@@ -206,7 +209,7 @@ const ProductScreen = ({ history }) => {
 
       {/* This is modal */}
       {modalIsOpen && (
-        <div id="modal" className="registration-form">
+        <div id="modal" className="registration-form" >
           {/* <img src="../../../public/plugins/close.png" className="w-25 h-25"/> */}
 
           <form style={{ position: "relative" }} onSubmit={handleSubmit}>
@@ -366,6 +369,25 @@ const ProductScreen = ({ history }) => {
                 uploading={uploading}
               />
             </div>
+            {isAlert && (
+              <div className="form-group">
+                <div
+                  class="alert alert-danger alert-dismissible fade show"
+                  role="alert"
+                >
+                  <strong>Alert</strong> You should select image file or the size of image less than 5MB
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="alert"
+                    aria-label="Close"
+                    onClick={()=>{setIsAlert(false)}}
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="form-group">
               <button
                 type="submit"
@@ -383,27 +405,40 @@ const ProductScreen = ({ history }) => {
 
   // upload file
   const uploadingFileHandler = async (e) => {
-    //get first element from files which one is the image
+    // Get the first element from files which should be the image
     const file = e.target.files[0];
-    //form instance
+
+    // Check if a file is selected
+    if (!file) {
+      return;
+    }
+
+    // Check if the file type is an image
+    if (!file.type.startsWith("image/")) {
+      setIsAlert(true);
+      return;
+    }
+
+    // Check if the file size is less than 5MB
+    if (file.size > 5 * 1024 * 1024) {
+      setIsAlert(true);
+      return;
+    }
+
+    // If all checks pass, proceed with uploading the file
     const formData = new FormData();
-    //add file
     formData.append("image", file);
-    //start loader
     setUploading(true);
+
     try {
-      //form config
       const config = {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       };
-      //console.log(file);return false;
-      //api call to upload image
+
       const { data } = await axios.post("/api/v1/upload", formData, config);
-      //set image path
       setImage(data);
-      //stop loader
       setUploading(false);
     } catch (error) {
       console.error(error);
@@ -415,8 +450,7 @@ const ProductScreen = ({ history }) => {
     return imageArray[1];
   };
 
-
-  const renderConfirmModal = (productID) =>(
+  const renderConfirmModal = (productID) => (
     <div id="myModal" className="modal fade">
       <div className="modal-dialog modal-confirm">
         <div className="modal-content">
@@ -438,7 +472,6 @@ const ProductScreen = ({ history }) => {
             <p>
               Do you really want to delete these records? This process cannot be
               undone.
-              
             </p>
           </div>
           <div className="modal-footer justify-content-center">
@@ -449,15 +482,24 @@ const ProductScreen = ({ history }) => {
             >
               Cancel
             </button>
-            <button type="button" className="btn btn-danger" data-dismiss="modal" onClick={(e) => {
-                  deleteRow(productID);
-                  setProductID(null);
-                }}>Delete</button>
+            <button
+              type="button"
+              className="btn btn-danger"
+              data-dismiss="modal"
+              onClick={(e) => {
+                deleteRow(productID);
+                setProductID(null);
+              }}
+            >
+              Delete
+            </button>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
+
+  
 
   const renderProductsTable = () => (
     <table className="table table-hover text-nowrap">
@@ -481,7 +523,6 @@ const ProductScreen = ({ history }) => {
       </thead>
       <tbody>
         {products.map((product) => (
-          
           <tr className="border-right border border-light" key={product.id}>
             <td className="py-4 border-right border border-light">
               {product.name}
@@ -508,15 +549,14 @@ const ProductScreen = ({ history }) => {
               <button
                 type="button"
                 className=" btn btn-danger btn-md rounded ml-5 custom_delete_btn"
-                href="#myModal" data-toggle="modal"
+                href="#myModal"
+                data-toggle="modal"
                 onClick={(e) => {
-                  console.log(product.id)
-                  setProductID(product.id)
+                  setProductID(product.id);
                 }}
               >
                 Delete
               </button>
-              
             </td>
           </tr>
         ))}

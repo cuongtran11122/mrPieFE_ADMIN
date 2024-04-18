@@ -6,20 +6,21 @@ const FileInput = ({ fileHandler, name, image, uploading }) => {
     return (
         <div className="form-group" >
             <label htmlFor={name}>{capitalize(name)}</label>
-            <div className="input-group" >
-                <label htmlFor={name} className="custom-file-label">
+            <div className="input-group" style={{display:"flex"}} >
+                <label style={{  zIndex: 0 }} htmlFor={name} className="custom-file-label">
                     {image}
                 </label>
                 <input
-                    
-                    style={{ position: "relative", zIndex: 1 }} // Set zIndex to a positive value
+                    style={{zIndex: -99 }} // Set zIndex to a positive value
                     type="file"
                     className="custom-file-input"
                     aria-describedby={name}
                     id={name}
                     onChange={fileHandler}
+                    accept=".jpg, .jpeg, .png"
                 />
             </div>
+            
             {uploading && <Loader variable={uploading} />}
         </div>
     );
