@@ -28,7 +28,7 @@ import Message from "../../components/Message";
 import "../../style/product.css";
 import CustomInput from "../../components/form/CustomInput";
 
-import "../../../src/style/confirmModal.css";
+import "../../../src/style/confirmModal.css"
 
 Modal.setAppElement("#root");
 
@@ -76,7 +76,9 @@ const ProductScreen = ({ history }) => {
 
   const closeModal = () => {
     setModalIsOpen(false);
-    refershForm();
+
+    refershForm()
+
   };
 
   useEffect(() => {
@@ -535,7 +537,7 @@ const ProductScreen = ({ history }) => {
               {product.quantity}
             </td>
             <td className="d-none d-sm-table-cell py-4 border-right border border-light ">
-              {product.category.name}
+            {!product.category ? ""  : product.category.name}
             </td>
 
             <td className="py-4 border-right border border-light d-flex justify-content-center align items-center">
