@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 /* Components */
-import Message from "../../components/Message";
-import Loader from "../../components/Loader";
+
 import HeaderContent from "../../components/HeaderContent";
 import Input from "../../components/form/Input";
 import ButtonGoBack from "../../components/ButtonGoBack";
