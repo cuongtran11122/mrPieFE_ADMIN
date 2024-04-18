@@ -76,7 +76,9 @@ const ProductScreen = ({ history }) => {
 
   const closeModal = () => {
     setModalIsOpen(false);
+
     refershForm()
+
   };
 
   useEffect(() => {
