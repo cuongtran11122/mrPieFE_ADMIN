@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 /* Components */
 import HeaderContent from "../../components/HeaderContent";
 import Input from "../../components/form/Input";
-import Checkbox from "../../components/form/Checkbox";
+
 import ButtonGoBack from "../../components/ButtonGoBack";
 import LoaderHandler from "../../components/loader/LoaderHandler";
 import DisabledInput from "../../components/form/DisabledInput";
@@ -149,7 +149,7 @@ const UserEditScreen = ({ history, match }) => {
             <hr />
             <Checkbox name={"Admin"} data={isAdmin} setData={setIsAdmin} />
             <hr /> */}
-      <button type="submit" className="btn btn-success">
+      <button type="submit" className="custom_submit_btn w-100">
         Submit
       </button>
     </form>

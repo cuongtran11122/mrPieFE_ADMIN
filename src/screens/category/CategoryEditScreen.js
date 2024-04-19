@@ -104,7 +104,7 @@ const CategoryEditScreen = ({ history, match }) => {
             />
             <Checkbox name={"status"} data={status} setData={setStatus} />
             <hr />
-            <button type="submit" className="btn btn-success">
+            <button type="submit" className="custom_submit_btn w-100">
                 Submit
             </button>
         </form>
