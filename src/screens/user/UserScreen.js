@@ -123,7 +123,7 @@ const UserScreen = ({ history }) => {
                         </td>
                         <td className=" border-right border border-light d-flex justify-content-center align items-center">
                         <Link
-                            to={`/user/${user.id}/edit`}
+                            to={`/list/${user.id}/orders`}
                             className="custom_submit_btn"
                             
                         >

@@ -28,6 +28,7 @@ import CategoryEditScreen from "./screens/category/CategoryEditScreen";
 
 import UserScreen from "./screens/user/UserScreen";
 import UserEditScreen from "./screens/user/UserEditScreen";
+import UserOrderListScreen from "./screens/user/UserListOrders";
 import ProfileScreen from "./screens/user/ProfileScreen";
 
 import DashboardScreen from "./screens/DashboardScreen";
@@ -60,6 +61,8 @@ const Main = () => {
                     />
                      
                     <PrivateRoute path="/user" component={UserScreen} />
+
+                    <PrivateRoute path="/list/:id/orders" component={UserOrderListScreen}/>
 
                     <PrivateRoute
                         path="/category/:id/edit"

@@ -30,6 +30,7 @@ const OrderScreen = ({ history }) => {
         }
         
         dispatch(listOrders({ keyword, pageNumber, delivery: false }));
+        console.log(orders)
     }, [dispatch, history, userInfo, pageNumber, keyword]);
 
     const renderCreateButton = () => (

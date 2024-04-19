@@ -18,6 +18,10 @@ import {
     ORDER_STATISTICS_REQUEST,
     ORDER_STATISTICS_SUCCESS,
     ORDER_STATISTICS_FAIL,
+    ORDER_USER_LIST_REQUEST,
+    ORDER_USER_LIST_SUCCESS,
+    ORDER_USER_LIST_FAIL,
+    ORDER_USER_LIST_RESET
 } from "../constants/orderConstants";
 
 //get all sales
@@ -166,6 +170,49 @@ export const listOrderDetails = (id) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: ORDER_DETAILS_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        });
+    }
+};
+
+
+export const listOrdersUserDetail = (options,userID) => async (dispatch, getState) => {
+    const { keyword, pageNumber, delivery } = options;
+    try {
+        dispatch({
+            type: ORDER_USER_LIST_REQUEST,
+        });
+
+        //get user from state
+        const {
+            userLogin: { userInfo },
+        } = getState();
+
+        //headers
+        const config = {
+            headers: {
+                Authorization: `Bearer ${userInfo.token}`,
+            },
+        };
+        console.log(userInfo);
+        //get all orders
+        const { data } = await axios.get(
+            `/api/v1/admin/order/list/${userID}?keyword=${keyword}&pageNumber=${pageNumber}${
+                delivery ? "&delivery=true" : ""
+            }`,
+            config
+        );
+
+        dispatch({
+            type: ORDER_USER_LIST_SUCCESS,
+            payload: data,
+        });
+    } catch (error) {
+        dispatch({
+            type: ORDER_USER_LIST_FAIL,
             payload:
                 error.response && error.response.data.message
                     ? error.response.data.message
