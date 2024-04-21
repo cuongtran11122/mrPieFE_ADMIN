@@ -4,12 +4,16 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Main from "./Main";
 import LoginScreen from "./screens/auth/LoginScreen";
+import RegisterScreen from "./screens/auth/RegisterScreen";
+import ForgotPasswordScreen from "./screens/auth/ForgotPasswordScreen";
 
 const App = () => {
     return (
         <Router>
             <Switch>
                 <Route path="/login" component={LoginScreen} />
+                <Route path="/register" component={RegisterScreen} />
+                <Route path="/forgot_password" component={ForgotPasswordScreen}/>
                 <Route path="/" component={Main} />
             </Switch>
         </Router>

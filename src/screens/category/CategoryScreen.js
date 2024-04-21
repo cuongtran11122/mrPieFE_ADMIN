@@ -46,6 +46,8 @@ const CategoryScreen = ({ history, match }) => {
     error: createError,
   } = categoryCreate;
 
+  console.log(createLoading)
+  console.log(createError)
 
   const openModal = () => {
     setModalIsOpen(true);

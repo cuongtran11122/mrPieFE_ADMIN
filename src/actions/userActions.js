@@ -20,6 +20,12 @@ import {
   USER_DELETE_SUCCESS,
   USER_DELETE_FAIL,
   USER_DETAILS_RESET,
+  USER_FORGOTPASSWORD_REQUEST,
+  USER_FORGOTPASSWORD_SUCCESS,
+  USER_FORGOTPASSWORD_FAIL,
+  // USER_UPDATEPASSWORD_REQUEST,
+  // USER_UPDATEPASSWORD_SUCCESS,
+  // USER_UPDATEPASSWORD_FAIL
 } from "./../constants/userConstants";
 
 //login
@@ -108,8 +114,8 @@ export const listUsers =
   };
 
 //register an user
-export const register = (user) => async (dispatch, getState) => {
-  const { name, email, password, isAdmin } = user;
+export const register = (admin) => async (dispatch, getState) => {
+  const { name, username, email, password} = admin;
 
   try {
     dispatch({
@@ -117,22 +123,22 @@ export const register = (user) => async (dispatch, getState) => {
     });
 
     //get user from state
-    const {
-      userLogin: { userInfo },
-    } = getState();
+    // const {
+    //   userLogin: { userInfo },
+    // } = getState();
 
     //headers
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
+        
       },
     };
 
     //get login data
     const { data } = await axios.post(
-      "/api/users",
-      { name, email, password, isAdmin },
+      "/api/v1/admin/account",
+      { name, username, email, password},
       config
     );
     dispatch({
@@ -142,13 +148,77 @@ export const register = (user) => async (dispatch, getState) => {
   } catch (error) {
     dispatch({
       type: USER_REGISTER_FAIL,
-      payload:
-        error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
+      payload: error.response.data.error,
+        
     });
   }
 };
+
+export const forgotPassword = (email) => async (dispatch, getState) =>{
+    try{
+      dispatch({
+        type: USER_FORGOTPASSWORD_REQUEST
+      });
+
+      //headers
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        
+      },
+    };
+
+    const { data } = await axios.patch(
+      "api/v1/admin/reset_passwords/forgot_password",
+      {email},
+      config
+    );
+    dispatch(
+      {
+        type: USER_FORGOTPASSWORD_SUCCESS,
+        payload: data
+      }
+    )
+
+    }catch(error){
+      dispatch({
+        type: USER_FORGOTPASSWORD_FAIL,
+        payload: error.response.data.error
+      })
+    }
+}
+
+// export const updatePassword = (newPassword) => async (dispatch, getState) =>{
+//   try{
+//     dispatch({
+//       type: USER_UPDATEPASSWORD_REQUEST
+//     })
+
+//     const config = {
+//       headers: {
+//         "Content-Type": "application/json",
+        
+//       },
+//     };
+
+//     const { data } = await axios.patch(
+//       "api/v1/admin/reset_passwords/update_password",
+//       {resetToken,newPassword},
+//       config
+//     );
+
+//     dispatch({
+//       type: USER_UPDATEPASSWORD_SUCCESS,
+//       payload: data
+//     })
+
+//   }catch(error){
+//     dispatch({
+//       type: USER_UPDATEPASSWORD_FAIL,
+//       payload: error.response.data.error
+//     })
+//   }
+// }
 
 //get user details
 export const listUserDetails = (id) => async (dispatch, getState) => {

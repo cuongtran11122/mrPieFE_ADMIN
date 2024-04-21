@@ -44,6 +44,7 @@ const ProductEditScreen = ({ history, match }) => {
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  console.log(userInfo)
 
   const categoryList = useSelector((state) => state.categoryList);
   const { categories } = categoryList;
