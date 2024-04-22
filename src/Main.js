@@ -40,7 +40,7 @@ import NotAuthorizedScreen from "./screens/NotAuthorizedScreen";
 const Main = () => {
     const dispatch = useDispatch();
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     return (
         <>

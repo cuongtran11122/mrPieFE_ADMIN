@@ -42,7 +42,7 @@ const ProductCreateScreen = ({ history, match }) => {
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+  const { adminInfo } = userLogin;
 
   const categoryList = useSelector((state) => state.categoryList);
   const { categories } = categoryList;

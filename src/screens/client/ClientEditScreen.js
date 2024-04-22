@@ -31,7 +31,7 @@ const ClientEditScreen = ({ history, match }) => {
     const dispatch = useDispatch();
 
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     //client details state
     const clientDetails = useSelector((state) => state.clientDetails);

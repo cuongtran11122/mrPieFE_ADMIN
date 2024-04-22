@@ -36,7 +36,7 @@ const ClientScreen = ({ history }) => {
     const dispatch = useDispatch();
 
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     const clientList = useSelector((state) => state.clientList);
     const { loading, error, clients, page, pages } = clientList;
@@ -58,7 +58,7 @@ const ClientScreen = ({ history }) => {
             setDni("");
             setModalIsOpen(false);
         }
-    }, [dispatch, history, userInfo, pageNumber, keyword, createSuccess]);
+    }, [dispatch, history, adminInfo, pageNumber, keyword, createSuccess]);
 
     const handleSubmit = (e) => {
         e.preventDefault();

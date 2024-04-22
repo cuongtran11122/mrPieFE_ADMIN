@@ -81,7 +81,7 @@ const state = {
         loading: true,
         categories: [],
     },
-    userLogin: { userInfo: { token: "token" } },
+    userLogin: { adminInfo: { token: "token" } },
 };
 
 /* MOXIOS */

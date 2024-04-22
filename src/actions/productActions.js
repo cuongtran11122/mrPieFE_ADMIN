@@ -33,13 +33,13 @@ export const listProducts = (keyword = "", pageNumber = "") => async (
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -73,14 +73,14 @@ export const createProduct = (product) => async (dispatch, getState) => {
 
         //get product from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -108,13 +108,13 @@ export const listProductDetails = (id) => async (dispatch, getState) => {
 
         // Get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         // Headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -152,13 +152,13 @@ export const updateProduct = (product) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
         //headers
         const config = {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -192,12 +192,12 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 

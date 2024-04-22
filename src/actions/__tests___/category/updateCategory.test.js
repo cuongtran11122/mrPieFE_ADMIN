@@ -44,7 +44,7 @@ const successResponse = {
 /* INITIAL STATE */
 const state = {
     categoryCreate: {},
-    userLogin: { userInfo: { token: "token" } },
+    userLogin: { adminInfo: { token: "token" } },
 };
 
 beforeEach(() => {

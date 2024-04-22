@@ -37,7 +37,7 @@ const CategoryScreen = ({ history, match }) => {
   const { loading, error, categories, page, pages } = categoryList;
 
   const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+  const { adminInfo } = userLogin;
 
   const categoryCreate = useSelector((state) => state.categoryCreate);
   const {
@@ -63,7 +63,7 @@ const CategoryScreen = ({ history, match }) => {
       setName("");
       setModalIsOpen(false);
     }
-  }, [dispatch, history, userInfo, pageNumber, keyword, createSuccess]);
+  }, [dispatch, history, adminInfo, pageNumber, keyword, createSuccess]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

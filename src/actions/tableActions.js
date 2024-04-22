@@ -29,13 +29,13 @@ export const allTables = () => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -69,13 +69,13 @@ export const listTables = (keyword = "", pageNumber = "") => async (
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -111,14 +111,14 @@ export const createTable = (table) => async (dispatch, getState) => {
 
         //get table from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -146,13 +146,13 @@ export const listTableDetails = (id) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -182,13 +182,13 @@ export const updateTable = (table) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
         //headers
         const config = {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -222,12 +222,12 @@ export const deleteTable = (id) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 

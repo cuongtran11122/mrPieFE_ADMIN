@@ -48,7 +48,7 @@ export const login = (username, password) => async (dispatch) => {
     });
 
     //set user info into local storage
-    localStorage.setItem("userInfo", JSON.stringify(data.data));
+    localStorage.setItem("adminInfo", JSON.stringify(data.data));
   } catch (error) {
     // console.log(error.response.data.error);
     dispatch({
@@ -60,7 +60,7 @@ export const login = (username, password) => async (dispatch) => {
 
 //logout
 export const logout = () => (dispatch) => {
-  localStorage.removeItem("userInfo");
+  localStorage.removeItem("adminInfo");
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_RESET });
   dispatch({ type: USER_LOGOUT });
@@ -77,13 +77,13 @@ export const listUsers =
 
       //get user from state
       const {
-        userLogin: { userInfo },
+        userLogin: { adminInfo },
       } = getState();
 
       //headers
       const config = {
         headers: {
-          Authorization: `Bearer ${userInfo.token}`,
+          Authorization: `Bearer ${adminInfo.token}`,
         },
       };
 
@@ -118,14 +118,14 @@ export const register = (user) => async (dispatch, getState) => {
 
     //get user from state
     const {
-      userLogin: { userInfo },
+      userLogin: { adminInfo },
     } = getState();
 
     //headers
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${adminInfo.token}`,
       },
     };
 
@@ -157,13 +157,13 @@ export const listUserDetails = (id) => async (dispatch, getState) => {
 
     //get user from state
     const {
-      userLogin: { userInfo },
+      userLogin: { adminInfo },
     } = getState();
 
     //headers
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${adminInfo.token}`,
       },
     };
 
@@ -196,13 +196,13 @@ export const updateUser = (user) => async (dispatch, getState) => {
 
     //get user from state
     const {
-      userLogin: { userInfo },
+      userLogin: { adminInfo },
     } = getState();
     //headers
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${adminInfo.token}`,
       },
     };
 
@@ -232,12 +232,12 @@ export const deleteUser = (id) => async (dispatch, getState) => {
 
     //get user from state
     const {
-      userLogin: { userInfo },
+      userLogin: { adminInfo },
     } = getState();
     //headers
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${adminInfo.token}`,
       },
     };
 
@@ -266,13 +266,13 @@ export const updateProfile = (user) => async (dispatch, getState) => {
 
     //get user from state
     const {
-      userLogin: { userInfo },
+      userLogin: { adminInfo },
     } = getState();
     //headers
     const config = {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.token}`,
+        Authorization: `Bearer ${adminInfo.token}`,
       },
     };
 

@@ -28,13 +28,13 @@ export const listClients =
 
             //get user from state
             const {
-                userLogin: { userInfo },
+                userLogin: { adminInfo },
             } = getState();
 
             //headers
             const config = {
                 headers: {
-                    Authorization: `Bearer ${userInfo.token}`,
+                    Authorization: `Bearer ${adminInfo.token}`,
                 },
             };
 
@@ -68,14 +68,14 @@ export const createClient = (client) => async (dispatch, getState) => {
 
         //get client from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -103,13 +103,13 @@ export const listClientDetails = (id) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -139,13 +139,13 @@ export const updateClient = (client) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
         //headers
         const config = {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -179,12 +179,12 @@ export const deleteClient = (id) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 

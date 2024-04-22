@@ -44,7 +44,7 @@ const ProfileScreen = ({ history }) => {
     const [errors, setErrors] = useState({});
 
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     //user details state
     const userDetails = useSelector((state) => state.userDetails);
@@ -61,7 +61,7 @@ const ProfileScreen = ({ history }) => {
     useEffect(() => {
         //after update redirect to users
         if (successUpdate) {
-            localStorage.removeItem("userInfo");
+            localStorage.removeItem("adminInfo");
             dispatch({ type: USER_UPDATE_RESET });
             dispatch({ type: USER_DETAILS_RESET });
             dispatch({ type: USER_LOGOUT });
@@ -70,15 +70,15 @@ const ProfileScreen = ({ history }) => {
         }
 
         //load product data
-        if ((!user || !user.name) && userInfo) {
-            dispatch(listUserDetails(userInfo._id));
+        if ((!user || !user.name) && adminInfo) {
+            dispatch(listUserDetails(adminInfo._id));
         } else {
             //set states
             setName(user.name);
             setEmail(user.email);
             setImage(user.image);
         }
-    }, [dispatch, history, user, userInfo, successUpdate]);
+    }, [dispatch, history, user, adminInfo, successUpdate]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -140,7 +140,7 @@ const ProfileScreen = ({ history }) => {
         if (Object.keys(errorsCheck).length === 0) {
             dispatch(
                 updateProfile({
-                    id: userInfo._id,
+                    id: adminInfo._id,
                     name,
                     email,
                     password,
@@ -239,10 +239,10 @@ const ProfileScreen = ({ history }) => {
                 />
             </div>
             <h3 className="profile-username text-center">
-                {userInfo && userInfo.name}
+                {adminInfo && adminInfo.name}
             </h3>
             <p className="text-muted text-center">
-                {userInfo && userInfo.isAdmin ? "Administrator" : "Employee"}
+                {adminInfo && adminInfo.isAdmin ? "Administrator" : "Employee"}
             </p>
         </>
     );

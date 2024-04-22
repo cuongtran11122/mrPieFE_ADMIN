@@ -33,7 +33,7 @@ const TableScreen = ({ history }) => {
     const dispatch = useDispatch();
 
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     const tableList = useSelector((state) => state.tableList);
     const { loading, error, tables, page, pages } = tableList;
@@ -51,7 +51,7 @@ const TableScreen = ({ history }) => {
             setName("");
             setModalIsOpen(false);
         }
-    }, [dispatch, history, userInfo, pageNumber, keyword, createSuccess]);
+    }, [dispatch, history, adminInfo, pageNumber, keyword, createSuccess]);
 
     const handleSubmit = (e) => {
         e.preventDefault();

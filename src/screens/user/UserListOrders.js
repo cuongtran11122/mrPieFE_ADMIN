@@ -21,14 +21,14 @@ const UserListOrders = ({ history, match }) => {
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+  const { adminInfo } = userLogin;
 
   //order details state
   const orderUserList = useSelector((state) => state.orderUserList);
   const { loading, error, orders, page, pages } = orderUserList;
 
   useEffect(() => {
-    if (!userInfo) {
+    if (!adminInfo) {
       history.push("/login");
     }
 
@@ -36,7 +36,7 @@ const UserListOrders = ({ history, match }) => {
       listOrdersUserDetail({ keyword, pageNumber, delivery: false }, userId)
     );
     console.log(orders);
-  }, [dispatch, history, userInfo, pageNumber, keyword]);
+  }, [dispatch, history, adminInfo, pageNumber, keyword]);
 
   const renderTable = () => (
     <table className="table table-hover text-nowrap">

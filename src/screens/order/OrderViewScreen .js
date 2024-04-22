@@ -30,7 +30,7 @@ const OrderViewScreen = ({ history, match }) => {
     const [modal, setModal] = useState(false);
 
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     //order details state
     const orderDetails = useSelector((state) => state.orderDetails);

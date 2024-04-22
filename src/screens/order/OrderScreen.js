@@ -19,19 +19,19 @@ const OrderScreen = ({ history }) => {
     const dispatch = useDispatch();
 
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     const orderList = useSelector((state) => state.orderList);
     const { loading, error, orders, page, pages } = orderList;
 
     useEffect(() => {
-        if (!userInfo) {
+        if (!adminInfo) {
             history.push("/login");
         }
         
         dispatch(listOrders({ keyword, pageNumber, delivery: false }));
         console.log(orders)
-    }, [dispatch, history, userInfo, pageNumber, keyword]);
+    }, [dispatch, history, adminInfo, pageNumber, keyword]);
 
     const renderCreateButton = () => (
         <Link to="/order/create">
