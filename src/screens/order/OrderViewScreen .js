@@ -10,6 +10,7 @@ import LoaderHandler from "../../components/loader/LoaderHandler";
 import ModalButton from "../../components/ModalButton";
 import { BigSpin } from "../../components/loader/SvgLoaders";
 import Checkbox from "../../components/form/Checkbox";
+import Select from "../../components/Select";
 
 /* constants */
 import { ORDER_UPDATE_RESET } from "../../constants/orderConstants";
@@ -29,16 +30,43 @@ const OrderViewScreen = ({ history, match }) => {
   const dispatch = useDispatch();
 
   const [modal, setModal] = useState(false);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(0);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const items = [
+    { id: 0, name: "Pending" },
+    { id: 1, name: "Paid" },
+    { id: 2, name: "Completed" },
+    { id: 3, name: "Canceled" }
+
+  ];
+
+  const formatMoney = (money)=>{
+    return money.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
+  }
+
+  const openModal = (value) => {
+    setStatus(value);
+    setModalIsOpen(true);
+
+    console.log(value);
+  };
+
+  const closeModal = (value) => {
+    setStatus(value);
+    setModalIsOpen(false);
+
+  };
 
   const userLogin = useSelector((state) => state.userLogin);
   const { adminInfo } = userLogin;
 
   //order details state
   const orderDetails = useSelector((state) => state.orderDetails);
-  const { loading, error, order } = orderDetails;
+  const { loading, error, order,user } = orderDetails;
 
   const [totalPrice, setTotalPrice] = useState(0);
+
+ 
 
   //order edit state
   const orderUpdate = useSelector((state) => state.orderUpdate);
@@ -48,17 +76,19 @@ const OrderViewScreen = ({ history, match }) => {
     errorUpdate,
   } = orderUpdate;
 
-  const calculateTotalPrice = () => {
-    if (order && order.orderItems && order.orderItems.length > 0) {
-      const total = order.orderItems.reduce((acc, item) => {
-        return acc + item.attribute.product_price * item.quantity;
-      }, 0);
-      console.log(total);
-      setTotalPrice(total);
-    } else {
-      setTotalPrice(0); // Set to 0 if no order items
-    }
-  };
+  
+
+  // const calculateTotalPrice = () => {
+  //   if (order && order.orderItems && order.orderItems.length > 0) {
+  //     const total = order.orderItems.reduce((acc, item) => {
+  //       return acc + item.attribute.product_price * item.quantity;
+  //     }, 0);
+  //     console.log(total);
+  //     setTotalPrice(total);
+  //   } else {
+  //     setTotalPrice(0); // Set to 0 if no order items
+  //   }
+  // };
 
   useEffect(() => {
     if (successUpdate) {
@@ -75,13 +105,10 @@ const OrderViewScreen = ({ history, match }) => {
       if (!order.id || order.id !== orderId) {
         dispatch(listOrderDetails(orderId));
       }
-      calculateTotalPrice();
+
+      setStatus(order.status)
     }
-    if (order.status === 1) {
-      setStatus(true);
-    } else {
-      setStatus(false);
-    }
+    
   }, [dispatch, history, order, orderId, successUpdate]);
 
   const renderModalPay = () => (
@@ -110,6 +137,20 @@ const OrderViewScreen = ({ history, match }) => {
     </Modal>
   );
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const updatedOrder = {
+      id: orderId,
+      status: status,
+    };
+    dispatch(updateOrderToPaid(updatedOrder));
+    closeModal(status);
+    dispatch(listOrderDetails(orderId));
+  };
+  
+
+
   const handlePay = async (e) => {
     e.preventDefault();
     let statusPay = 0;
@@ -129,6 +170,63 @@ const OrderViewScreen = ({ history, match }) => {
     e.preventDefault();
     history.push(`/order/${orderId}/edit`);
   };
+  const handleSearch = (event) => {
+    console.log("Searching...", event.target.value);
+    // Add your search logic here
+  };
+
+  const renderModal = () => {
+    return (
+      <>
+        {modalIsOpen && (
+          <div id="modal" className="registration-form">
+            <form style={{ position: "relative" }} onSubmit={handleSubmit} >
+              <img
+                onClick={() => closeModal(status)}
+                style={{
+                  width: 20,
+                  height: 20,
+                  cursor: "pointer",
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  margin: 25,
+                }}
+                src={"/close.png"}
+                alt="Close button"
+              />
+              <span>
+                <h3 className="text-center mb-4">
+                  Change order status {status} {" "}
+                </h3>
+                <div style={{height:90}}>
+                <Select data={status} setData={setStatus} items={items} search={handleSearch}/>
+                </div>
+                
+              </span>
+
+              <div className="form-group d-flex justify-content-around mt-5">
+                <button
+                  type="submit"
+                  className="custom_submit_btn"
+                  style={{ width: "40%" }}
+                >
+                  Submit
+                </button>
+                <div
+                  onClick={() => closeModal(status)}
+                  className="custom_delete_btn"
+                  style={{ width: "40%" }}
+                >
+                  Cancel
+                </div>
+              </div>
+            </form>
+          </div>
+        )}
+      </>
+    );
+  };
 
   //get all order items
   const totalItems = (productsIn) => {
@@ -137,10 +235,13 @@ const OrderViewScreen = ({ history, match }) => {
 
   const renderCartInfo = () =>
     order &&
-    order.orderItems && (
-      <div className="small-box bg-info">
+    order.orderItems && order.shipment && (
+      <>
+        <div className="d-flex flex-column flex-md-row ">
+        <div className="col-12 col-md-8">
+        <div className="small-box bg-info">
         <div className="inner">
-          <h3>TOTAL ${totalPrice}</h3>
+          <h3>TOTAL {formatMoney(parseInt(order.total_amount))}</h3>
           <p>
             {order.orderItems.length > 0 ? totalItems(order.orderItems) : 0}{" "}
             Items in Order
@@ -150,6 +251,22 @@ const OrderViewScreen = ({ history, match }) => {
           <i className="fas fa-shopping-cart" />
         </div>
       </div>
+      </div>
+      <div className="col-12 col-md-4">
+      <ViewBox
+        title={formatMoney(parseInt(order.shipment.fee))}
+        paragraph={"Fee shipping"}
+        icon={"fas fa-truck"}
+        color={"bg-info"}
+      />
+    </div>
+
+        </div>
+
+      </>
+      
+      
+      
     );
 
   const renderOrderProducts = () => (
@@ -180,12 +297,12 @@ const OrderViewScreen = ({ history, match }) => {
                 </td>
                 <td className="text-center h4">
                   <span className="badge bg-info">
-                    ${product.attribute.product_price}
+                    {formatMoney(parseInt(product.attribute.product_price))}
                   </span>
                 </td>
                 <td className="text-center h4">
                   <span className={"badge bg-success"}>
-                    ${product.attribute.product_price * product.quantity}{" "}
+                    {formatMoney(parseInt(product.attribute.product_price * product.quantity))}{" "}
                   </span>
                 </td>
               </tr>
@@ -208,25 +325,44 @@ const OrderViewScreen = ({ history, match }) => {
             />
           </div>
 
-          {order.status === 1 ? (
-            <div className="col-12 col-md-6">
-              <ViewBox
-                title={"Paid"}
-                paragraph={"Order is already paid"}
-                icon={"fas fa-check"}
-                color={"bg-success"}
-              />
-            </div>
-          ) : (
-            <div className="col-12 col-md-6">
-              <ViewBox
-                title={"Not Paid"}
-                paragraph={"Order is still not paid"}
-                icon={"far fa-times-circle"}
-                color={"bg-danger"}
-              />
-            </div>
-          )}
+          {order.status === 0 ? (
+    <div className="col-12 col-md-6">
+        <ViewBox
+            title={"Pending"}
+            paragraph={"Order is pending"}
+            icon={"far fa-clock"}
+            color={"bg-warning"}
+        />
+    </div>
+) : order.status === 1 ? (
+    <div className="col-12 col-md-6">
+        <ViewBox
+            title={"Paid"}
+            paragraph={"Order is already paid"}
+            icon={"fas fa-check"}
+            color={"bg-info"}
+        />
+    </div>
+) : order.status === 2 ? (
+    <div className="col-12 col-md-6">
+        <ViewBox
+            title={"Completed"}
+            paragraph={"Order is completed"}
+            icon={"fas fa-check-circle"}
+            color={"bg-success"}
+        />
+    </div>
+) : (
+    <div className="col-12 col-md-6">
+        <ViewBox
+            title={"Canceled"}
+            paragraph={"Order is canceled"}
+            icon={"fas fa-times"}
+            color={"bg-danger"}
+        />
+    </div>
+)}
+
 
           <div className="col-12 col-md-6">
             {order.client && (
@@ -261,8 +397,17 @@ const OrderViewScreen = ({ history, match }) => {
             </div>
           )}
         </div>
-
-        <div className="col-12">
+        
+        
+        {order && order.user && (
+  <div className="col-12">
+    <div className="border rounded  d-flex  mb-3  bg-light d-flex justify-content-center align-items-center " style={{minHeight:40}}>
+    <h6 >Customer name: <strong>{order.user.name}</strong> </h6>
+    </div>
+  </div>
+)}
+        
+        <div className="col-12 mt-1">
           <ViewBox
             title={"Note:"}
             paragraph={order.note}
@@ -270,6 +415,7 @@ const OrderViewScreen = ({ history, match }) => {
             color={"bg-silver"}
           />
         </div>
+        
       </>
     );
 
@@ -293,7 +439,7 @@ const OrderViewScreen = ({ history, match }) => {
     <div className="card">
       <div className="card-header bg-success">Update to Paid</div>
       <div className="card-body">
-        <button className="btn btn-block" onClick={() => setModal(true)}>
+        <button className="btn btn-block" onClick={() => openModal(status)}>
           <ViewBox
             title={`Update`}
             paragraph={`Click to Pay`}
@@ -307,12 +453,14 @@ const OrderViewScreen = ({ history, match }) => {
 
   const renderInfo = () => (
     <>
-      <div className="col-12 col-md-6">
+      <div className="col-12 col-md-8">
         {renderCartInfo()}
+        
         {renderOrderProducts()}
       </div>
+      
 
-      <div className="col-12 col-md-6">{renderOrderInfo()}</div>
+      <div className="col-12 col-md-4">{renderOrderInfo()}</div>
     </>
   );
 
@@ -337,7 +485,7 @@ const OrderViewScreen = ({ history, match }) => {
       <section className="content">
         <div className="container-fluid">
           <div className="row">
-            {renderModalPay()}
+            {renderModal()}
             <div className="col-12">
               <ButtonGoBack history={history} />
 

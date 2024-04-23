@@ -36,6 +36,7 @@ const DashboardScreen = ({ history }) => {
         }
         
         dispatch(getStatistics());
+        
     }, [dispatch, history, adminInfo]);
 
     //get all in place orders
@@ -112,32 +113,32 @@ const DashboardScreen = ({ history }) => {
     const renderSmallBoxes = () => (
         <>
             <SmallBox
-                number={orders.length}
-                paragraph={"Active orders"}
-                link={"order"}
+                number={statistics.completedOrders}
+                paragraph={"Completed Orders"}
+                link={"order?status=2"}
                 color={"success"}
                 icon={"fas fa-utensils"}
             />
 
             <SmallBox
-                number={ordersInPlace(orders).length}
-                paragraph={"In Place Orders"}
-                link={"active"}
+                number={statistics.paidOrders}
+                paragraph={"Paid Orders"}
+                link={"order?status=1"}
                 color={"info"}
                 icon={"fas fa-users"}
             />
             <SmallBox
-                number={ordersForDelivery(orders).length}
-                paragraph={"Orders for delivery"}
-                link={"delivery"}
+                number={statistics.canceledOrders}
+                paragraph={"Canceled Orders"}
+                link={"order?status=3"}
                 color={"danger"}
                 icon={"fas fa-truck"}
             />
 
             <SmallBox
-                number={orders.length}
-                paragraph={"Total orders"}
-                link={"order"}
+                number={statistics.pendingOrders}
+                paragraph={"Pending orders"}
+                link={"order?status=0"}
                 color={"warning"}
                 icon={"ion ion-bag"}
             />
@@ -200,7 +201,7 @@ const DashboardScreen = ({ history }) => {
                             <p className="d-flex flex-column text-right">
                                 <span className="font-weight-bold">
                                     <i className="ion ion-android-arrow-up text-info" />{" "}
-                                    {statistics && statistics.deliveries}
+                                    {/* {statistics && statistics.deliveries} */}
                                 </span>
                                 <span className="text-muted">
                                     TOTAL DELIVERIES COMPLETED
@@ -358,6 +359,7 @@ const DashboardScreen = ({ history }) => {
                                     </Link>
                                     <Link
                                         to={"/order"}
+                                        
                                         className="btn btn-sm btn-secondary float-right"
                                     >
                                         View All Orders
@@ -392,12 +394,13 @@ const DashboardScreen = ({ history }) => {
                                     </ul>
                                 </div>
                                 <div className="card-footer text-center">
-                                    <Link
+                                    <span onClick={()=>{console.log(orders)}}>Test</span>
+                                    {/* <Link
                                         to={"/delivery"}
                                         className="uppercase"
                                     >
                                         View All Delivery Orders
-                                    </Link>
+                                    </Link> */}
                                 </div>
                             </div>
                         </div>
