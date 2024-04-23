@@ -14,22 +14,26 @@ const ProductsTable = ({
     productsInOrder,
     setProductsInOrder,
     productsAlreadyOrdered,
+    order
+
 }) => {
     //add product to order
     const dispatch = useDispatch();
     const [keyword, setKeyword] = useState("");
     const [pageNumber, setPageNumber] = useState(0);
     const [products, setProducts] = useState([]);
+    
 
-    const addProduct = (e, product) => {
+    const addProduct = (e, product,productStock) => {
         e.preventDefault();
-
+        console.log("Hello")
+        console.log(product)
         //product object
         const productIn = {
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            stock: product.stock,
+            id: product.product_id,
+            name: product.product.name,
+            price: product.attribute.product_price,
+            stock: productStock,
             quantity: 1,
         };
         //if is already in order
@@ -62,8 +66,9 @@ const ProductsTable = ({
 
     //check if product is already in order
     const inOrder = (obj, list) => {
+
         for (let index = 0; index < list.length; index++) {
-            if (obj.id === list[index].id) {
+            if (obj.product_id === list[index].id) {
                 return list[index];
             }
         }
@@ -78,11 +83,15 @@ const ProductsTable = ({
 
     //check stock to show
     const showStock = (product) => {
-        const productInOrder = productsInOrder.find(
-            (productIn) => productIn.id === product.id
-        );
-        if (productInOrder) return product.stock - productInOrder.quantity;
-        return product.stock;
+        console.log("Heloosssss")
+        console.log(productsInOrder)
+        let productInOrder=false;
+        if(product.product.id === product.product_id) {
+            productInOrder=true;
+        }
+        
+        if (productInOrder) return product.product.quantity -product.quantity ;
+        return product.product.quantity;
     };
 
     const mapProducts = (productsToMap) => {
@@ -122,7 +131,63 @@ const ProductsTable = ({
                 </tr>
             </thead>
             <tbody>
-                {products.map((product) => (
+            {order &&
+          order.orderItems &&
+          order.orderItems.length > 0 &&
+          order.orderItems.map((product) => {
+            let productStock =0;
+            let productInOrder = false;
+            if(product.product.id === product.product_id) {
+                productInOrder=true;
+            }
+            
+            if (productInOrder){
+                productStock =  product.product.quantity -product.quantity ;
+            }
+            else{
+                productStock =  product.product.quantity
+            }
+
+            return (
+              <tr key={product.id}>
+                <td>{product.id}</td>
+                <td>{product.product.name}</td>
+                
+                <td className=" h4">
+                  <span className="badge bg-info">
+                    ${product.attribute.product_price}
+                  </span>
+                </td>
+                <td>{showStock(product)}</td>
+                {inOrder(product, productsInOrder) ? (
+                            <td className="text-center">
+                                <button disabled className="btn btn-primary">
+                                    In Order
+                                </button>
+                            </td>
+                        ) : productStock > 0 ? (
+                            <td className="text-center">
+                                <button
+                                    className="btn btn-success"
+                                    onClick={(e) => addProduct(e, product,productStock)}
+                                >
+                                    <i className="fas fa-plus"></i>
+                                </button>
+                            </td>
+                        ) : (
+                            <td className="text-center">
+                                <button disabled className="btn btn-danger">
+                                    Out of Stock
+                                </button>
+                            </td>
+                        )}
+              </tr>
+            );
+          })}
+
+
+
+                {/* {products.map((product) => (
                     <tr key={product.id}>
                         <td>{product.id}</td>
                         <td>{product.name}</td>
@@ -151,7 +216,7 @@ const ProductsTable = ({
                             </td>
                         )}
                     </tr>
-                ))}
+                ))} */}
             </tbody>
         </table>
     );
