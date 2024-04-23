@@ -241,8 +241,8 @@ export const updateOrder = (order) => async (dispatch, getState) => {
         };
 
         //update order
-        const { data } = await axios.put(
-            `/api/orders/${order.id}`,
+        const { data } = await axios.patch(
+            `/api/v1/admin/order/${order.id}`,
             order,
             config
         );
@@ -264,9 +264,13 @@ export const updateOrder = (order) => async (dispatch, getState) => {
 //update a order
 export const updateOrderToPaid = (order) => async (dispatch, getState) => {
     try {
+        const newOrder ={
+            status: order.status
+        }
         dispatch({
             type: ORDER_UPDATE_REQUEST,
         });
+
 
         //get user from state
         const {
@@ -280,9 +284,9 @@ export const updateOrderToPaid = (order) => async (dispatch, getState) => {
             },
         };
         //update order
-        const { data } = await axios.post(
-            `/api/orders/${order.id}/pay`,
-            order,
+        const { data } = await axios.patch(
+            `/api/v1/admin/order/${order.id}/status`,
+            newOrder,
             config
         );
         dispatch({

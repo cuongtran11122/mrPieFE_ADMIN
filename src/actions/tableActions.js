@@ -40,7 +40,7 @@ export const allTables = () => async (dispatch, getState) => {
         };
 
         //if tables available is needed
-        const { data } = await axios.get(`/api/tables/all`, config);
+        const { data } = await axios.get(`/api/v1/admin/tables/all`, config);
 
         dispatch({
             type: TABLE_ALL_SUCCESS,

@@ -13,6 +13,7 @@ import Pagination from "../../components/Pagination";
 import { listOrders } from "../../actions/orderActions";
 
 const OrderScreen = ({ history }) => {
+
     const [pageNumber, setPageNumber] = useState(1);
     const [keyword, setKeyword] = useState("");
 
@@ -107,43 +108,83 @@ const OrderScreen = ({ history }) => {
                             setPage={setPageNumber}
                         />
                     </div>
+
                 </div>
-                {/* /.card-header */}
-                <div className="card-body table-responsive p-0">
-                    <LoaderHandler
-                        loading={loading}
-                        error={error}
-                        loader={DataTableLoader()}
-                        render={renderTable}
-                    />
+              ) : (
+                <div className="bg-warning rounded text-white text-center py-1">
+                  <h5 className="text-white">Pending</h5>
                 </div>
-                {/* /.card-body */}
+              )}
+            </td>
+            <td className="d-none d-sm-table-cell h4 py-4 border-right border border-light">
+              <span className={"badge bg-success"}>${order.total_amount}</span>
+            </td>
+            <td className="py-4 border-right border border-light">
+              {order.createdAt.slice(0, 10)}
+            </td>
+            <td className=" border-right border border-light">
+              <Link
+                to={`/order/${order.id}/view`}
+                className="custom_submit_btn"
+              >
+                View
+              </Link>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+
+  const renderOrders = () => (
+    <>
+      <div className="card ">
+        <div className="card-header">
+          <h3 className="card-title">All orders</h3>
+          <div className="card-tools">
+            <Search
+              keyword={keyword}
+              setKeyword={setKeyword}
+              setPage={setPageNumber}
+            />
+          </div>
+        </div>
+        {/* /.card-header */}
+        <div className="card-body table-responsive p-0">
+          <LoaderHandler
+            loading={loading}
+            error={error}
+            loader={DataTableLoader()}
+            render={renderTable}
+          />
+        </div>
+        {/* /.card-body */}
+      </div>
+
+      <Pagination page={page} pages={pages} setPage={setPageNumber} />
+    </>
+  );
+
+  return (
+    <>
+      <HeaderContent name={"Orders"} />
+
+      <section className="content">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-12">
+              {/* {renderCreateButton()} */}
+              <hr />
+              {renderOrders()}
             </div>
-
-            <Pagination page={page} pages={pages} setPage={setPageNumber} />
-        </>
-    );
-
-    return (
-        <>
-            <HeaderContent name={"Orders"} />
-
-            <section className="content">
-                <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-12">
-                            {/* {renderCreateButton()} */}
-                            <hr />
-                            {renderOrders()}
-                        </div>
-                        {/* /.col */}
-                    </div>
-                    {/* /.row */}
-                </div>
-                {/* /.container-fluid */}
-            </section>
-        </>
-    );
+            {/* /.col */}
+          </div>
+          {/* /.row */}
+        </div>
+        {/* /.container-fluid */}
+      </section>
+    </>
+  );
 };
 
 export default OrderScreen;

@@ -38,11 +38,14 @@ const ProductCreateScreen = ({ history, match }) => {
 
   const [errors, setErrors] = useState({});
   const [isAlert, setIsAlert] = useState(false);
+  console.log(isAlert)
 
   const dispatch = useDispatch();
 
   const userLogin = useSelector((state) => state.userLogin);
+
   const { adminInfo } = userLogin;
+
 
   const categoryList = useSelector((state) => state.categoryList);
   const { categories } = categoryList;
