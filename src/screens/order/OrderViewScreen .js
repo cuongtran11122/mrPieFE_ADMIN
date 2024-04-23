@@ -24,87 +24,101 @@ import {
 import { modalStyles } from "../../utils/styles";
 
 const OrderViewScreen = ({ history, match }) => {
+  const orderId = parseInt(match.params.id);
 
-    const orderId = parseInt(match.params.id);
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
+  const [modal, setModal] = useState(false);
+  const [status, setStatus] = useState(false);
 
-    const [modal, setModal] = useState(false);
+  const userLogin = useSelector((state) => state.userLogin);
+  const { adminInfo } = userLogin;
 
-    const userLogin = useSelector((state) => state.userLogin);
-    const { adminInfo } = userLogin;
+  //order details state
+  const orderDetails = useSelector((state) => state.orderDetails);
+  const { loading, error, order } = orderDetails;
 
-    //order details state
-    const orderDetails = useSelector((state) => state.orderDetails);
-    const { loading, error, order } = orderDetails;
+  const [totalPrice, setTotalPrice] = useState(0);
 
-    //order edit state
-    const orderUpdate = useSelector((state) => state.orderUpdate);
-    const {
-        loading: loadingUpdate,
-        success: successUpdate,
-        errorUpdate,
-    } = orderUpdate;
+  //order edit state
+  const orderUpdate = useSelector((state) => state.orderUpdate);
+  const {
+    loading: loadingUpdate,
+    success: successUpdate,
+    errorUpdate,
+  } = orderUpdate;
 
-    useEffect(() => {
-        if (successUpdate) {
-            dispatch({ type: ORDER_UPDATE_RESET });
-            if (order.delivery) {
-                history.push("/delivery");
-            } else {
-                history.push("/active");
-            }
-        }
-        if (order) {
-            if (!order.id || order.id !== orderId) {
-                dispatch(listOrderDetails(orderId));
-            }
-        }
-    }, [dispatch, history, order, orderId, successUpdate]);
+  const calculateTotalPrice = () => {
+    if (order && order.orderItems && order.orderItems.length > 0) {
+      const total = order.orderItems.reduce((acc, item) => {
+        return acc + item.attribute.product_price * item.quantity;
+      }, 0);
+      console.log(total);
+      setTotalPrice(total);
+    } else {
+      setTotalPrice(0); // Set to 0 if no order items
+    }
+  };
 
-    const renderModalPay = () => (
-        <Modal
-            style={modalStyles}
-            isOpen={modal}
-            onRequestClose={() => setModal(false)}
-        >
-            <h2 className="text-center">Order Payment</h2>
-            <p className="text-center">Is order already paid?.</p>
-            <form onSubmit={handlePay}>
-                <button type="submit" className="btn btn-primary">
-                    Yes, close order.
-                </button>
+  useEffect(() => {
+    if (successUpdate) {
+      dispatch({ type: ORDER_UPDATE_RESET });
+      dispatch(listOrderDetails(orderId));
 
-                <ModalButton
-                    modal={modal}
-                    setModal={setModal}
-                    classes={"btn-danger float-right"}
-                />
-            </form>
-        </Modal>
-    );
+      // if (order.delivery) {
+      //   history.push("/delivery");
+      // } else {
+      //   history.push("/active");
+      // }
+    }
+    if (order) {
+      if (!order.id || order.id !== orderId) {
+        dispatch(listOrderDetails(orderId));
+      }
+      calculateTotalPrice();
+    }
+    if (order.status === 1) {
+      setStatus(true);
+    } else {
+      setStatus(false);
+    }
+  }, [dispatch, history, order, orderId, successUpdate]);
 
-    const handlePay = async (e) => {
-        e.preventDefault();
-        const updatedOrder = {
-            id: orderId,
-        };
-        setModal(false);
-        dispatch(updateOrderToPaid(updatedOrder));
-    };
+  const renderModalPay = () => (
+    <Modal
+      style={modalStyles}
+      isOpen={modal}
+      onRequestClose={() => setModal(false)}
+    >
+      <h2 className="text-center">Order Payment</h2>
+      <p className="text-center">Is order already paid?.</p>
+      <form onSubmit={handlePay}>
+        <div className="d-flex justify-content-between align-items-center ">
+          <Checkbox name={"status"} data={status} setData={setStatus} />
+          <div className="d-flex justify-content-center  w-75 ">
+            <button type="submit" className="custom_submit_btn w-35 mx-2 ">
+              Submit
+            </button>
+            <ModalButton
+              modal={modal}
+              setModal={setModal}
+              classes={"custom_delete_btn w-35"}
+            />
+          </div>
+        </div>
+      </form>
+    </Modal>
+  );
 
-    const handleEdit = (e) => {
-        e.preventDefault();
-        history.push(`/order/${orderId}/edit`);
-    };
-
-    //get all order items
-    const totalItems = (productsIn) => {
-        return productsIn.reduce(
-            (acc, item) => acc + item.quantity,
-            0
-        );
-
+  const handlePay = async (e) => {
+    e.preventDefault();
+    let statusPay = 0;
+    if (status) {
+      statusPay = 1;
+    }
+    const updatedOrder = {
+      id: orderId,
+      status: statusPay,
     };
     setModal(false);
     dispatch(updateOrderToPaid(updatedOrder));
@@ -153,14 +167,14 @@ const OrderViewScreen = ({ history, match }) => {
       </thead>
       <tbody>
         {order &&
-          order.orderItems &&
-          order.orderItems.length > 0 &&
-          order.orderItems.map((product) => {
-          
-
+          order?.orderItems &&
+          order?.orderItems.length > 0 &&
+          order?.orderItems.map((product) => {
+            console.log(order);
+            console.log(product.product);
             return (
               <tr key={product.id}>
-                <td>{product.product.name}</td>
+                <td>{product.name}</td>
                 <td className="text-center h4">
                   <span className="badge bg-primary">{product.quantity}</span>
                 </td>
@@ -329,8 +343,7 @@ const OrderViewScreen = ({ history, match }) => {
 
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">View Order  </h3>
-                  
+                  <h3 className="card-title">View Order </h3>
                 </div>
                 {/* /.card-header */}
                 <div className="card-body">

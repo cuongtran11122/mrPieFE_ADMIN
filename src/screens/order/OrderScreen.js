@@ -13,102 +13,77 @@ import Pagination from "../../components/Pagination";
 import { listOrders } from "../../actions/orderActions";
 
 const OrderScreen = ({ history }) => {
+  const [pageNumber, setPageNumber] = useState(1);
+  const [keyword, setKeyword] = useState("");
 
-    const [pageNumber, setPageNumber] = useState(1);
-    const [keyword, setKeyword] = useState("");
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
+  const userLogin = useSelector((state) => state.userLogin);
+  const { adminInfo } = userLogin;
 
-    const userLogin = useSelector((state) => state.userLogin);
-    const { adminInfo } = userLogin;
+  const orderList = useSelector((state) => state.orderList);
+  const { loading, error, orders, page, pages } = orderList;
 
-    const orderList = useSelector((state) => state.orderList);
-    const { loading, error, orders, page, pages } = orderList;
+  useEffect(() => {
+    if (!adminInfo) {
+      history.push("/login");
+    }
 
-    useEffect(() => {
-        if (!adminInfo) {
-            history.push("/login");
-        }
-        
-        dispatch(listOrders({ keyword, pageNumber, delivery: false }));
-        console.log(orders)
-    }, [dispatch, history, adminInfo, pageNumber, keyword]);
+    dispatch(listOrders({ keyword, pageNumber, delivery: false }));
+    console.log(orders);
+  }, [dispatch, history, adminInfo, pageNumber, keyword]);
 
-    const renderCreateButton = () => (
-        <Link to="/order/create">
-            <button className="btn btn-success btn-lg">
-                <i className="fas fa-edit" /> New Order
-            </button>
-        </Link>
-    );
+  const renderCreateButton = () => (
+    <Link to="/order/create">
+      <button className="btn btn-success btn-lg">
+        <i className="fas fa-edit" /> New Order
+      </button>
+    </Link>
+  );
 
-    const renderTable = () => (
-        <table className="table table-hover text-nowrap">
-            <thead>
-                <tr className="bg-success">
-                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Customer name</th>
-                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Phone</th>
-                    <th className="d-none d-sm-table-cell border-right border-bottom-0 border-left-0 border-top-0">Total mount</th>
-                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Status</th>
-                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Total</th>
-                    <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Created date</th>
-                    <th className="border-right border-bottom-0 border-left-0 border-top-0 "></th>
-                </tr>
-            </thead>
-            <tbody>
-                {orders.map((order) => (
-                    <tr key={order.id}>
-                        <td className="py-4 border-right border border-light">{order.user ? order.user.name : ''}</td>
-                        <td className="py-4 border-right border border-light">{order.user ? order.user.phone : ''}</td>
-                        
-                        <td className="py-4 border-right border border-light">
-                            {order.total_amount}
-                        </td>
-                        <td className="py-4 border-right border border-light">
-                            {order.status}
-                            {/* {order.isPaid ? (
-                                <h4 className="text-success">
-                                    <i className="fas fa-check"></i>
-                                </h4>
-                            ) : (
-                                <h4 className="text-danger">
-                                    <i className="far fa-times-circle"></i>
-                                </h4>
-                            )} */}
-                        </td>
-                        <td className="d-none d-sm-table-cell h4 py-4 border-right border border-light">
-                            <span className={"badge bg-success"}>
-                                ${order.total_amount}
-                            </span>
-                        </td>
-                        <td className="py-4 border-right border border-light">{order.createdAt.slice(0, 10)}</td>
-                        <td className=" border-right border border-light">
-                            <Link
-                                to={`/order/${order.id}/view`}
-                                className="custom_submit_btn"
-                            >
-                                View
-                            </Link>
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    );
+  const renderTable = () => (
+    <table className="table table-hover text-nowrap">
+      <thead>
+        <tr className="bg-success">
+          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+            Customer name
+          </th>
+          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+            Phone
+          </th>
+          <th className="d-none d-sm-table-cell border-right border-bottom-0 border-left-0 border-top-0">
+            Total mount
+          </th>
+          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+            Status
+          </th>
+          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+            Total
+          </th>
+          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+            Created date
+          </th>
+          <th className="border-right border-bottom-0 border-left-0 border-top-0 "></th>
+        </tr>
+      </thead>
+      <tbody>
+        {orders.map((order) => (
+          <tr key={order.id}>
+            <td className="py-4 border-right border border-light">
+              {order.user ? order.user.name : ""}
+            </td>
+            <td className="py-4 border-right border border-light">
+              {order.user ? order.user.phone : ""}
+            </td>
 
-    const renderOrders = () => (
-        <>
-            <div className="card ">
-                <div className="card-header">
-                    <h3 className="card-title">All orders</h3>
-                    <div className="card-tools">
-                        <Search
-                            keyword={keyword}
-                            setKeyword={setKeyword}
-                            setPage={setPageNumber}
-                        />
-                    </div>
-
+            <td className="py-4 border-right border border-light">
+              {order.total_amount}
+            </td>
+            <td className="py-4 border-right border border-light">
+              {/* {order.status} */}
+              {order.status === 1 ? (
+                <div className="bg-success rounded text-white text-center py-1  ">
+                  <h5 className="text-white">Paid</h5>
                 </div>
               ) : (
                 <div className="bg-warning rounded text-white text-center py-1">

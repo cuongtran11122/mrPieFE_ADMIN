@@ -36,7 +36,7 @@ const UserEditScreen = ({ history, match }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { adminInfo } = userLogin;
 
-  console.log(userInfo)
+ 
 
   //user details state
   const userDetails = useSelector((state) => state.userDetails);
