@@ -8,6 +8,9 @@ import Modal from "react-modal";
 import Input from "../../components/form/Input";
 import FileInput from "../../components/form/FileInput";
 
+import Loader from "../../components/Loader";
+
+
 import DataTableLoader from "../../components/loader/DataTableLoader";
 import Select from "../../components/Select";
 
@@ -18,6 +21,7 @@ import {
   deleteProduct,
 } from "../../actions/productActions";
 import { listCategories } from "../../actions/categoryActions";
+import { PRODUCT_CREATE_FAIL } from "../../constants/productConstants";
 
 /* Styles */
 
@@ -32,12 +36,14 @@ import "../../../src/style/confirmModal.css"
 
 Modal.setAppElement("#root");
 
+
+
 const ProductScreen = ({ history }) => {
   const [name, setName] = useState("");
   const [name_en, setNameEn] = useState("");
 
-  const [size, setSize] = useState({ S: "", M: "", L: "", J: "" });
-  const [quantity, setQuantity] = useState(0);
+  const [size, setSize] = useState({ S: 0, M: 0, L: 0, J: 0 });
+  // const [quantity, setQuantity] = useState(0);
   const [category, setCategory] = useState(null);
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
@@ -88,12 +94,16 @@ const ProductScreen = ({ history }) => {
     if (createSuccess) {
       setName("");
       setNameEn("");
-      setSize({ S: "", M: "", L: "", J: "" });
-      setQuantity(0);
+      setSize({ S: 0, M: 0, L: 0, J: 0 });
+      // setQuantity(0);
       setCategory(null);
       setNameEn("");
       setModalIsOpen(false);
       setDescription("");
+    }
+    if(createError){
+      dispatch({type: PRODUCT_CREATE_FAIL})
+      console.log(createError)
     }
     dispatch(listProducts(keyword, pageNumber));
   }, [dispatch, history, adminInfo, pageNumber, keyword, createSuccess]);
@@ -122,25 +132,25 @@ const ProductScreen = ({ history }) => {
     //     }
     //   }
 
-    // if (!size.S) {
-    //   errorsCheck.size_S = "Price size value is required";
-    // }
+    if (size.S === undefined || size.S === null) {
+      errorsCheck.size_S = "Price size value is required";
+  }
+  
+  if (size.M === undefined || size.M === null) {
+      errorsCheck.size_M = "Price size value is required";
+  }
+  
+  if (size.L === undefined || size.L === null) {
+      errorsCheck.size_L = "Price size value is required";
+  }
+  
+  if (size.J === undefined || size.J === null) {
+      errorsCheck.size_J = "Price size value is required";
+  }
 
-    // if (!size.M) {
-    //   errorsCheck.size_M = "Price size value is required";
+    // if (!quantity) {
+    //   errorsCheck.quantity = "Quantity is required";
     // }
-
-    // if (!size.L) {
-    //   errorsCheck.size_L = "Price size value is required";
-    // }
-
-    // if (!size.J) {
-    //   errorsCheck.size_J = "Price size value is required";
-    // }
-
-    if (!quantity) {
-      errorsCheck.quantity = "Quantity is required";
-    }
 
     if (!category) {
       errorsCheck.category = "Category is required";
@@ -157,14 +167,14 @@ const ProductScreen = ({ history }) => {
         name: name,
         name_en: name_en,
         size: size,
-        quantity: quantity,
+        // quantity: quantity,
         category_id: category,
         image: image,
         description: description,
       };
 
       dispatch(createProduct(product));
-      refershForm();
+      // refershForm();
     }
   };
 
@@ -192,11 +202,11 @@ const ProductScreen = ({ history }) => {
   const refershForm = () => {
     setName("");
     setNameEn("");
-    setSize({ S: "", M: "", L: "", J: "" });
-    setQuantity(0);
+    setSize({ S: 0, M: 0, L: 0, J: 0 });
+    // setQuantity(0);
     setCategory(null);
     setNameEn("");
-    setModalIsOpen(false);
+    // setModalIsOpen(false);
     setDescription("");
     setImage("")
   };
@@ -216,8 +226,10 @@ const ProductScreen = ({ history }) => {
       {modalIsOpen && (
         <div id="modal" className="registration-form" >
           {/* <img src="../../../public/plugins/close.png" className="w-25 h-25"/> */}
-
+          
           <form style={{ position: "relative" }} onSubmit={handleSubmit}>
+          {loading && <Loader variable={loading} />}
+          {createError && <Message message={createError} color={"danger"} />}
             <img
               onClick={closeModal}
               style={{
@@ -342,7 +354,7 @@ const ProductScreen = ({ history }) => {
               </div>
             </div>
 
-            <div className="form-group">
+            {/* <div className="form-group">
               <CustomInput
                 class="form-control item"
                 name={"quantity"}
@@ -351,7 +363,7 @@ const ProductScreen = ({ history }) => {
                 setData={setQuantity}
                 errors={errors}
               />
-            </div>
+            </div> */}
             {renderCategoriesSelect()}
             {errors.category && (
               <Message message={errors.category} color={"warning"} />
@@ -514,11 +526,11 @@ const ProductScreen = ({ history }) => {
             Name
           </th>
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
-            Price
+            Name English
           </th>
-          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+          {/* <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Quantity
-          </th>
+          </th> */}
           <th className="d-none d-sm-table-cell border-right border-bottom-0 border-left-0 border-top-0 ">
             Category
           </th>
@@ -534,11 +546,11 @@ const ProductScreen = ({ history }) => {
             </td>
 
             <td className="py-4 border-right border border-light">
-              {product.price}
+              {product.name_en}
             </td>
-            <td className="py-4 border-right border border-light ">
+            {/* <td className="py-4 border-right border border-light ">
               {product.quantity}
-            </td>
+            </td> */}
             <td className="d-none d-sm-table-cell py-4 border-right border border-light ">
             {!product.category ? ""  : product.category.name}
             </td>

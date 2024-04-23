@@ -29,7 +29,7 @@ const ProductCreateScreen = ({ history, match }) => {
   const [name, setName] = useState("");
   const [name_en, setNameEn] = useState("");
   const [price, setPrice] = useState(0);
-  const [quantity, setQuantity] = useState(0);
+  // const [quantity, setQuantity] = useState(0);
   const [size, setSize] = useState("");
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -80,7 +80,7 @@ const ProductCreateScreen = ({ history, match }) => {
         setNameEn(product.name_en);
         setPrice(product.price);
         setSize(product.size);
-        setQuantity(product.quantity);
+        // setQuantity(product.quantity);
         setCategory(product.category_id);
         setImage(product.image);
         setDescription(product.description);
@@ -106,9 +106,9 @@ const ProductCreateScreen = ({ history, match }) => {
       errorsCheck.price = "size is required";
     }
 
-    if (!quantity) {
-      errorsCheck.quantity = "quantity is required";
-    }
+    // if (!quantity) {
+    //   errorsCheck.quantity = "quantity is required";
+    // }
     // if (!category) {
     //     errorsCheck.category = "Category is required";
     // }
@@ -126,7 +126,7 @@ const ProductCreateScreen = ({ history, match }) => {
           name,
           name_en,
           price,
-          quantity,
+          // quantity,
           size,
           category_id: category,
           image,
@@ -232,13 +232,13 @@ const ProductCreateScreen = ({ history, match }) => {
         errors={errors}
       />
 
-      <Input
+      {/* <Input
         name={"quantity"}
         type={"number"}
         data={quantity}
         setData={setQuantity}
         errors={errors}
-      />
+      /> */}
 
       
 
