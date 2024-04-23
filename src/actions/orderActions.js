@@ -65,6 +65,48 @@ export const getStatistics = () => async (dispatch, getState) => {
 };
 
 //get all orders with pagination
+export const listOrdersByStatus = (options) => async (dispatch, getState) => {
+    const { keyword, pageNumber, delivery,status } = options;
+    try {
+        dispatch({
+            type: ORDER_LIST_REQUEST,
+        });
+
+        //get user from state
+        const {
+            userLogin: { adminInfo },
+        } = getState();
+
+        //headers
+        const config = {
+            headers: {
+                Authorization: `Bearer ${adminInfo.token}`,
+            },
+        };
+        console.log(adminInfo);
+        //get all orders
+        const { data } = await axios.get(
+            `/api/v1/admin/order/list?keyword=${keyword}&pageNumber=${pageNumber}&status=${status}${
+                delivery ? "&delivery=true" : ""
+            }`,
+            config
+        );
+
+        dispatch({
+            type: ORDER_LIST_SUCCESS,
+            payload: data,
+        });
+    } catch (error) {
+        dispatch({
+            type: ORDER_LIST_FAIL,
+            payload:
+                error.response && error.response.data.message
+                    ? error.response.data.message
+                    : error.message,
+        });
+    }
+};
+
 export const listOrders = (options) => async (dispatch, getState) => {
     const { keyword, pageNumber, delivery } = options;
     try {
@@ -86,7 +128,7 @@ export const listOrders = (options) => async (dispatch, getState) => {
         console.log(adminInfo);
         //get all orders
         const { data } = await axios.get(
-            `/api/v1/admin/order/list?keyword=${keyword}&pageNumber=${pageNumber}${
+            `/api/v1/admin/order/list?keyword=${keyword}&pageNumber=${pageNumber}&${
                 delivery ? "&delivery=true" : ""
             }`,
             config

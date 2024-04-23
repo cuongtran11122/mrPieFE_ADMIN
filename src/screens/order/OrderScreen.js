@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link,useLocation } from "react-router-dom";
+import Modal from "react-modal";
 
 /* Components */
 import HeaderContent from "../../components/HeaderContent";
@@ -9,10 +10,18 @@ import Search from "../../components/Search";
 import LoaderHandler from "../../components/loader/LoaderHandler";
 import Pagination from "../../components/Pagination";
 
+import "../../style/product.css";
+import "../../style/confirmModal.css";
+
+
 /* Actions */
-import { listOrders } from "../../actions/orderActions";
+import { listOrders, updateOrderToPaid,listOrdersByStatus } from "../../actions/orderActions";
 
 const OrderScreen = ({ history }) => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const statusParams = queryParams.get("status");
+  const [orderID, setOrderID] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [keyword, setKeyword] = useState("");
 
@@ -23,23 +32,119 @@ const OrderScreen = ({ history }) => {
 
   const orderList = useSelector((state) => state.orderList);
   const { loading, error, orders, page, pages } = orderList;
+  const [modal, setModal] = useState(false);
+  const [status, setStatus] = useState(0);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  
+
+  const openModal = (value, orderID) => {
+    setStatus(value);
+    setModalIsOpen(true);
+    setOrderID(orderID);
+    console.log(value);
+  };
+
+  const closeModal = (value, orderID) => {
+    setStatus(value);
+    setModalIsOpen(false);
+    setOrderID(orderID);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const updatedOrder = {
+      id: orderID,
+      status: status,
+    };
+    dispatch(updateOrderToPaid(updatedOrder));
+    closeModal(0, 0);
+
+    if(statusParams !=null){
+      dispatch(listOrdersByStatus({ keyword, pageNumber, delivery: false, status:statusParams }));
+    }else{
+      dispatch(listOrders({ keyword, pageNumber, delivery: false }))
+    }
+  };
+  const formatMoney = (money)=>{
+    return money.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
+  } 
 
   useEffect(() => {
+    
+
     if (!adminInfo) {
       history.push("/login");
     }
 
-    dispatch(listOrders({ keyword, pageNumber, delivery: false }));
+    if(statusParams !=null){
+      dispatch(listOrdersByStatus({ keyword, pageNumber, delivery: false, status:statusParams }));
+    }else{
+      dispatch(listOrders({ keyword, pageNumber, delivery: false }))
+    }
+
+    
     console.log(orders);
   }, [dispatch, history, adminInfo, pageNumber, keyword]);
 
-  const renderCreateButton = () => (
-    <Link to="/order/create">
-      <button className="btn btn-success btn-lg">
-        <i className="fas fa-edit" /> New Order
-      </button>
-    </Link>
-  );
+  const handleSearch = (event) => {
+    console.log("Searching...", event.target.value);
+    // Add your search logic here
+  };
+
+  
+
+  const renderModal = () => {
+    return (
+      <>
+        {modalIsOpen && (
+          <div id="modal" className="registration-form">
+            <form style={{ position: "relative" }} onSubmit={handleSubmit}>
+              <img
+                onClick={() => closeModal(0, 0)}
+                style={{
+                  width: 20,
+                  height: 20,
+                  cursor: "pointer",
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  margin: 25,
+                }}
+                src={"/close.png"}
+                alt="Close button"
+              />
+              <span>
+                <h3 className="text-center mb-4">
+                  Change order status {" "}
+                </h3>
+                <p className="text-center mb-4">
+                  Do you want to change order satus ?
+                </p>
+              </span>
+
+              <div className="form-group d-flex justify-content-around mt-5">
+                <button
+                  type="submit"
+                  className="custom_submit_btn"
+                  style={{ width: "40%" }}
+                >
+                  Submit
+                </button>
+                <div
+                  onClick={() => closeModal(0, 0)}
+                  className="custom_delete_btn"
+                  style={{ width: "40%" }}
+                >
+                  Cancel
+                </div>
+              </div>
+            </form>
+          </div>
+        )}
+      </>
+    );
+  };
 
   const renderTable = () => (
     <table className="table table-hover text-nowrap">
@@ -51,9 +156,7 @@ const OrderScreen = ({ history }) => {
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Phone
           </th>
-          <th className="d-none d-sm-table-cell border-right border-bottom-0 border-left-0 border-top-0">
-            Total mount
-          </th>
+          
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Status
           </th>
@@ -76,23 +179,77 @@ const OrderScreen = ({ history }) => {
               {order.user ? order.user.phone : ""}
             </td>
 
+            
             <td className="py-4 border-right border border-light">
-              {order.total_amount}
-            </td>
-            <td className="py-4 border-right border border-light">
-              {/* {order.status} */}
-              {order.status === 1 ? (
-                <div className="bg-success rounded text-white text-center py-1  ">
-                  <h5 className="text-white">Paid</h5>
+              <div class="btn-group w-100">
+              <button
+    type="button"
+    className={`btn dropdown-toggle d-flex align-items-center justify-content-center w-50 ${
+        order.status === 0 ? 'btn-warning' :
+        order.status === 1 ? 'btn-info' :
+        order.status === 2 ? 'btn-success' :
+        'btn-danger'
+    }`}
+    data-toggle="dropdown"
+    aria-haspopup="true"
+    aria-expanded="false"
+>
+    {order.status === 0 ? (
+        <span>
+            <strong>Pending</strong>
+        </span>
+    ) : order.status === 1 ? (
+        <span>
+            <strong>Paid</strong>
+        </span>
+    ) : order.status === 2 ? (
+        <span>
+            <strong>Completed</strong>
+        </span>
+    ) : (
+        <span>
+            <strong>Canceled</strong>
+        </span>
+    )}
+</button>
+                <div class="dropdown-menu dropdown-menu-right">
+                  <button
+                    value={0}
+                    class="dropdown-item"
+                    type="button"
+                    onClick={() => openModal(0, order.id)}
+                  >
+                    Pending
+                  </button>
+                  <button
+                    value={1}
+                    class="dropdown-item"
+                    type="button"
+                    onClick={() => openModal(1, order.id)}
+                  >
+                    Paid
+                  </button>
+                  <button
+                    value={2}
+                    class="dropdown-item"
+                    type="button"
+                    onClick={() => openModal(2, order.id)}
+                  >
+                    Completed
+                  </button>
+                  <button
+                    value={3}
+                    class="dropdown-item"
+                    type="button"
+                    onClick={() => openModal(3, order.id)}
+                  >
+                    Canceled
+                  </button>
                 </div>
-              ) : (
-                <div className="bg-warning rounded text-white text-center py-1">
-                  <h5 className="text-white">Pending</h5>
-                </div>
-              )}
+              </div>
             </td>
             <td className="d-none d-sm-table-cell h4 py-4 border-right border border-light">
-              <span className={"badge bg-success"}>${order.total_amount}</span>
+              <span className={"badge bg-success "} style={{minWidth:200}}>{formatMoney(parseInt(order.total_amount))}</span>
             </td>
             <td className="py-4 border-right border border-light">
               {order.createdAt.slice(0, 10)}
@@ -146,9 +303,9 @@ const OrderScreen = ({ history }) => {
 
       <section className="content">
         <div className="container-fluid">
+          {renderModal()}
           <div className="row">
             <div className="col-12">
-              {/* {renderCreateButton()} */}
               <hr />
               {renderOrders()}
             </div>
