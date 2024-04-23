@@ -31,7 +31,7 @@ const ProductEditScreen = ({ history, match }) => {
   const [name, setName] = useState("");
   const [name_en, setNameEn] = useState("");
 
-  const [quantity, setQuantity] = useState(0);
+  // const [quantity, setQuantity] = useState(0);
   const [size, setSize] = useState({ S: "", M: "", L: "", J: "" });
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -78,7 +78,7 @@ const ProductEditScreen = ({ history, match }) => {
         //set states
         setName(product.name);
         setNameEn(product.name_en);
-        setQuantity(product.quantity);
+        // setQuantity(product.quantity);
         setCategory(product.category_id);
         setImage(product.image);
         setDescription(product.description);
@@ -107,9 +107,9 @@ const ProductEditScreen = ({ history, match }) => {
       errorsCheck.name_en = "English name is required";
     }
 
-    if (!quantity) {
-      errorsCheck.quantity = "quantity is required";
-    }
+    // if (!quantity) {
+    //   errorsCheck.quantity = "quantity is required";
+    // }
     // if (!category) {
     //     errorsCheck.category = "Category is required";
     // }
@@ -126,7 +126,7 @@ const ProductEditScreen = ({ history, match }) => {
           id: productId,
           name,
           name_en,
-          quantity,
+          // quantity,
           size,
           category_id: category,
           image,
@@ -303,7 +303,7 @@ const ProductEditScreen = ({ history, match }) => {
         </div>
       </div>
 
-      <div className="form-group">
+      {/* <div className="form-group">
         <CustomInput
           class="form-control item"
           name={"quantity"}
@@ -312,7 +312,7 @@ const ProductEditScreen = ({ history, match }) => {
           setData={setQuantity}
           errors={errors}
         />
-      </div>
+      </div> */}
 
       {/* <Input
         name={"quantity"}
