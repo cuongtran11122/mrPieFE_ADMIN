@@ -70,6 +70,9 @@ const ProductScreen = ({ history }) => {
     error: createError,
   } = productCreate;
 
+  console.log(createLoading)
+  console.log(createError)
+
   const openModal = () => {
     setModalIsOpen(true);
   };
