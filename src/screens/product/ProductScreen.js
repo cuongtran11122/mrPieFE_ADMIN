@@ -61,7 +61,7 @@ const ProductScreen = ({ history }) => {
   const { loading, error, products, page, pages } = productList;
 
   const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+  const { adminInfo } = userLogin;
 
   const productCreate = useSelector((state) => state.productCreate);
   const {
@@ -96,7 +96,7 @@ const ProductScreen = ({ history }) => {
       setDescription("");
     }
     dispatch(listProducts(keyword, pageNumber));
-  }, [dispatch, history, userInfo, pageNumber, keyword, createSuccess]);
+  }, [dispatch, history, adminInfo, pageNumber, keyword, createSuccess]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

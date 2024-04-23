@@ -29,7 +29,7 @@ const TableEditScreen = ({ history, match }) => {
     const dispatch = useDispatch();
 
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     //table details state
     const tableDetails = useSelector((state) => state.tableDetails);

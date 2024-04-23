@@ -23,7 +23,7 @@ const DashboardScreen = ({ history }) => {
 
     //user state
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     const orderStatistics = useSelector((state) => state.orderStatistics);
     const { loading, error, data } = orderStatistics;
@@ -31,12 +31,12 @@ const DashboardScreen = ({ history }) => {
     const { orders, sales, statistics } = data;
 
     useEffect(() => {
-        if (!userInfo) {
+        if (!adminInfo) {
             history.push("/login");
         }
         
         dispatch(getStatistics());
-    }, [dispatch, history, userInfo]);
+    }, [dispatch, history, adminInfo]);
 
     //get all in place orders
     const ordersInPlace = (orders) => {
@@ -313,7 +313,7 @@ const DashboardScreen = ({ history }) => {
                         />
                     </div>
 
-                    {userInfo.isAdmin && (
+                    {adminInfo.isAdmin && (
                         <LoaderHandler
                             loading={loading}
                             error={error}

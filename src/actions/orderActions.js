@@ -34,14 +34,14 @@ export const getStatistics = () => async (dispatch, getState) => {
         
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
        
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
         
@@ -74,16 +74,16 @@ export const listOrders = (options) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
-        console.log(userInfo);
+        console.log(adminInfo);
         //get all orders
         const { data } = await axios.get(
             `/api/v1/admin/order/list?keyword=${keyword}&pageNumber=${pageNumber}${
@@ -116,14 +116,14 @@ export const createOrder = (order) => async (dispatch, getState) => {
 
         //get order from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -151,13 +151,13 @@ export const listOrderDetails = (id) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -188,16 +188,16 @@ export const listOrdersUserDetail = (options,userID) => async (dispatch, getStat
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
-        console.log(userInfo);
+        console.log(adminInfo);
         //get all orders
         const { data } = await axios.get(
             `/api/v1/admin/order/list/${userID}?keyword=${keyword}&pageNumber=${pageNumber}${
@@ -230,13 +230,13 @@ export const updateOrder = (order) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
         //headers
         const config = {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -274,13 +274,13 @@ export const updateOrderToPaid = (order) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
         //headers
         const config = {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
         //update order
@@ -313,12 +313,12 @@ export const deleteOrder = (id) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 

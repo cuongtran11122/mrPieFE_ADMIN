@@ -31,7 +31,7 @@ const CategoryEditScreen = ({ history, match }) => {
     const dispatch = useDispatch();
 
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     const [status, setStatus] = useState(false);
 

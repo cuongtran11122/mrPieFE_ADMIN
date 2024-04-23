@@ -13,14 +13,14 @@ const SignInScreen = ({ history }) => {
 
     //get user from state
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo, error, loading } = userLogin;
+    const { adminInfo, error, loading } = userLogin;
 
     useEffect(() => {
         //if user is logged
-        if (userInfo) {
+        if (adminInfo) {
             history.push("/");
         }
-    }, [history, userInfo]);
+    }, [history, adminInfo]);
 
     const submitHandler = (e) => {
         e.preventDefault();

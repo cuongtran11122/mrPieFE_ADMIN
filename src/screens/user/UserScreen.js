@@ -37,7 +37,7 @@ const UserScreen = ({ history }) => {
     const { loading, error, users, page, pages } = userList;
 
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     const userRegister = useSelector((state) => state.userRegister);
     const {
@@ -47,7 +47,7 @@ const UserScreen = ({ history }) => {
     } = userRegister;
 
     useEffect(() => {
-        if (userInfo) {
+        if (adminInfo) {
             dispatch(listUsers(keyword, pageNumber));
         }
         if (createSuccess) {
@@ -58,7 +58,7 @@ const UserScreen = ({ history }) => {
 
             setModalIsOpen(false);
         }
-    }, [dispatch, userInfo, pageNumber, keyword, history, createSuccess]);
+    }, [dispatch, adminInfo, pageNumber, keyword, history, createSuccess]);
 
     const handleSubmit = (e) => {
         e.preventDefault();

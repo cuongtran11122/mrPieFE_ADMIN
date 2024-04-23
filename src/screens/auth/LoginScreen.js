@@ -11,16 +11,18 @@ const LoginScreen = ({ history }) => {
 
   const dispatch = useDispatch();
 
-  //get user from state
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo, error, loading } = userLogin;
 
-  useEffect(() => {
-    //if user is logged
-    if (userInfo) {
-      history.push("/dashboard");
-    }
-  }, [history, userInfo]);
+    //get user from state
+    const userLogin = useSelector((state) => state.userLogin);
+    const { adminInfo, error, loading } = userLogin;
+
+    useEffect(() => {
+        //if user is logged
+        if (adminInfo) {
+            history.push("/dashboard");
+        }
+    }, [history, adminInfo]);
+
 
   const submitHandler = (e) => {
     e.preventDefault();

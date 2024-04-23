@@ -28,13 +28,13 @@ export const listCategories =
 
             //get user from state
             const {
-                userLogin: { userInfo },
+                userLogin: { adminInfo },
             } = getState();
 
             //headers
             const config = {
                 headers: {
-                    Authorization: `Bearer ${userInfo.token}`,
+                    Authorization: `Bearer ${adminInfo.token}`,
                 },
             };
 
@@ -70,14 +70,14 @@ export const createCategory = (category) => async (dispatch, getState) => {
 
         //get category from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -105,13 +105,13 @@ export const listCategoryDetails = (id) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
 
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -141,13 +141,13 @@ export const updateCategory = (category) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
         //headers
         const config = {
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 
@@ -181,12 +181,12 @@ export const deleteCategory = (id) => async (dispatch, getState) => {
 
         //get user from state
         const {
-            userLogin: { userInfo },
+            userLogin: { adminInfo },
         } = getState();
         //headers
         const config = {
             headers: {
-                Authorization: `Bearer ${userInfo.token}`,
+                Authorization: `Bearer ${adminInfo.token}`,
             },
         };
 

@@ -18,14 +18,14 @@ const ActiveOrdersScreen = ({ history }) => {
     const dispatch = useDispatch();
 
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     const tableAll = useSelector((state) => state.tableAll);
     const { loading, error, tables } = tableAll;
 
     useEffect(() => {
         dispatch(allTables());
-    }, [dispatch, history, userInfo]);
+    }, [dispatch, history, adminInfo]);
 
     const occupiedTableLoader = () => {
         let tableSkeleton = [];

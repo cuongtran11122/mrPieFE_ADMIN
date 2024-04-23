@@ -24,104 +24,87 @@ import {
 import { modalStyles } from "../../utils/styles";
 
 const OrderViewScreen = ({ history, match }) => {
-  const orderId = parseInt(match.params.id);
 
-  const dispatch = useDispatch();
+    const orderId = parseInt(match.params.id);
 
-  const [modal, setModal] = useState(false);
-  const [status, setStatus] = useState(false);
+    const dispatch = useDispatch();
 
-  const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
+    const [modal, setModal] = useState(false);
 
-  //order details state
-  const orderDetails = useSelector((state) => state.orderDetails);
-  const { loading, error, order } = orderDetails;
-  
-  const [totalPrice,setTotalPrice] = useState(0);
+    const userLogin = useSelector((state) => state.userLogin);
+    const { adminInfo } = userLogin;
 
-  //order edit state
-  const orderUpdate = useSelector((state) => state.orderUpdate);
-  const {
-    loading: loadingUpdate,
-    success: successUpdate,
-    errorUpdate,
-  } = orderUpdate;
+    //order details state
+    const orderDetails = useSelector((state) => state.orderDetails);
+    const { loading, error, order } = orderDetails;
 
-  const calculateTotalPrice = () => {
-    if (order && order.orderItems && order.orderItems.length > 0) {
-      const total = order.orderItems.reduce((acc, item) => {
-        return acc + (item.attribute.product_price * item.quantity);
-      }, 0);
-      console.log(total)
-      setTotalPrice(total);
-      
-    } else {
-      setTotalPrice(0); // Set to 0 if no order items
-    }
-  };
+    //order edit state
+    const orderUpdate = useSelector((state) => state.orderUpdate);
+    const {
+        loading: loadingUpdate,
+        success: successUpdate,
+        errorUpdate,
+    } = orderUpdate;
 
-  useEffect(() => {
-    if (successUpdate) {
-      dispatch({ type: ORDER_UPDATE_RESET });
-      dispatch(listOrderDetails(orderId));
-      
-      // if (order.delivery) {
-      //   history.push("/delivery");
-      // } else {
-      //   history.push("/active");
-      // }
-    }
-    if (order) {
-      if (!order.id || order.id !== orderId) {
-        dispatch(listOrderDetails(orderId));
-        
-        
-      }
-      calculateTotalPrice();
-    }
-    if (order.status === 1) {
-      setStatus(true);
-    } else {
-      setStatus(false);
-    }
-  }, [dispatch, history, order, orderId, successUpdate]);
+    useEffect(() => {
+        if (successUpdate) {
+            dispatch({ type: ORDER_UPDATE_RESET });
+            if (order.delivery) {
+                history.push("/delivery");
+            } else {
+                history.push("/active");
+            }
+        }
+        if (order) {
+            if (!order.id || order.id !== orderId) {
+                dispatch(listOrderDetails(orderId));
+            }
+        }
+    }, [dispatch, history, order, orderId, successUpdate]);
 
-  const renderModalPay = () => (
-    <Modal
-      style={modalStyles}
-      isOpen={modal}
-      onRequestClose={() => setModal(false)}
-    >
-      <h2 className="text-center">Order Payment</h2>
-      <p className="text-center">Is order already paid?.</p>
-      <form onSubmit={handlePay}>
-        <div className="d-flex justify-content-between align-items-center ">
-          <Checkbox name={"status"} data={status} setData={setStatus} />
-          <div className="d-flex justify-content-center  w-75 ">
-            <button type="submit" className="custom_submit_btn w-35 mx-2 ">
-              Submit
-            </button>
-            <ModalButton
-              modal={modal}
-              setModal={setModal}
-              classes={"custom_delete_btn w-35"}
-            />
-          </div>
-        </div>
-      </form>
-    </Modal>
-  );
+    const renderModalPay = () => (
+        <Modal
+            style={modalStyles}
+            isOpen={modal}
+            onRequestClose={() => setModal(false)}
+        >
+            <h2 className="text-center">Order Payment</h2>
+            <p className="text-center">Is order already paid?.</p>
+            <form onSubmit={handlePay}>
+                <button type="submit" className="btn btn-primary">
+                    Yes, close order.
+                </button>
 
-  const handlePay = async (e) => {
-    e.preventDefault();
-    let statusPay = 0;
-    if (status) {
-      statusPay = 1;
-    }
-    const updatedOrder = {
-      id: orderId,
-      status: statusPay,
+                <ModalButton
+                    modal={modal}
+                    setModal={setModal}
+                    classes={"btn-danger float-right"}
+                />
+            </form>
+        </Modal>
+    );
+
+    const handlePay = async (e) => {
+        e.preventDefault();
+        const updatedOrder = {
+            id: orderId,
+        };
+        setModal(false);
+        dispatch(updateOrderToPaid(updatedOrder));
+    };
+
+    const handleEdit = (e) => {
+        e.preventDefault();
+        history.push(`/order/${orderId}/edit`);
+    };
+
+    //get all order items
+    const totalItems = (productsIn) => {
+        return productsIn.reduce(
+            (acc, item) => acc + item.quantity,
+            0
+        );
+
     };
     setModal(false);
     dispatch(updateOrderToPaid(updatedOrder));

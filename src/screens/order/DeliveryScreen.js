@@ -18,14 +18,14 @@ const DeliveryScreen = ({ history }) => {
     const [pageNumber, setPageNumber] = useState(1);
     const [keyword, setKeyword] = useState("");
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     const orderList = useSelector((state) => state.orderList);
     const { loading, error, orders, page, pages } = orderList;
 
     useEffect(() => {
         dispatch(listOrders({ keyword, pageNumber, delivery: true }));
-    }, [dispatch, history, userInfo, pageNumber, keyword]);
+    }, [dispatch, history, adminInfo, pageNumber, keyword]);
 
     const renderCreateButton = () => (
         <Link to="/order/create/delivery">
