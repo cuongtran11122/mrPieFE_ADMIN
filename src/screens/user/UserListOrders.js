@@ -27,6 +27,13 @@ const UserListOrders = ({ history, match }) => {
   const orderUserList = useSelector((state) => state.orderUserList);
   const { loading, error, orders, page, pages } = orderUserList;
 
+  const formatMoney = (money) => {
+    return money.toLocaleString("it-IT", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
+
   useEffect(() => {
     if (!adminInfo) {
       history.push("/login");
@@ -48,9 +55,7 @@ const UserListOrders = ({ history, match }) => {
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Phone
           </th>
-          <th className="d-none d-sm-table-cell border-right border-bottom-0 border-left-0 border-top-0">
-            Total mount
-          </th>
+
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Status
           </th>
@@ -74,10 +79,7 @@ const UserListOrders = ({ history, match }) => {
             </td>
 
             <td className="py-4 border-right border border-light">
-              {order.total_amount}
-            </td>
-            <td className="py-4 border-right border border-light">
-              {order.status}
+              {/* {order.status}
               {/* {order.isPaid ? (
                             <h4 className="text-success">
                                 <i className="fas fa-check"></i>
@@ -87,9 +89,41 @@ const UserListOrders = ({ history, match }) => {
                                 <i className="far fa-times-circle"></i>
                             </h4>
                         )} */}
+
+              <div class="btn-group w-100">
+                <div
+                  className={`btn  d-flex align-items-center justify-content-center w-50 ${
+                    order.status === 0
+                      ? "btn-warning"
+                      : order.status === 1
+                      ? "btn-info"
+                      : order.status === 2
+                      ? "btn-success"
+                      : "btn-danger"
+                  }`}
+                >
+                  {order.status === 0 ? (
+                    <span>
+                      <strong>Pending</strong>
+                    </span>
+                  ) : order.status === 1 ? (
+                    <span>
+                      <strong>Paid</strong>
+                    </span>
+                  ) : order.status === 2 ? (
+                    <span>
+                      <strong>Completed</strong>
+                    </span>
+                  ) : (
+                    <span>
+                      <strong>Canceled</strong>
+                    </span>
+                  )}
+                </div>
+              </div>
             </td>
             <td className="d-none d-sm-table-cell h4 py-4 border-right border border-light">
-              <span className={"badge bg-primary"}>${order.total_amount}</span>
+              <span className={"badge bg-primary "} style={{minWidth:200}}>{formatMoney(parseInt(order.total_amount))}</span>
             </td>
             <td className="py-4 border-right border border-light">
               {order.createdAt.slice(0, 10)}

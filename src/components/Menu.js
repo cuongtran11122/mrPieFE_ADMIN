@@ -6,14 +6,14 @@ const Menu = ({ history }) => {
     const dispatch = useDispatch();
 
     const userLogin = useSelector((state) => state.userLogin);
-    const { userInfo } = userLogin;
+    const { adminInfo } = userLogin;
 
     useEffect(() => {
-        if (!userInfo) {
+        if (!adminInfo) {
             redirectTo();
         }
         
-    }, [dispatch, userInfo]);
+    }, [dispatch, adminInfo]);
 
     const redirectTo = () => {
         return (
@@ -45,7 +45,7 @@ const Menu = ({ history }) => {
                 <div className="user-panel w-full mt-3 pb-3 mb-3 d-flex ">
                     <div className="image">
                         <img
-                            // src={userInfo ? userInfo.image : "/avatar.png"}
+                            // src={adminInfo ? adminInfo.image : "/avatar.png"}
                             src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
                             className="img-circle elevation-2"
                             alt="User"
@@ -53,7 +53,7 @@ const Menu = ({ history }) => {
                     </div>
                     <div className="info">
                         <Link to="/profile" className="d-block">
-                            {userInfo ? userInfo.username : ""}
+                            {adminInfo ? adminInfo.username : ""}
                         </Link>
                     </div>
                 </div>
