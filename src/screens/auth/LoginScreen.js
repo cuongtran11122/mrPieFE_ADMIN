@@ -19,7 +19,7 @@ const LoginScreen = ({ history }) => {
     useEffect(() => {
         //if user is logged
         if (adminInfo) {
-            history.push("/dashboard");
+            history.push("/order");
         }
     }, [history, adminInfo]);
 

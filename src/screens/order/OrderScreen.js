@@ -41,7 +41,7 @@ const OrderScreen = ({ history }) => {
     setStatus(value);
     setModalIsOpen(true);
     setOrderID(orderID);
-    console.log(value);
+    
   };
 
   const closeModal = (value, orderID) => {
@@ -84,7 +84,7 @@ const OrderScreen = ({ history }) => {
     }
 
     
-    console.log(orders);
+    
   }, [dispatch, history, adminInfo, pageNumber, keyword]);
 
   const handleSearch = (event) => {
