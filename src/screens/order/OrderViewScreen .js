@@ -289,7 +289,7 @@ const OrderViewScreen = ({ history, match }) => {
           order?.orderItems.map((product) => {
             return (
               <tr key={product.id}>
-                <td>{product.name}</td>
+                <td>{product.product.name}</td>
                 <td className="text-center h4">
                   <span className="badge bg-primary">{product.quantity}</span>
                 </td>
