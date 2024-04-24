@@ -73,7 +73,7 @@ const OrderEditScreen = ({ history, match }) => {
             return acc + (item.attribute.product_price * item.quantity);
           }, 0);
           
-          console.log(total)
+          
           setCurrentTotalPrices(total)
           
         } else {
@@ -173,7 +173,7 @@ const OrderEditScreen = ({ history, match }) => {
         } else {
             setErrors({});
             const updatedProduct =  updateProductQuantity(productOrders,productsInOrder)
-            console.log(updatedProduct)
+            
             
             const updatedOrderItems = updatedProduct.map(product => ({
                 productId: product.id,
@@ -186,7 +186,7 @@ const OrderEditScreen = ({ history, match }) => {
                 total_amount: parseInt(currentTotalPrices) + parseInt(total),
                 updatedProductOrders: updatedOrderItems // Use updatedProductOrders instead of products
             };
-            console.log(order)
+            
             // Dispatch the updateOrder action
             dispatch(updateOrder(order));
         }

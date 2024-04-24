@@ -197,7 +197,7 @@ const OrderViewScreen = ({ history, match }) => {
               />
               <span>
                 <h3 className="text-center mb-4">
-                  Change order status {status} {" "}
+                  Change order status {" "}
                 </h3>
                 <div style={{height:90}}>
                 <Select data={status} setData={setStatus} items={items} search={handleSearch}/>
@@ -287,8 +287,6 @@ const OrderViewScreen = ({ history, match }) => {
           order?.orderItems &&
           order?.orderItems.length > 0 &&
           order?.orderItems.map((product) => {
-            console.log(order);
-            console.log(product.product);
             return (
               <tr key={product.id}>
                 <td>{product.name}</td>
