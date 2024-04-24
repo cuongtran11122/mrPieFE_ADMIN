@@ -23,9 +23,9 @@ import {
   USER_FORGOTPASSWORD_REQUEST,
   USER_FORGOTPASSWORD_SUCCESS,
   USER_FORGOTPASSWORD_FAIL,
-  // USER_UPDATEPASSWORD_REQUEST,
-  // USER_UPDATEPASSWORD_SUCCESS,
-  // USER_UPDATEPASSWORD_FAIL
+  USER_UPDATEPASSWORD_REQUEST,
+  USER_UPDATEPASSWORD_SUCCESS,
+  USER_UPDATEPASSWORD_FAIL
 } from "./../constants/userConstants";
 
 //login
@@ -188,37 +188,38 @@ export const forgotPassword = (email) => async (dispatch, getState) =>{
     }
 }
 
-// export const updatePassword = (newPassword) => async (dispatch, getState) =>{
-//   try{
-//     dispatch({
-//       type: USER_UPDATEPASSWORD_REQUEST
-//     })
+export const updatePassword = (newPassword) => async (dispatch, getState) =>{
+  try{
+    dispatch({
+      type: USER_UPDATEPASSWORD_REQUEST
+    })
 
-//     const config = {
-//       headers: {
-//         "Content-Type": "application/json",
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
         
-//       },
-//     };
+      },
+    };
 
-//     const { data } = await axios.patch(
-//       "api/v1/admin/reset_passwords/update_password",
-//       {resetToken,newPassword},
-//       config
-//     );
+    const { data } = await axios.patch(
+      "api/v1/admin/reset_passwords/update_password",
+      {newPassword},
+      // {resetToken,newPassword},
+      config
+    );
 
-//     dispatch({
-//       type: USER_UPDATEPASSWORD_SUCCESS,
-//       payload: data
-//     })
+    dispatch({
+      type: USER_UPDATEPASSWORD_SUCCESS,
+      payload: data
+    })
 
-//   }catch(error){
-//     dispatch({
-//       type: USER_UPDATEPASSWORD_FAIL,
-//       payload: error.response.data.error
-//     })
-//   }
-// }
+  }catch(error){
+    dispatch({
+      type: USER_UPDATEPASSWORD_FAIL,
+      payload: error.response.data.error
+    })
+  }
+}
 
 //get user details
 export const listUserDetails = (id) => async (dispatch, getState) => {
