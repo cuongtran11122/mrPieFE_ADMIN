@@ -123,19 +123,15 @@ export const register = (admin) => async (dispatch, getState) => {
     });
 
     //get user from state
-
-    const {
-      userLogin: { adminInfo },
-    } = getState();
-
+    // const {
+    //   userLogin: { userInfo },
+    // } = getState();
 
     //headers
     const config = {
       headers: {
         "Content-Type": "application/json",
-
-        Authorization: `Bearer ${adminInfo.token}`,
-
+        
       },
     };
 
@@ -153,6 +149,7 @@ export const register = (admin) => async (dispatch, getState) => {
     dispatch({
       type: USER_REGISTER_FAIL,
       payload: error.response.data.error,
+        
     });
   }
 };
