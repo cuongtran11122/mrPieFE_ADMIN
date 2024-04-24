@@ -85,14 +85,7 @@ const LoginScreen = ({ history }) => {
               </div>
 
               <div className="row justify-content-around">
-                <div className="col-4">
-                    <Link to="/register">
-                    <button className="btn btn-primary btn-block">
-                    Register
-                  </button>
-                    </Link>
-                  
-                </div>
+                 
                 <div className="col-4">
                   <button type="submit" className="btn btn-primary btn-block">
                     Sign In
