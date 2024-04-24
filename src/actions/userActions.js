@@ -123,19 +123,15 @@ export const register = (admin) => async (dispatch, getState) => {
     });
 
     //get user from state
-
-    const {
-      userLogin: { adminInfo },
-    } = getState();
-
+    // const {
+    //   userLogin: { userInfo },
+    // } = getState();
 
     //headers
     const config = {
       headers: {
         "Content-Type": "application/json",
-
-        Authorization: `Bearer ${adminInfo.token}`,
-
+        
       },
     };
 

@@ -94,7 +94,7 @@ const ProductScreen = ({ history }) => {
     if (createSuccess) {
       setName("");
       setNameEn("");
-      setSize({ S: 0, M: 0, L: 0, J: 0 });
+      setSize({ S: '', M: '', L: '', J: '' });
       // setQuantity(0);
       setCategory(null);
       setNameEn("");
@@ -132,29 +132,29 @@ const ProductScreen = ({ history }) => {
     //     }
     //   }
 
-    if (size.S === undefined || size.S === null) {
-      errorsCheck.size_S = "Price size value is required";
-  }
+  //   if (size.S === undefined || size.S === null) {
+  //     errorsCheck.size_S = "Price size value is required";
+  // }
   
-  if (size.M === undefined || size.M === null) {
-      errorsCheck.size_M = "Price size value is required";
-  }
+  // if (size.M === undefined || size.M === null) {
+  //     errorsCheck.size_M = "Price size value is required";
+  // }
   
-  if (size.L === undefined || size.L === null) {
-      errorsCheck.size_L = "Price size value is required";
-  }
+  // if (size.L === undefined || size.L === null) {
+  //     errorsCheck.size_L = "Price size value is required";
+  // }
   
-  if (size.J === undefined || size.J === null) {
-      errorsCheck.size_J = "Price size value is required";
-  }
+  // if (size.J === undefined || size.J === null) {
+  //     errorsCheck.size_J = "Price size value is required";
+  // }
 
     // if (!quantity) {
     //   errorsCheck.quantity = "Quantity is required";
     // }
 
-    if (!category) {
-      errorsCheck.category = "Category is required";
-    }
+    // if (!category) {
+    //   errorsCheck.category = "Category is required";
+    // }
 
     if (Object.keys(errorsCheck).length > 0) {
       setErrors(errorsCheck);
@@ -202,7 +202,7 @@ const ProductScreen = ({ history }) => {
   const refershForm = () => {
     setName("");
     setNameEn("");
-    setSize({ S: 0, M: 0, L: 0, J: 0 });
+    setSize({ S: '', M: '', L: '', J: '' });
     // setQuantity(0);
     setCategory(null);
     setNameEn("");
