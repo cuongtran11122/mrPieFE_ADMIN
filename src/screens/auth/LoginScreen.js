@@ -103,7 +103,7 @@ const LoginScreen = ({ history }) => {
                 <h6>Are you <Link to="/forgot_password"><span className="text-primary " style={{cursor:"pointer"}}> Forgot password </span></Link>  ? </h6>
               </div>
               <br />
-              <div className="alert alert-info alert-dismissible">
+              {/* <div className="alert alert-info alert-dismissible">
                 <button
                   type="button"
                   className="close"
@@ -117,7 +117,7 @@ const LoginScreen = ({ history }) => {
                 <p>user@example.com</p>
                 <hr />
                 <p>pass: 123456</p>
-              </div>
+              </div> */}
             </form>
             <div></div>
           </div>

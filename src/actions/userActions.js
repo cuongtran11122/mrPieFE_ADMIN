@@ -153,7 +153,6 @@ export const register = (admin) => async (dispatch, getState) => {
     dispatch({
       type: USER_REGISTER_FAIL,
       payload: error.response.data.error,
-        
     });
   }
 };
