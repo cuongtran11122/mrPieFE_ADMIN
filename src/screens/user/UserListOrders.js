@@ -12,6 +12,8 @@ import Pagination from "../../components/Pagination";
 
 import { listOrdersUserDetail } from "../../actions/orderActions";
 
+import "../../style/button.css"
+
 const UserListOrders = ({ history, match }) => {
   const userId = parseInt(match.params.id);
 
@@ -48,7 +50,7 @@ const UserListOrders = ({ history, match }) => {
   const renderTable = () => (
     <table className="table table-hover text-nowrap">
       <thead>
-        <tr className="bg-primary">
+        <tr className="header_table">
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Customer name
           </th>
@@ -90,51 +92,47 @@ const UserListOrders = ({ history, match }) => {
                             </h4>
                         )} */}
 
-              <div class="btn-group w-100">
+              <div class="btn-group">
                 <div
-                  className={`btn  d-flex align-items-center justify-content-center w-50 ${
-                    order.status === 0
-                      ? "btn-warning"
-                      : order.status === 1
-                      ? "btn-info"
-                      : order.status === 2
-                      ? "btn-success"
-                      : "btn-danger"
-                  }`}
+                  className={` `}
                 >
                   {order.status === 0 ? (
                     <span>
-                      <strong>Pending</strong>
+                      <p>pending</p>
                     </span>
                   ) : order.status === 1 ? (
                     <span>
-                      <strong>Paid</strong>
+                      <p>Paid</p>
                     </span>
                   ) : order.status === 2 ? (
                     <span>
-                      <strong>Completed</strong>
+                      <p>Completed</p>
                     </span>
                   ) : (
                     <span>
-                      <strong>Canceled</strong>
+                      <p>Canceled</p>
                     </span>
                   )}
                 </div>
               </div>
             </td>
-            <td className="d-none d-sm-table-cell h4 py-4 border-right border border-light">
-              <span className={"badge bg-primary "} style={{minWidth:200}}>{formatMoney(parseInt(order.total_amount))}</span>
+            <td className="d-none d-sm-table-cell  py-4 border-right border border-light">
+            {formatMoney(parseInt(order.total_amount))}
             </td>
             <td className="py-4 border-right border border-light">
               {order.createdAt.slice(0, 10)}
             </td>
-            <td className=" border-right border border-light">
+            <td className="py-4 border-right border border-light d-flex justify-content-center">
               <Link
                 to={`/order/${order.id}/view`}
-                className="custom_create_btn"
+
               >
+                <button type="button" className="btn  btn-light text-sm border border-black">
                 View
+              </button>
               </Link>
+
+              
             </td>
           </tr>
         ))}
@@ -146,16 +144,22 @@ const UserListOrders = ({ history, match }) => {
     <>
       <div className="card ">
         <div className="card-header">
+          <div className="d-flex  d-flex justify-content-between">
+          <div className="d-flex align-items-center">
+          <ButtonGoBack history={history} />
+
           {orders.length > 0 ? (
-            <h3 className="card-title">
+            <h3 className="card-title ml-4">
               User orders:{" "}
               <strong>
                 {orders[0].user ? orders[0].user.name : "Unknown User"}
               </strong>
             </h3>
           ) : (
-            <h3>User Order</h3>
+            <h4 className="ml-4">User Order</h4>
           )}
+          </div>
+        
 
           <div className="card-tools">
             <Search
@@ -164,6 +168,9 @@ const UserListOrders = ({ history, match }) => {
               setPage={setPageNumber}
             />
           </div>
+          </div>
+          
+          
         </div>
         {/* /.card-header */}
         <div className="card-body table-responsive p-0">
@@ -186,7 +193,7 @@ const UserListOrders = ({ history, match }) => {
       <HeaderContent name={"User's Order"} />
 
       <section className="content">
-        <ButtonGoBack history={history} />
+        
         <div className="container-fluid">
           <div className="row">
             <div className="col-12">

@@ -10,7 +10,6 @@ import FileInput from "../../components/form/FileInput";
 
 import Loader from "../../components/Loader";
 
-
 import DataTableLoader from "../../components/loader/DataTableLoader";
 import Select from "../../components/Select";
 
@@ -32,11 +31,10 @@ import Message from "../../components/Message";
 import "../../style/product.css";
 import CustomInput from "../../components/form/CustomInput";
 
-import "../../../src/style/confirmModal.css"
+import "../../../src/style/confirmModal.css";
+import "../../style/button.css";
 
 Modal.setAppElement("#root");
-
-
 
 const ProductScreen = ({ history }) => {
   const [name, setName] = useState("");
@@ -76,8 +74,8 @@ const ProductScreen = ({ history }) => {
     error: createError,
   } = productCreate;
 
-  console.log(createLoading)
-  console.log(createError)
+  console.log(createLoading);
+  console.log(createError);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -86,24 +84,23 @@ const ProductScreen = ({ history }) => {
   const closeModal = () => {
     setModalIsOpen(false);
 
-    refershForm()
-
+    refershForm();
   };
 
   useEffect(() => {
     if (createSuccess) {
       setName("");
       setNameEn("");
-      setSize({ S: '', M: '', L: '', J: '' });
+      setSize({ S: "", M: "", L: "", J: "" });
       // setQuantity(0);
       setCategory(null);
       setNameEn("");
       setModalIsOpen(false);
       setDescription("");
     }
-    if(createError){
-      dispatch({type: PRODUCT_CREATE_FAIL})
-      console.log(createError)
+    if (createError) {
+      dispatch({ type: PRODUCT_CREATE_FAIL });
+      console.log(createError);
     }
     dispatch(listProducts(keyword, pageNumber));
   }, [dispatch, history, adminInfo, pageNumber, keyword, createSuccess]);
@@ -132,21 +129,21 @@ const ProductScreen = ({ history }) => {
     //     }
     //   }
 
-  //   if (size.S === undefined || size.S === null) {
-  //     errorsCheck.size_S = "Price size value is required";
-  // }
-  
-  // if (size.M === undefined || size.M === null) {
-  //     errorsCheck.size_M = "Price size value is required";
-  // }
-  
-  // if (size.L === undefined || size.L === null) {
-  //     errorsCheck.size_L = "Price size value is required";
-  // }
-  
-  // if (size.J === undefined || size.J === null) {
-  //     errorsCheck.size_J = "Price size value is required";
-  // }
+    //   if (size.S === undefined || size.S === null) {
+    //     errorsCheck.size_S = "Price size value is required";
+    // }
+
+    // if (size.M === undefined || size.M === null) {
+    //     errorsCheck.size_M = "Price size value is required";
+    // }
+
+    // if (size.L === undefined || size.L === null) {
+    //     errorsCheck.size_L = "Price size value is required";
+    // }
+
+    // if (size.J === undefined || size.J === null) {
+    //     errorsCheck.size_J = "Price size value is required";
+    // }
 
     // if (!quantity) {
     //   errorsCheck.quantity = "Quantity is required";
@@ -202,13 +199,13 @@ const ProductScreen = ({ history }) => {
   const refershForm = () => {
     setName("");
     setNameEn("");
-    setSize({ S: '', M: '', L: '', J: '' });
+    setSize({ S: "", M: "", L: "", J: "" });
     // setQuantity(0);
     setCategory(null);
     setNameEn("");
     // setModalIsOpen(false);
     setDescription("");
-    setImage("")
+    setImage("");
   };
 
   const renderModalCreateProduct = () => (
@@ -218,18 +215,15 @@ const ProductScreen = ({ history }) => {
         setModal={setModalIsOpen}
         classes={"btn-success btn-md mb-2 fw-bolder"}
       /> */}
-      <button id="createBtn" className="custom_create_btn" onClick={openModal}>
-        Create
-      </button>
 
       {/* This is modal */}
       {modalIsOpen && (
-        <div id="modal" className="registration-form" >
+        <div id="modal" className="registration-form">
           {/* <img src="../../../public/plugins/close.png" className="w-25 h-25"/> */}
-          
+
           <form style={{ position: "relative" }} onSubmit={handleSubmit}>
-          {loading && <Loader variable={loading} />}
-          {createError && <Message message={createError} color={"danger"} />}
+            {loading && <Loader variable={loading} />}
+            {createError && <Message message={createError} color={"danger"} />}
             <img
               onClick={closeModal}
               style={{
@@ -392,13 +386,16 @@ const ProductScreen = ({ history }) => {
                   class="alert alert-danger alert-dismissible fade show"
                   role="alert"
                 >
-                  <strong>Alert</strong> You should select image file or the size of image less than 5MB
+                  <strong>Alert</strong> You should select image file or the
+                  size of image less than 5MB
                   <button
                     type="button"
                     class="close"
                     data-dismiss="alert"
                     aria-label="Close"
-                    onClick={()=>{setIsAlert(false)}}
+                    onClick={() => {
+                      setIsAlert(false);
+                    }}
                   >
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -408,7 +405,7 @@ const ProductScreen = ({ history }) => {
             <div className="form-group">
               <button
                 type="submit"
-                className="custom_submit_btn"
+                className="btn  btn-secondary  border border-black "
                 style={{ width: "100%" }}
               >
                 Submit
@@ -516,12 +513,10 @@ const ProductScreen = ({ history }) => {
     </div>
   );
 
-  
-
   const renderProductsTable = () => (
     <table className="table table-hover text-nowrap">
       <thead>
-        <tr className="bg-success">
+        <tr className="header_table">
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Name
           </th>
@@ -552,18 +547,32 @@ const ProductScreen = ({ history }) => {
               {product.quantity}
             </td> */}
             <td className="d-none d-sm-table-cell py-4 border-right border border-light ">
-            {!product.category ? ""  : product.category.name}
+              {!product.category ? "" : product.category.name}
             </td>
 
             <td className="py-4 border-right border border-light d-flex justify-content-center align items-center">
-              <Link
+              {/* <Link
                 to={`/product/${product.id}/edit`}
                 className="btn btn-warning btn-md px-4 rounded text-white custom_edit_btn"
               >
                 Edit
+              </Link> */}
+
+              <Link to={`/product/${product.id}/edit`}>
+                <button className="btn  btn-light text-sm border border-black mr-4 ">
+                  Edit
+                </button>
               </Link>
 
-              <button
+              <button className="btn btn btn-light btn-sm border border-black" href="#myModal"
+                data-toggle="modal"
+                onClick={(e) => {
+                  setProductID(product.id);
+                }}>
+                Delete
+              </button>
+
+              {/* <button
                 type="button"
                 className=" btn btn-danger btn-md rounded ml-5 custom_delete_btn"
                 href="#myModal"
@@ -573,7 +582,7 @@ const ProductScreen = ({ history }) => {
                 }}
               >
                 Delete
-              </button>
+              </button> */}
             </td>
           </tr>
         ))}
@@ -594,7 +603,8 @@ const ProductScreen = ({ history }) => {
             <div className="col-12">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title fw-bold">Products table</h3>
+                  <h3 className="card-title "><strong>Products table</strong></h3>
+                  <div className="d-flex justify-content-end">
                   <div className="card-tools">
                     <Search
                       keyword={keyword}
@@ -602,6 +612,16 @@ const ProductScreen = ({ history }) => {
                       setPage={setPageNumber}
                     />
                   </div>
+                  <button
+                    id="createBtn"
+                    className="btn  btn-secondary  border border-black ml-2"
+                    onClick={openModal}
+                  >
+                    Create
+                  </button>
+
+                  </div>
+                  
                 </div>
                 {/* /.card-header */}
                 <div className="card-body table-responsive p-0">

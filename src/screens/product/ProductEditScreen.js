@@ -326,31 +326,38 @@ const ProductEditScreen = ({ history, match }) => {
       {errors.category && (
         <Message message={errors.category} color={"warning"} />
       )}
-      <div className="">
+      <div className="d-flex mt-5">
         {/* <img
           className="profile-user-img img-fluid"
           src={image}
           alt="User profile picture"
         /> */}
+        <div className="w-25 h-25">
         <img
-          className="profile-user-img img-fluid  "
+          className="profile-user-img img-fluid w-75  "
           src={
             image.length > 0
               ? image
               : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
           }
-          alt="User profile picture"
+          alt="User profile"
         />
-      </div>
-      <FileInput
+        </div>
+        <div className="w-75 h-25">
+        <FileInput
         fileHandler={uploadingFileHandler}
         name={"photo"}
         image={imageName(image)}
         uploading={uploading}
       />
 
+        </div>
+        
+      </div>
+      
+
       <hr />
-      <button type="submit" className="custom_submit_btn">
+      <button type="submit" className="btn  btn-secondary  border border-black w-25 ">
         Submit
       </button>
     </form>
@@ -369,7 +376,7 @@ const ProductEditScreen = ({ history, match }) => {
             <div className="col-12 col-md-6">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">Edit Product</h3>
+                  <h3 className="card-title"><strong>Edit Product</strong></h3>
                 </div>
                 {/* /.card-header */}
                 <div className="card-body">

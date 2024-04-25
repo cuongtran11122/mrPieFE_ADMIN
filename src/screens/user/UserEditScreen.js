@@ -151,7 +151,7 @@ const UserEditScreen = ({ history, match }) => {
             <hr />
             <Checkbox name={"Admin"} data={isAdmin} setData={setIsAdmin} />
             <hr /> */}
-      <button type="submit" className="custom_submit_btn w-100">
+      <button type="submit" className="btn  btn-secondary  border border-black w-25">
         Submit
       </button>
     </form>
