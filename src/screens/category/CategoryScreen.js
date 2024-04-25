@@ -286,6 +286,9 @@ const CategoryScreen = ({ history, match }) => {
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Name
           </th>
+          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+            Name English
+          </th>
           {/* <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Status
           </th> */}
@@ -301,6 +304,9 @@ const CategoryScreen = ({ history, match }) => {
             {/* <td>{category.id}</td> */}
             <td className="py-4 border-right border border-light">
               {category.name}
+            </td>
+            <td className="py-4 border-right border border-light">
+              {category.name_en}
             </td>
             {/* <td className="py-4 border-right border border-light"> */}
               {/* <div class="radio-box">

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 /* Components */
 
 import HeaderContent from "../../components/HeaderContent";
-import Input from "../../components/form/Input";
+// import ErrorInput from "../../components/form/Input";
 import ButtonGoBack from "../../components/ButtonGoBack";
 import Checkbox from "../../components/form/Checkbox";
 /* Constants */
@@ -20,11 +20,13 @@ import {
     listCategoryDetails,
 } from "../../actions/categoryActions";
 import LoaderHandler from "../../components/loader/LoaderHandler";
+import ErrorInput from "../../components/form/ErrorInput";
 
 const CategoryEditScreen = ({ history, match }) => {
     const categoryId = parseInt(match.params.id);
 
     const [name, setName] = useState("");
+    const [name_en, setNameEn] = useState("");
 
     const [errors, setErrors] = useState({});
 
@@ -63,6 +65,7 @@ const CategoryEditScreen = ({ history, match }) => {
             } else {
                 //set states
                 setName(category.name);
+                setNameEn(category.name_en)
                 setStatus(category.status)
             }
         }
@@ -76,6 +79,11 @@ const CategoryEditScreen = ({ history, match }) => {
             errorsCheck.name = "Name is required";
         }
 
+        if(!name_en){
+            errorsCheck.name_en = "Name english is required"
+        }
+        
+
         if (Object.keys(errorsCheck).length > 0) {
             setErrors(errorsCheck);
         } else {
@@ -87,6 +95,7 @@ const CategoryEditScreen = ({ history, match }) => {
                 updateCategory({
                     id: categoryId,
                     name,
+                    name_en,
                     status: status ? 1 : 0
                 })
             );
@@ -95,13 +104,24 @@ const CategoryEditScreen = ({ history, match }) => {
 
     const renderForm = () => (
         <form onSubmit={handleSubmit}>
-            <Input
-                name={"name"}
+            <ErrorInput
+                name={"Category name"}
                 type={"text"}
                 data={name}
                 setData={setName}
                 errors={errors}
+                nameError={"name"}
             />
+            <div className="form-group">
+              <ErrorInput
+                name={"Category english name"}
+                type={"text"}
+                data={name_en}
+                setData={setNameEn}
+                errors={errors}
+                nameError={"name_en"}
+              />
+            </div>
             {/* <Checkbox name={"status"} data={status} setData={setStatus} /> */}
             <hr />
             <div className="w-100 d-flex justify-content-start">
