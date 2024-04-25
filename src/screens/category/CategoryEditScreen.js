@@ -102,11 +102,14 @@ const CategoryEditScreen = ({ history, match }) => {
                 setData={setName}
                 errors={errors}
             />
-            <Checkbox name={"status"} data={status} setData={setStatus} />
+            {/* <Checkbox name={"status"} data={status} setData={setStatus} /> */}
             <hr />
-            <button type="submit" className="custom_submit_btn w-100">
+            <div className="w-100 d-flex justify-content-start">
+            <button type="submit" className="btn  btn-secondary  border border-black w-25">
                 Submit
             </button>
+            </div>
+            
         </form>
     );
 

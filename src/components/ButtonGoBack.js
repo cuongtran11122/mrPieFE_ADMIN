@@ -6,7 +6,7 @@ const ButtonGoBack = ({ history }) => {
     };
 
     return (
-        <button onClick={handleClick} className="custom_submit_btn">
+        <button onClick={handleClick} className="btn  btn-secondary  border border-black ">
             Go Back
         </button>
     );

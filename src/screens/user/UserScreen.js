@@ -13,6 +13,7 @@ import Search from "../../components/Search";
 import Pagination from "../../components/Pagination";
 import LoaderHandler from "../../components/loader/LoaderHandler";
 import "../../style/product.css"
+import "../../style/button.css"
 
 /* Actions */
 import { listUsers, register } from "../../actions/userActions";
@@ -96,7 +97,7 @@ const UserScreen = ({ history }) => {
     const renderTable = () => (
         <table className="table table-hover text-nowrap">
             <thead>
-                <tr className="bg-success">
+                <tr className="header_table">
                     {/* <th className="d-none d-sm-table-cell">ID</th> */}
                     <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Name</th>
                     <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Username</th>
@@ -105,7 +106,7 @@ const UserScreen = ({ history }) => {
                     <th className="border-right border-bottom-0 border-left-0 border-top-0 ">Address</th>
                     <th className="d-none d-sm-table-cell border-right border-bottom-0 border-left-0 border-top-0">Type</th>
                     
-                    <th></th>
+                    <th className="border-right border-bottom-0 border-left-0 border-top-0"></th>
                 </tr>
             </thead>
             <tbody>
@@ -121,10 +122,10 @@ const UserScreen = ({ history }) => {
                         <td className="d-none d-sm-table-cell py-4 border-right border border-light">
                             {user.username ? 'registered' : 'unregistered'}
                         </td>
-                        <td className=" border-right border border-light d-flex justify-content-center align items-center">
+                        <td className="py-4 border-right border border-light d-flex justify-content-center align items-center">
                         <Link
                             to={`/list/${user.id}/orders`}
-                            className="custom_submit_btn"
+                            className="btn  btn-light text-sm border border-black mr-4"
                             
                         >
                             
@@ -132,7 +133,7 @@ const UserScreen = ({ history }) => {
                         </Link>
                         <Link
                             to={`/user/${user.id}/edit`}
-                            className="custom_edit_btn margin_lr"
+                            className="btn  btn-light text-sm border border-black mr-4"
                         >
                             Edit
                         </Link>
@@ -213,7 +214,7 @@ const UserScreen = ({ history }) => {
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-header">
-                                    <h3 className="card-title">Users table</h3>
+                                    <h3 className="card-title"><strong>Users Table</strong></h3>
                                     <div className="card-tools">
                                         <Search
                                             keyword={keyword}

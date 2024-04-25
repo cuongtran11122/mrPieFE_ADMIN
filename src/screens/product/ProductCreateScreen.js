@@ -261,7 +261,7 @@ const ProductCreateScreen = ({ history, match }) => {
       />
 
       <hr />
-      <button type="submit" className="btn btn-success">
+      <button type="submit" className="btn  btn-secondary  border border-black ">
         Submit
       </button>
     </form>

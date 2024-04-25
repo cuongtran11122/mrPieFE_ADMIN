@@ -18,6 +18,7 @@ import {
   deleteCategory,
 } from "../../actions/categoryActions";
 
+import "../../style/button.css";
 
 const CategoryScreen = ({ history, match }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -28,7 +29,7 @@ const CategoryScreen = ({ history, match }) => {
   const [errors, setErrors] = useState({});
   const [keyword, setKeyword] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
-  
+
   const [categoryID, setCategoryID] = useState(null);
 
   const dispatch = useDispatch();
@@ -46,17 +47,16 @@ const CategoryScreen = ({ history, match }) => {
     error: createError,
   } = categoryCreate;
 
-  console.log(createLoading)
-  console.log(createError)
+  console.log(createLoading);
+  console.log(createError);
 
   const openModal = () => {
     setModalIsOpen(true);
   };
-  
 
   const closeModal = () => {
     setModalIsOpen(false);
-    refershForm()
+    refershForm();
   };
   useEffect(() => {
     dispatch(listCategories(keyword, pageNumber));
@@ -91,7 +91,7 @@ const CategoryScreen = ({ history, match }) => {
       //console.log(category);return false;
 
       dispatch(createCategory(category));
-      refershForm()
+      refershForm();
     }
   };
 
@@ -105,7 +105,6 @@ const CategoryScreen = ({ history, match }) => {
     setNameEn("");
     setStatus(false);
   };
-  
 
   // const renderModalCreateCategory = () => (
   //   <>
@@ -159,13 +158,10 @@ const CategoryScreen = ({ history, match }) => {
         setModal={setModalIsOpen}
         classes={"btn-success btn-md mb-2 fw-bolder"}
       /> */}
-      <button id="createBtn" className="custom_create_btn" onClick={openModal}>
-        Create
-      </button>
 
       {/* This is modal */}
       {modalIsOpen && (
-        <div id="modal" className="registration-form" >
+        <div id="modal" className="registration-form">
           {/* <img src="../../../public/plugins/close.png" className="w-25 h-25"/> */}
 
           <form style={{ position: "relative" }} onSubmit={handleSubmit}>
@@ -184,7 +180,7 @@ const CategoryScreen = ({ history, match }) => {
               alt="User profile picture"
             />
             <span>
-              <h1 className="text-center mb-4">Creat product</h1>
+              <h1 className="text-center mb-4">Creat Category</h1>
             </span>
             <div className="form-group">
               {/* <input
@@ -195,41 +191,32 @@ const CategoryScreen = ({ history, match }) => {
               placeholder="Username"
             /> */}
               <Input
-            name={"name"}
-            type={"text"}
-            data={name}
-            setData={setName}
-            errors={errors}
-          />
+                name={"name"}
+                type={"text"}
+                data={name}
+                setData={setName}
+                errors={errors}
+              />
             </div>
             <div className="form-group">
-            <Input
-            name={"name English"}
-            type={"text"}
-            data={name_en}
-            setData={setNameEn}
-            errors={errors}
-          />
+              <Input
+                name={"name English"}
+                type={"text"}
+                data={name_en}
+                setData={setNameEn}
+                errors={errors}
+              />
             </div>
-            <div className="form-group">
-            <Checkbox name={"available"} data={status} setData={setStatus} />
-            </div>
-            
-          
-          
-            
-            
+            {/* <div className="form-group">
+              <Checkbox name={"available"} data={status} setData={setStatus} />
+            </div> */}
 
-            
-
-            
             <hr />
-            
-            
+
             <div className="form-group">
               <button
                 type="submit"
-                className="custom_submit_btn"
+                className="btn  btn-secondary  border border-black"
                 style={{ width: "100%" }}
               >
                 Submit
@@ -278,7 +265,7 @@ const CategoryScreen = ({ history, match }) => {
               className="btn btn-danger"
               data-dismiss="modal"
               onClick={(e) => {
-                console.log(categoryID)
+                console.log(categoryID);
                 deleteRow(categoryID);
                 setCategoryID(null);
               }}
@@ -294,14 +281,14 @@ const CategoryScreen = ({ history, match }) => {
   const renderTable = () => (
     <table className="table table-hover text-nowrap">
       <thead>
-        <tr className="bg-success">
+        <tr className="header_table">
           {/* <th>ID</th> */}
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Name
           </th>
-          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+          {/* <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Status
-          </th>
+          </th> */}
           <th className="d-none d-sm-table-cell border-right border-bottom-0 border-left-0 border-top-0">
             Created At
           </th>
@@ -315,7 +302,7 @@ const CategoryScreen = ({ history, match }) => {
             <td className="py-4 border-right border border-light">
               {category.name}
             </td>
-            <td className="py-4 border-right border border-light">
+            {/* <td className="py-4 border-right border border-light"> */}
               {/* <div class="radio-box">
                                 <label class="switch">
                                 <input type="checkbox" />
@@ -328,7 +315,7 @@ const CategoryScreen = ({ history, match }) => {
                                 setData={setIsOpen}
                             /> */}
 
-              {category.status == 1 ? (
+              {/* {category.status == 1 ? (
                 <h4 className="text-success">
                   <i className="fas fa-check"></i>
                 </h4>
@@ -336,22 +323,24 @@ const CategoryScreen = ({ history, match }) => {
                 <h4 className="text-danger">
                   <i className="far fa-times-circle"></i>
                 </h4>
-              )}
-            </td>
+              )} */}
+            {/* </td> */}
             <td className="d-none d-sm-table-cell py-4 border-right border border-light">
               {category.createdAt.slice(0, 10)}
             </td>
-            <td className="py-4 border-right border border-light d-flex justify-content-center align items-center">
-              <Link
-                to={`/category/${category.id}/edit`}
-                className="custom_edit_btn"
-              >
-                Edit
+            <td className="py-4  border-right border border-light d-flex justify-content-center align items-center">
+              <Link to={`/category/${category.id}/edit`}>
+                <button
+                  type="button"
+                  className="btn  btn-light text-sm border border-black mr-4"
+                >
+                  Edit
+                </button>
               </Link>
 
               <button
                 type="button"
-                className=" btn btn-danger btn-md rounded ml-5 custom_delete_btn"
+                className=" btn  btn-light text-sm border border-black mr-4"
                 href="#myModal"
                 data-toggle="modal"
                 onClick={(e) => {
@@ -382,7 +371,8 @@ const CategoryScreen = ({ history, match }) => {
             <div className="col-12">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title">Categories</h3>
+                  <h3 className="card-title align-middle "><strong>Categories</strong></h3>
+                  <div className="d-flex justify-content-end">
                   <div className="card-tools">
                     <Search
                       keyword={keyword}
@@ -390,6 +380,16 @@ const CategoryScreen = ({ history, match }) => {
                       setPage={setPageNumber}
                     />
                   </div>
+                  <button
+                    id="createBtn"
+                    className="btn  btn-secondary  border border-black ml-2"
+                    onClick={openModal}
+                  >
+                    Create
+                  </button>
+
+                  </div>
+                  
                 </div>
                 {/* /.card-header */}
                 <div className="card-body table-responsive p-0">

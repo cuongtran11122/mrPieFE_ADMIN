@@ -13,7 +13,7 @@ const Search = ({ keyword, setKeyword, setPage }) => {
         setPage(1);
     };
     return (
-        <div className="input-group input-group-sm" style={{ width: 160 }}>
+        <div className="input-group " style={{ width: 360 }}>
             <input
                 value={searchTerm}
                 type="text"
@@ -27,7 +27,7 @@ const Search = ({ keyword, setKeyword, setPage }) => {
                 <button
                     onClick={handleClickButton}
                     type="submit"
-                    className="btn btn-default bg-primary"
+                    className="btn  btn-secondary   "
                 >
                     <i className="fas fa-search" />
                 </button>

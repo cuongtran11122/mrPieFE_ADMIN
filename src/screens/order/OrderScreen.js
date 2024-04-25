@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link,useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import Modal from "react-modal";
 
 /* Components */
@@ -12,10 +12,14 @@ import Pagination from "../../components/Pagination";
 
 import "../../style/product.css";
 import "../../style/confirmModal.css";
-
+import "../../style/button.css";
 
 /* Actions */
-import { listOrders, updateOrderToPaid,listOrdersByStatus } from "../../actions/orderActions";
+import {
+  listOrders,
+  updateOrderToPaid,
+  listOrdersByStatus,
+} from "../../actions/orderActions";
 
 const OrderScreen = ({ history }) => {
   const location = useLocation();
@@ -35,13 +39,11 @@ const OrderScreen = ({ history }) => {
   const [modal, setModal] = useState(false);
   const [status, setStatus] = useState(0);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  
 
   const openModal = (value, orderID) => {
     setStatus(value);
     setModalIsOpen(true);
     setOrderID(orderID);
-    
   };
 
   const closeModal = (value, orderID) => {
@@ -60,39 +62,49 @@ const OrderScreen = ({ history }) => {
     dispatch(updateOrderToPaid(updatedOrder));
     closeModal(0, 0);
 
-    if(statusParams !=null){
-      dispatch(listOrdersByStatus({ keyword, pageNumber, delivery: false, status:statusParams }));
-    }else{
-      dispatch(listOrders({ keyword, pageNumber, delivery: false }))
+    if (statusParams != null) {
+      dispatch(
+        listOrdersByStatus({
+          keyword,
+          pageNumber,
+          delivery: false,
+          status: statusParams,
+        })
+      );
+    } else {
+      dispatch(listOrders({ keyword, pageNumber, delivery: false }));
     }
   };
-  const formatMoney = (money)=>{
-    return money.toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
-  } 
+  const formatMoney = (money) => {
+    return money.toLocaleString("it-IT", {
+      style: "currency",
+      currency: "VND",
+    });
+  };
 
   useEffect(() => {
-    
-
     if (!adminInfo) {
       history.push("/login");
     }
 
-    if(statusParams !=null){
-      dispatch(listOrdersByStatus({ keyword, pageNumber, delivery: false, status:statusParams }));
-    }else{
-      dispatch(listOrders({ keyword, pageNumber, delivery: false }))
+    if (statusParams != null) {
+      dispatch(
+        listOrdersByStatus({
+          keyword,
+          pageNumber,
+          delivery: false,
+          status: statusParams,
+        })
+      );
+    } else {
+      dispatch(listOrders({ keyword, pageNumber, delivery: false }));
     }
-
-    
-    
   }, [dispatch, history, adminInfo, pageNumber, keyword]);
 
   const handleSearch = (event) => {
     console.log("Searching...", event.target.value);
     // Add your search logic here
   };
-
-  
 
   const renderModal = () => {
     return (
@@ -115,9 +127,7 @@ const OrderScreen = ({ history }) => {
                 alt="Close button"
               />
               <span>
-                <h3 className="text-center mb-4">
-                  Change order status {" "}
-                </h3>
+                <h3 className="text-center mb-4">Change order status </h3>
                 <p className="text-center mb-4">
                   Do you want to change order satus ?
                 </p>
@@ -149,14 +159,14 @@ const OrderScreen = ({ history }) => {
   const renderTable = () => (
     <table className="table table-hover text-nowrap">
       <thead>
-        <tr className="bg-success">
+        <tr className="header_table">
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Customer name
           </th>
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Phone
           </th>
-          
+
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Status
           </th>
@@ -179,40 +189,34 @@ const OrderScreen = ({ history }) => {
               {order.user ? order.user.phone : ""}
             </td>
 
-            
-            <td className="py-4 border-right border border-light">
-              <div class="btn-group w-100">
-              <button
-    type="button"
-    className={`btn dropdown-toggle d-flex align-items-center justify-content-center w-50 ${
-        order.status === 0 ? 'btn-warning' :
-        order.status === 1 ? 'btn-info' :
-        order.status === 2 ? 'btn-success' :
-        'btn-danger'
-    }`}
-    data-toggle="dropdown"
-    aria-haspopup="true"
-    aria-expanded="false"
->
-    {order.status === 0 ? (
-        <span>
-            <strong>Pending</strong>
-        </span>
-    ) : order.status === 1 ? (
-        <span>
-            <strong>Paid</strong>
-        </span>
-    ) : order.status === 2 ? (
-        <span>
-            <strong>Completed</strong>
-        </span>
-    ) : (
-        <span>
-            <strong>Canceled</strong>
-        </span>
-    )}
-</button>
-                <div class="dropdown-menu dropdown-menu-right">
+            <td className="py-4 border-right border border-light d-flex justify-content-center">
+              <div class="btn-group w-75">
+                <button
+                  type="button"
+                  className={`btn btn-outline-secondary dropdown-toggle d-flex align-items-center justify-content-center  `}
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  {order.status === 0 ? (
+                    <span>
+                      <strong>Pending</strong>
+                    </span>
+                  ) : order.status === 1 ? (
+                    <span>
+                      <strong>Paid</strong>
+                    </span>
+                  ) : order.status === 2 ? (
+                    <span>
+                      <strong>Completed</strong>
+                    </span>
+                  ) : (
+                    <span>
+                      <strong>Canceled</strong>
+                    </span>
+                  )}
+                </button>
+                <div class="dropdown-menu dropdown-menu-right w-100">
                   <button
                     value={0}
                     class="dropdown-item"
@@ -248,18 +252,17 @@ const OrderScreen = ({ history }) => {
                 </div>
               </div>
             </td>
-            <td className="d-none d-sm-table-cell h4 py-4 border-right border border-light">
-              <span className={"badge bg-success "} style={{minWidth:200}}>{formatMoney(parseInt(order.total_amount))}</span>
+            <td className="d-none d-sm-table-cell  py-4 border-right border border-light">
+              {formatMoney(parseInt(order.total_amount))}
             </td>
             <td className="py-4 border-right border border-light">
               {order.createdAt.slice(0, 10)}
             </td>
-            <td className=" border-right border border-light">
-              <Link
-                to={`/order/${order.id}/view`}
-                className="custom_submit_btn"
-              >
-                View
+            <td className="py-4 border-right border border-light  ">
+              <Link to={`/order/${order.id}/view`}>
+                <button className="btn  btn-light text-sm border border-black ">
+                  View
+                </button>
               </Link>
             </td>
           </tr>
