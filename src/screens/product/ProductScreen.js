@@ -47,6 +47,7 @@ const ProductScreen = ({ history }) => {
   const [image, setImage] = useState("");
   const [uploading, setUploading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [errorsUpload, setErrorsUpload] = useState("");
 
   const [productID, setProductID] = useState(null);
 
@@ -379,7 +380,9 @@ const ProductScreen = ({ history }) => {
                 image={imageName(image)}
                 uploading={uploading}
               />
+              
             </div>
+             <label className="text-danger">{errorsUpload} </label>
             {isAlert && (
               <div className="form-group">
                 <div
@@ -420,43 +423,51 @@ const ProductScreen = ({ history }) => {
   // upload file
   const uploadingFileHandler = async (e) => {
     // Get the first element from files which should be the image
+
+
+    let validFile = true;
+    let errorsUp  = "";
+    //get first element from files which one is the image
     const file = e.target.files[0];
 
-    // Check if a file is selected
-    if (!file) {
-      return;
+    const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+    if (!validImageTypes.includes(file.type)) {
+      validFile = false;
+      errorsUp = "Only for uploading jpeg, jpg, png files";
+      setErrorsUpload(errorsUp);
     }
 
-    // Check if the file type is an image
-    if (!file.type.startsWith("image/")) {
-      setIsAlert(true);
-      return;
-    }
-
-    // Check if the file size is less than 5MB
-    if (file.size > 5 * 1024 * 1024) {
-      setIsAlert(true);
-      return;
-    }
-
-    // If all checks pass, proceed with uploading the file
-    const formData = new FormData();
-    formData.append("image", file);
-    setUploading(true);
-
-    try {
-      const config = {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-
-      const { data } = await axios.post("/api/v1/upload", formData, config);
-      setImage(data);
-      setUploading(false);
-    } catch (error) {
-      console.error(error);
-      setUploading(false);
+    if (file && file.size/1000000 > 5) {
+      validFile = false;
+      errorsUp = " The image maximum size is 5MB";
+      setErrorsUpload(errorsUp);
+    }  
+    //form instance
+     if (validFile) {
+      setErrorsUpload('');
+      const formData = new FormData();
+      //add file
+      formData.append("image", file);
+      //start loader
+      setUploading(true);
+      try {
+        //form config
+        const config = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
+        //api call to upload image
+        const { data } = await axios.post("/api/v1/upload", formData, config);
+        //set image path
+        setImage(data);
+        //stop loader
+        setUploading(false);
+      } catch (error) {
+        console.error(error);
+        setUploading(false);
+      }
+     
     }
   };
   const imageName = (image) => {
