@@ -9,7 +9,9 @@ import FileInput from "../../components/form/FileInput";
 import HeaderContent from "../../components/HeaderContent";
 import ButtonGoBack from "../../components/ButtonGoBack";
 import LoaderHandler from "../../components/loader/LoaderHandler";
+import ErrorInput from "../../components/form/ErrorInput";
 import CustomInput from "../../components/form/CustomInput";
+import CustomTextarea from "../../components/form/CustomTextarea";
 import "../../style/product.css";
 
 /* Constants */
@@ -35,6 +37,7 @@ const ProductEditScreen = ({ history, match }) => {
   const [size, setSize] = useState({ S: "", M: "", L: "", J: "" });
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
+  const [description_en, setDescription_en] = useState("");
   const [image, setImage] = useState("");
   const [uploading, setUploading] = useState(false);
 
@@ -45,7 +48,6 @@ const ProductEditScreen = ({ history, match }) => {
   const userLogin = useSelector((state) => state.userLogin);
 
   const { adminInfo } = userLogin;
-
 
   const categoryList = useSelector((state) => state.categoryList);
   const { categories } = categoryList;
@@ -82,6 +84,7 @@ const ProductEditScreen = ({ history, match }) => {
         setCategory(product.category_id);
         setImage(product.image);
         setDescription(product.description);
+        setDescription_en(product.description_en);
 
         const sizePrices = { S: "", M: "", L: "", J: "" };
         product.attributes.forEach((attribute) => {
@@ -90,7 +93,6 @@ const ProductEditScreen = ({ history, match }) => {
 
         // Update the size state object with the extracted product prices
         setSize(sizePrices);
-        
       }
     }
   }, [dispatch, history, productId, product, successUpdate]);
@@ -103,8 +105,8 @@ const ProductEditScreen = ({ history, match }) => {
     if (!name) {
       errorsCheck.name = "Name is required";
     }
-    if (!name) {
-      errorsCheck.name_en = "English name is required";
+    if (!name_en) {
+      errorsCheck.name_en = "Product english name is required";
     }
 
     // if (!quantity) {
@@ -131,6 +133,7 @@ const ProductEditScreen = ({ history, match }) => {
           category_id: category,
           image,
           description,
+          description_en
         })
       );
     }
@@ -142,27 +145,27 @@ const ProductEditScreen = ({ history, match }) => {
 
   // upload file
   const uploadingFileHandler = async (e) => {
-     // e.preventDefault();
+    // e.preventDefault();
     let validFile = true;
-    let errorsUp  = "";
+    let errorsUp = "";
     //get first element from files which one is the image
     const file = e.target.files[0];
 
-    const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+    const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
     if (!validImageTypes.includes(file.type)) {
       validFile = false;
       errorsUp = "Only for uploading jpeg, jpg, png files";
       setErrorsUpload(errorsUp);
     }
 
-    if (file && file.size/1000000 > 5) {
+    if (file && file.size / 1000000 > 5) {
       validFile = false;
       errorsUp = " The image maximum size is 5MB";
       setErrorsUpload(errorsUp);
-    }  
+    }
     //form instance
-     if (validFile) {
-      setErrorsUpload('');
+    if (validFile) {
+      setErrorsUpload("");
       const formData = new FormData();
       //add file
       formData.append("image", file);
@@ -185,7 +188,7 @@ const ProductEditScreen = ({ history, match }) => {
         console.error(error);
         setUploading(false);
       }
-     }
+    }
   };
   const imageName = (image) => {
     const imageArray = image.split(`uploads`);
@@ -206,26 +209,36 @@ const ProductEditScreen = ({ history, match }) => {
 
   const renderForm = () => (
     <form onSubmit={handleSubmit}>
-      <Input
-        name={"name"}
+      <ErrorInput
+        name={"Product name"}
         type={"text"}
         data={name}
         setData={setName}
         errors={errors}
+        nameError={"name"}
       />
-      <Input
-        name={"name_en"}
+      <ErrorInput
+        name={"Product english name"}
         type={"text"}
         data={name_en}
         setData={setNameEn}
         errors={errors}
+        nameError={"name_en"}
       />
 
-      <Input
-        name={"description"}
+      <CustomTextarea
+        name={"Description"}
         type={"text"}
         data={description}
         setData={setDescription}
+        errors={errors}
+      />
+
+      <CustomTextarea
+        name={"English Description"}
+        type={"text"}
+        data={description_en}
+        setData={setDescription_en}
         errors={errors}
       />
 
@@ -250,7 +263,7 @@ const ProductEditScreen = ({ history, match }) => {
                 /> */}
           <CustomInput
             class="form-control item"
-            name={"size_S"}
+            name={"size S"}
             type={"text"}
             placeholder={"price"}
             data={size && size.S} // Check if size is not null or undefined before accessing its properties
@@ -263,7 +276,7 @@ const ProductEditScreen = ({ history, match }) => {
         <div className="form-group">
           <CustomInput
             class="form-control item"
-            name={"size_M"}
+            name={"size M"}
             type={"text"}
             placeholder={"price"}
             data={size && size.M} // Check if size is not null or undefined before accessing its properties
@@ -296,7 +309,7 @@ const ProductEditScreen = ({ history, match }) => {
                 /> */}
           <CustomInput
             class="form-control item"
-            name={"size_L"}
+            name={"size L"}
             type={"text"}
             placeholder={"price"}
             data={size && size.L} // Check if size is not null or undefined before accessing its properties
@@ -309,7 +322,7 @@ const ProductEditScreen = ({ history, match }) => {
         <div className="form-group">
           <CustomInput
             class="form-control item"
-            name={"size_J"}
+            name={"size J"}
             type={"text"}
             placeholder={"price"}
             data={size && size.J} // Check if size is not null or undefined before accessing its properties
@@ -351,31 +364,32 @@ const ProductEditScreen = ({ history, match }) => {
           alt="User profile picture"
         /> */}
         <div className="w-25 h-25">
-        <img
-          className="profile-user-img img-fluid w-75  "
-          src={
-            image.length > 0
-              ? image
-              : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
-          }
-          alt="User profile"
-        />
+          <img
+            className="profile-user-img img-fluid w-75  "
+            src={
+              image.length > 0
+                ? image
+                : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+            }
+            alt="Product"
+          />
         </div>
         <div className="w-75 h-25">
-        <FileInput
-        fileHandler={uploadingFileHandler}
-        name={"photo"}
-        image={imageName(image)}
-        uploading={uploading}
-      />
-        <label className="text-danger">{errorsUpload} </label>
+          <FileInput
+            fileHandler={uploadingFileHandler}
+            name={"photo"}
+            image={imageName(image)}
+            uploading={uploading}
+          />
+          <label className="text-danger">{errorsUpload} </label>
         </div>
-        
       </div>
-      
 
       <hr />
-      <button type="submit" className="btn  btn-secondary  border border-black w-25 ">
+      <button
+        type="submit"
+        className="btn  btn-secondary  border border-black w-25 "
+      >
         Submit
       </button>
     </form>
@@ -394,7 +408,9 @@ const ProductEditScreen = ({ history, match }) => {
             <div className="col-12 col-md-6">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title"><strong>Edit Product</strong></h3>
+                  <h3 className="card-title">
+                    <strong>Edit Product</strong>
+                  </h3>
                 </div>
                 {/* /.card-header */}
                 <div className="card-body">

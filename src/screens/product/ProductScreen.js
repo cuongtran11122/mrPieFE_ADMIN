@@ -13,6 +13,9 @@ import Loader from "../../components/Loader";
 import DataTableLoader from "../../components/loader/DataTableLoader";
 import Select from "../../components/Select";
 
+
+import CustomTextarea from "../../components/form/CustomTextarea";
+
 /* Actions */
 import {
   listProducts,
@@ -33,6 +36,7 @@ import CustomInput from "../../components/form/CustomInput";
 
 import "../../../src/style/confirmModal.css";
 import "../../style/button.css";
+import ErrorInput from "../../components/form/ErrorInput";
 
 Modal.setAppElement("#root");
 
@@ -44,6 +48,7 @@ const ProductScreen = ({ history }) => {
   // const [quantity, setQuantity] = useState(0);
   const [category, setCategory] = useState(null);
   const [description, setDescription] = useState("");
+  const [description_en,setDescription_en] =useState("");
   const [image, setImage] = useState("");
   const [uploading, setUploading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -169,7 +174,9 @@ const ProductScreen = ({ history }) => {
         category_id: category,
         image: image,
         description: description,
+        description_en: description_en
       };
+      console.log(product)
 
       dispatch(createProduct(product));
       // refershForm();
@@ -206,6 +213,7 @@ const ProductScreen = ({ history }) => {
     setNameEn("");
     // setModalIsOpen(false);
     setDescription("");
+    setDescription_en("")
     setImage("");
   };
 
@@ -250,32 +258,46 @@ const ProductScreen = ({ history }) => {
               id="username"
               placeholder="Username"
             /> */}
-              <Input
+              <ErrorInput
                 className="form-control item"
-                name={"name"}
+                name={"Product name"}
                 type={"text"}
                 data={name}
                 setData={setName}
                 errors={errors}
+                nameError={"name"}
               />
             </div>
             <div className="form-group">
-              <Input
+              <ErrorInput
                 class="form-control item"
-                name={"name_en"}
+                name={"Product english name"}
                 type={"text"}
                 data={name_en}
                 setData={setNameEn}
                 errors={errors}
+                nameError={"name_en"}
               />
             </div>
+            
             <div className="form-group">
-              <Input
+              <CustomTextarea
                 class="form-control item"
                 name={"description"}
                 type={"text"}
                 data={description}
                 setData={setDescription}
+                errors={errors}
+              />
+            </div>
+
+            <div className="form-group">
+              <CustomTextarea
+                class="form-control item"
+                name={"English description"}
+                type={"text"}
+                data={description_en}
+                setData={setDescription_en}
                 errors={errors}
               />
             </div>
@@ -289,7 +311,7 @@ const ProductScreen = ({ history }) => {
               <div className="form-group">
                 <CustomInput
                   class="form-control item"
-                  name={"size_S"}
+                  name={"size S"}
                   type={"text"}
                   placeholder={"price"}
                   data={size.S}
@@ -302,7 +324,7 @@ const ProductScreen = ({ history }) => {
               <div className="form-group">
                 <CustomInput
                   class="form-control item"
-                  name={"size_M"}
+                  name={"size M"}
                   type={"text"}
                   placeholder={"price"}
                   data={size.M}
@@ -324,7 +346,7 @@ const ProductScreen = ({ history }) => {
               <div className="form-group">
                 <CustomInput
                   class="form-control item"
-                  name={"size_L"}
+                  name={"size L"}
                   type={"text"}
                   placeholder={"price"}
                   data={size.L}
@@ -337,7 +359,7 @@ const ProductScreen = ({ history }) => {
               <div className="form-group">
                 <CustomInput
                   class="form-control item"
-                  name={"size_J"}
+                  name={"size J"}
                   type={"text"}
                   placeholder={"price"}
                   data={size.J}
