@@ -103,6 +103,8 @@ const ProductScreen = ({ history }) => {
       setNameEn("");
       setModalIsOpen(false);
       setDescription("");
+      setDescription_en("");
+      setImage("")
     }
     if (createError) {
       dispatch({ type: PRODUCT_CREATE_FAIL });

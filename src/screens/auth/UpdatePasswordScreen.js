@@ -16,7 +16,7 @@ const ForgotPasswordScreen = ({ history }) => {
   const dispatch = useDispatch();
   
   //get user from state
-  const userForgotPassword = useSelector((state) => state.userForgotPassword);
+  const userForgotPassword = useSelector((state) => state.userUpdatePassword);
   const { success, error, loading } = userForgotPassword;
   //get user from state
 //   const userLogin = useSelector((state) => state.userLogin);
