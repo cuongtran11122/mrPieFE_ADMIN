@@ -190,7 +190,7 @@ const OrderScreen = ({ history }) => {
             </td>
 
             <td className="py-4 border-right border border-light d-flex justify-content-center">
-              <div class="btn-group w-75">
+              <div className="btn-group w-75">
                 <button
                   type="button"
                   className={`btn btn-outline-secondary dropdown-toggle d-flex align-items-center justify-content-center  `}
@@ -216,10 +216,10 @@ const OrderScreen = ({ history }) => {
                     </span>
                   )}
                 </button>
-                <div class="dropdown-menu dropdown-menu-right w-100">
+                <div className="dropdown-menu dropdown-menu-right w-100">
                   <button
                     value={0}
-                    class="dropdown-item"
+                    className="dropdown-item"
                     type="button"
                     onClick={() => openModal(0, order.id)}
                   >
@@ -227,7 +227,7 @@ const OrderScreen = ({ history }) => {
                   </button>
                   <button
                     value={1}
-                    class="dropdown-item"
+                    className="dropdown-item"
                     type="button"
                     onClick={() => openModal(1, order.id)}
                   >
@@ -235,7 +235,7 @@ const OrderScreen = ({ history }) => {
                   </button>
                   <button
                     value={2}
-                    class="dropdown-item"
+                    className="dropdown-item"
                     type="button"
                     onClick={() => openModal(2, order.id)}
                   >
@@ -243,7 +243,7 @@ const OrderScreen = ({ history }) => {
                   </button>
                   <button
                     value={3}
-                    class="dropdown-item"
+                    className="dropdown-item"
                     type="button"
                     onClick={() => openModal(3, order.id)}
                   >
