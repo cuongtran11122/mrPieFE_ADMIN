@@ -31,6 +31,8 @@ import UserEditScreen from "./screens/user/UserEditScreen";
 import UserOrderListScreen from "./screens/user/UserListOrders";
 import ProfileScreen from "./screens/user/ProfileScreen";
 
+import StoreScreen from "./screens/store/StoreScreen";
+import StoreEditScreen from "./screens/store/StoreEditScreen";
 import DashboardScreen from "./screens/DashboardScreen";
 import PrivateRoute from "./auth/PrivateRoute";
 import NotFoundScreen from "./screens/NotFoundScreen";
@@ -38,39 +40,35 @@ import AdminRoute from "./auth/AdminRoute";
 import NotAuthorizedScreen from "./screens/NotAuthorizedScreen";
 
 const Main = () => {
-    const dispatch = useDispatch();
-    const userLogin = useSelector((state) => state.userLogin);
-    const { adminInfo } = userLogin;
+  const dispatch = useDispatch();
+  const userLogin = useSelector((state) => state.userLogin);
+  const { adminInfo } = userLogin;
 
-    return (
-        <>
-            <Header />
-            <Menu />
+  return (
+    <>
+      <Header />
+      <Menu />
 
-            <div className="content-wrapper">
-                <Switch>
-                    <PrivateRoute
-                        path="/active"
-                        exact
-                        component={ActiveOrdersScreen}
-                    />
-                    <PrivateRoute path="/profile" component={ProfileScreen} />
-                    <PrivateRoute
-                        path="/user/:id/edit"
-                        component={UserEditScreen}
-                    />
-                     
-                    <PrivateRoute path="/user" component={UserScreen} />
+      <div className="content-wrapper">
+        <Switch>
+          <PrivateRoute path="/active" exact component={ActiveOrdersScreen} />
+          <PrivateRoute path="/profile" component={ProfileScreen} />
+          <PrivateRoute path="/user/:id/edit" component={UserEditScreen} />
 
-                    <PrivateRoute path="/list/:id/orders" component={UserOrderListScreen}/>
+          <PrivateRoute path="/user" component={UserScreen} />
 
-                    <PrivateRoute
-                        path="/category/:id/edit"
-                        component={CategoryEditScreen}
-                    />
-                    <PrivateRoute path="/category" component={CategoryScreen} />
+          <PrivateRoute
+            path="/list/:id/orders"
+            component={UserOrderListScreen}
+          />
 
-                    {/* <PrivateRoute path="/delivery" component={DeliveryScreen} />
+          <PrivateRoute
+            path="/category/:id/edit"
+            component={CategoryEditScreen}
+          />
+          <PrivateRoute path="/category" component={CategoryScreen} />
+
+          {/* <PrivateRoute path="/delivery" component={DeliveryScreen} />
 
                     <PrivateRoute
                         path="/client/:id/edit"
@@ -79,54 +77,58 @@ const Main = () => {
 
                     <PrivateRoute path="/client" component={ClientScreen} /> */}
 
-                    <PrivateRoute
-                        path="/product/:id/edit"
-                        component={ProductEditScreen}
-                    />
-                    <PrivateRoute
-                        path="/product/create"
-                        component={ProductCreateScreen}
-                    />
-                    <PrivateRoute path="/product" component={ProductScreen} />
+          <PrivateRoute
+            path="/product/:id/edit"
+            component={ProductEditScreen}
+          />
+          <PrivateRoute
+            path="/product/create"
+            component={ProductCreateScreen}
+          />
+          <PrivateRoute path="/product" component={ProductScreen} />
 
-                    {/* <PrivateRoute
+          {/* <PrivateRoute
                         path="/table/:id/edit"
                         component={TableEditScreen}
                     />
                     <PrivateRoute path="/table" component={TableScreen} /> */}
 
-                    <PrivateRoute
-                        path="/order/create/:id/table"
-                        component={OrderCreateScreen}
-                    />
+          <PrivateRoute
+            path="/order/create/:id/table"
+            component={OrderCreateScreen}
+          />
 
-                    <PrivateRoute
-                        path="/order/:id/edit"
-                        component={OrderEditScreen}
-                        exact
-                    />
+          <PrivateRoute
+            path="/order/:id/edit"
+            component={OrderEditScreen}
+            exact
+          />
 
-                    <PrivateRoute
-                        path="/order/:id/view"
-                        component={OrderViewScreen}
-                        exact
-                    />
-                    <PrivateRoute
-                        path="/order/create"
-                        component={OrderCreateScreen}
-                    />
-                    <PrivateRoute path="/order" component={OrderScreen} />
-                    <PrivateRoute
-                        path="/not-authorized"
-                        component={NotAuthorizedScreen}
-                    />
-                    <PrivateRoute path="/" component={DashboardScreen} />
-                    <Route component={NotFoundScreen} />
-                </Switch>
-            </div>
-            <Footer />
-        </>
-    );
+          <PrivateRoute
+            path="/order/:id/view"
+            component={OrderViewScreen}
+            exact
+          />
+          <PrivateRoute path="/order/create" component={OrderCreateScreen} />
+          <PrivateRoute path="/order" component={OrderScreen} />
+          <PrivateRoute
+            path="/not-authorized"
+            component={NotAuthorizedScreen}
+          />
+          <PrivateRoute path="/store/list" component={StoreScreen} />
+          <PrivateRoute
+            path="/store/:id/edit"
+            component={StoreEditScreen}
+            exact
+          />
+          <PrivateRoute path="/" component={DashboardScreen} />
+
+          <Route component={NotFoundScreen} />
+        </Switch>
+      </div>
+      <Footer />
+    </>
+  );
 };
 
 export default Main;
