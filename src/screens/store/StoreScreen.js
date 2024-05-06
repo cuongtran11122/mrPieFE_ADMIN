@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 import Input from "../../components/form/Input";
 import HeaderContent from "../../components/HeaderContent";
 import DataTableLoader from "../../components/loader/DataTableLoader";
 import Search from "../../components/Search";
 import LoaderHandler from "../../components/loader/LoaderHandler";
 import Pagination from "../../components/Pagination";
-
+import FileInput from "../../components/form/FileInput";
 import {
   listStores,
   deleteStore,
@@ -30,7 +30,10 @@ const StoreScreen = ({ history, match }) => {
   const [storeId, setStoreId] = useState("");
   const [update, setUpdate] = useState(false);
   const dispatch = useDispatch();
-
+  const [image, setImage] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [isAlert, setIsAlert] = useState(false);
+  const [errorsUpload, setErrorsUpload] = useState("");
   const userLogin = useSelector((state) => state.userLogin);
   const { adminInfo } = userLogin;
   const storeList = useSelector((state) => state.storeList);
@@ -92,15 +95,67 @@ const StoreScreen = ({ history, match }) => {
 
     if (Object.keys(errorsCheck).length === 0) {
       const NewStore = {
-        name: name,
-        name_en: name_en,
-        address: address,
-        openingTime: openingTime,
-        closeTime: closeTime,
+        name: name.trim(),
+        name_en: name_en.trim(),
+        address: address.trim(),
+        openingTime: openingTime.trim(),
+        closeTime: closeTime.trim(),
+        image: image,
       };
       dispatch(createStore(NewStore));
       refreshForm();
     }
+  };
+  const uploadingFileHandler = async (e) => {
+    // Get the first element from files which should be the image
+
+    let validFile = true;
+    let errorsUp = "";
+    //get first element from files which one is the image
+    const file = e.target.files[0];
+
+    const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
+    if (!validImageTypes.includes(file.type)) {
+      validFile = false;
+      errorsUp = "Only for uploading jpeg, jpg, png files";
+      setErrorsUpload(errorsUp);
+    }
+
+    if (file && file.size / 1000000 > 5) {
+      validFile = false;
+      errorsUp = " The image maximum size is 5MB";
+      setErrorsUpload(errorsUp);
+    }
+    //form instance
+    if (validFile) {
+      setErrorsUpload("");
+      const formData = new FormData();
+      //add file
+      formData.append("image", file);
+      //start loader
+      setUploading(true);
+      try {
+        //form config
+        const config = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
+        //api call to upload image
+        const { data } = await axios.post("/api/v1/upload", formData, config);
+        //set image path
+        setImage(data);
+        //stop loader
+        setUploading(false);
+      } catch (error) {
+        console.error(error);
+        setUploading(false);
+      }
+    }
+  };
+  const imageName = (image) => {
+    const imageArray = image.split(`uploads`);
+    return imageArray[1];
   };
   const refreshForm = () => {
     setName("");
@@ -108,6 +163,7 @@ const StoreScreen = ({ history, match }) => {
     setAddress("");
     setCloseTime("");
     setOpeningTime("");
+    setImage("");
   };
   const deleteRow = (id) => {
     dispatch(deleteStore(id));
@@ -188,6 +244,47 @@ const StoreScreen = ({ history, match }) => {
                 errors={errors}
               />
             </div>
+
+            <div className="form-group d-flex">
+              <img
+                className="profile-user-img img-fluid  "
+                src={
+                  image.length > 0
+                    ? image
+                    : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+                }
+                alt="User profile picture"
+              />
+              <FileInput
+                fileHandler={uploadingFileHandler}
+                name={"photo"}
+                image={imageName(image)}
+                uploading={uploading}
+              />
+            </div>
+            <label className="text-danger">{errorsUpload} </label>
+            {isAlert && (
+              <div className="form-group">
+                <div
+                  class="alert alert-danger alert-dismissible fade show"
+                  role="alert"
+                >
+                  <strong>Alert</strong> You should select image file or the
+                  size of image less than 5MB
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="alert"
+                    aria-label="Close"
+                    onClick={() => {
+                      // setIsAlert(false);
+                    }}
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              </div>
+            )}
             <hr />
             <div className="form-group">
               <button
@@ -359,6 +456,7 @@ const StoreScreen = ({ history, match }) => {
                   <div className="d-flex justify-content-end">
                     <div className="card-tools">
                       <Search
+                        placeholder={"Search by name or address..."}
                         keyword={keyword}
                         setKeyword={setKeyword}
                         setPage={setPageNumber}

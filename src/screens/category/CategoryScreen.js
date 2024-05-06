@@ -309,7 +309,7 @@ const CategoryScreen = ({ history, match }) => {
               {category.name_en}
             </td>
             {/* <td className="py-4 border-right border border-light"> */}
-              {/* <div class="radio-box">
+            {/* <div class="radio-box">
                                 <label class="switch">
                                 <input type="checkbox" />
                                 <span class="slider round"></span>
@@ -321,7 +321,7 @@ const CategoryScreen = ({ history, match }) => {
                                 setData={setIsOpen}
                             /> */}
 
-              {/* {category.status == 1 ? (
+            {/* {category.status == 1 ? (
                 <h4 className="text-success">
                   <i className="fas fa-check"></i>
                 </h4>
@@ -377,25 +377,26 @@ const CategoryScreen = ({ history, match }) => {
             <div className="col-12">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title align-middle "><strong>Categories</strong></h3>
+                  <h3 className="card-title align-middle ">
+                    <strong>Categories</strong>
+                  </h3>
                   <div className="d-flex justify-content-end">
-                  <div className="card-tools">
-                    <Search
-                      keyword={keyword}
-                      setKeyword={setKeyword}
-                      setPage={setPageNumber}
-                    />
+                    <div className="card-tools">
+                      <Search
+                        placeholder={"Search by name..."}
+                        keyword={keyword}
+                        setKeyword={setKeyword}
+                        setPage={setPageNumber}
+                      />
+                    </div>
+                    <button
+                      id="createBtn"
+                      className="btn  btn-secondary  border border-black ml-2"
+                      onClick={openModal}
+                    >
+                      Create
+                    </button>
                   </div>
-                  <button
-                    id="createBtn"
-                    className="btn  btn-secondary  border border-black ml-2"
-                    onClick={openModal}
-                  >
-                    Create
-                  </button>
-
-                  </div>
-                  
                 </div>
                 {/* /.card-header */}
                 <div className="card-body table-responsive p-0">

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
+import axios from "axios";
 import HeaderContent from "../../components/HeaderContent";
 import LoaderHandler from "../../components/loader/LoaderHandler";
 import ErrorInput from "../../components/form/ErrorInput";
 import ButtonGoBack from "../../components/ButtonGoBack";
-
+import FileInput from "../../components/form/FileInput";
 import {
   STORE_UPDATE_RESET,
   STORE_DETAILS_RESET,
@@ -27,6 +27,9 @@ const StoreEditScreen = ({ history, match }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { adminInfo } = userLogin;
   const [update, setUpdate] = useState(false);
+  const [image, setImage] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [errorsUpload, setErrorsUpload] = useState("");
   const storeDetails = useSelector((state) => state.storeDetails);
   const { loading, error, store } = storeDetails;
   const storeUpdate = useSelector((state) => state.storeUpdate);
@@ -56,10 +59,60 @@ const StoreEditScreen = ({ history, match }) => {
         setAddress(store?.address);
         setOpeningTime(store?.openingTime);
         setCloseTime(store?.closeTime);
+        setImage(store?.image);
       }
     }
   }, [dispatch, history, storeId, store, successUpdate, update]);
+  const uploadingFileHandler = async (e) => {
+    // e.preventDefault();
+    let validFile = true;
+    let errorsUp = "";
+    //get first element from files which one is the image
+    const file = e.target.files[0];
 
+    const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
+    if (!validImageTypes.includes(file.type)) {
+      validFile = false;
+      errorsUp = "Only for uploading jpeg, jpg, png files";
+      setErrorsUpload(errorsUp);
+    }
+
+    if (file && file.size / 1000000 > 5) {
+      validFile = false;
+      errorsUp = " The image maximum size is 5MB";
+      setErrorsUpload(errorsUp);
+    }
+    //form instance
+    if (validFile) {
+      setErrorsUpload("");
+      const formData = new FormData();
+      //add file
+      formData.append("image", file);
+      //start loader
+      setUploading(true);
+      try {
+        //form config
+        const config = {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        };
+        //api call to upload image
+        const { data } = await axios.post("/api/v1/upload", formData, config);
+        //set image path
+        setImage(data);
+        //stop loader
+        setUploading(false);
+      } catch (error) {
+        console.error(error);
+        setUploading(false);
+      }
+    }
+  };
+  const imageName = (image) => {
+    const imageArray = image.split(`uploads`);
+    return imageArray[1];
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     let errorsCheck = {};
@@ -148,6 +201,33 @@ const StoreEditScreen = ({ history, match }) => {
           errors={errors}
           nameError={"closeTime"}
         />
+      </div>
+      <div className="d-flex mt-5">
+        {/* <img
+          className="profile-user-img img-fluid"
+          src={image}
+          alt="User profile picture"
+        /> */}
+        <div className="w-25 h-25">
+          <img
+            className="profile-user-img img-fluid w-75  "
+            src={
+              image.length > 0
+                ? image
+                : "https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg"
+            }
+            alt="Product"
+          />
+        </div>
+        <div className="w-75 h-25">
+          <FileInput
+            fileHandler={uploadingFileHandler}
+            name={"photo"}
+            image={imageName(image)}
+            uploading={uploading}
+          />
+          <label className="text-danger">{errorsUpload} </label>
+        </div>
       </div>
       <hr />
       <div className="w-100 d-flex justify-content-start">

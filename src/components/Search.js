@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Search = ({ keyword, setKeyword, setPage }) => {
+const Search = ({ keyword, setKeyword, setPage, placeholder }) => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleKeyPress = (event) => {
@@ -20,7 +20,7 @@ const Search = ({ keyword, setKeyword, setPage }) => {
         name="table_search"
         onChange={(e) => setSearchTerm(e.target.value)}
         className="form-control float-right"
-        placeholder="Search by name or address"
+        placeholder={placeholder}
         onKeyPress={handleKeyPress}
       />
       <div className="input-group-append">

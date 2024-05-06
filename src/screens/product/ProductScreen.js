@@ -13,7 +13,6 @@ import Loader from "../../components/Loader";
 import DataTableLoader from "../../components/loader/DataTableLoader";
 import Select from "../../components/Select";
 
-
 import CustomTextarea from "../../components/form/CustomTextarea";
 
 /* Actions */
@@ -48,7 +47,7 @@ const ProductScreen = ({ history }) => {
   // const [quantity, setQuantity] = useState(0);
   const [category, setCategory] = useState(null);
   const [description, setDescription] = useState("");
-  const [description_en,setDescription_en] =useState("");
+  const [description_en, setDescription_en] = useState("");
   const [image, setImage] = useState("");
   const [uploading, setUploading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -104,7 +103,7 @@ const ProductScreen = ({ history }) => {
       setModalIsOpen(false);
       setDescription("");
       setDescription_en("");
-      setImage("")
+      setImage("");
     }
     if (createError) {
       dispatch({ type: PRODUCT_CREATE_FAIL });
@@ -176,9 +175,9 @@ const ProductScreen = ({ history }) => {
         category_id: category,
         image: image,
         description: description,
-        description_en: description_en
+        description_en: description_en,
       };
-      console.log(product)
+      console.log(product);
 
       dispatch(createProduct(product));
       // refershForm();
@@ -215,7 +214,7 @@ const ProductScreen = ({ history }) => {
     setNameEn("");
     // setModalIsOpen(false);
     setDescription("");
-    setDescription_en("")
+    setDescription_en("");
     setImage("");
   };
 
@@ -281,7 +280,7 @@ const ProductScreen = ({ history }) => {
                 nameError={"name_en"}
               />
             </div>
-            
+
             <div className="form-group">
               <CustomTextarea
                 class="form-control item"
@@ -404,9 +403,8 @@ const ProductScreen = ({ history }) => {
                 image={imageName(image)}
                 uploading={uploading}
               />
-              
             </div>
-             <label className="text-danger">{errorsUpload} </label>
+            <label className="text-danger">{errorsUpload} </label>
             {isAlert && (
               <div className="form-group">
                 <div
@@ -448,27 +446,26 @@ const ProductScreen = ({ history }) => {
   const uploadingFileHandler = async (e) => {
     // Get the first element from files which should be the image
 
-
     let validFile = true;
-    let errorsUp  = "";
+    let errorsUp = "";
     //get first element from files which one is the image
     const file = e.target.files[0];
 
-    const validImageTypes = ['image/gif', 'image/jpeg', 'image/png'];
+    const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
     if (!validImageTypes.includes(file.type)) {
       validFile = false;
       errorsUp = "Only for uploading jpeg, jpg, png files";
       setErrorsUpload(errorsUp);
     }
 
-    if (file && file.size/1000000 > 5) {
+    if (file && file.size / 1000000 > 5) {
       validFile = false;
       errorsUp = " The image maximum size is 5MB";
       setErrorsUpload(errorsUp);
-    }  
+    }
     //form instance
-     if (validFile) {
-      setErrorsUpload('');
+    if (validFile) {
+      setErrorsUpload("");
       const formData = new FormData();
       //add file
       formData.append("image", file);
@@ -491,7 +488,6 @@ const ProductScreen = ({ history }) => {
         console.error(error);
         setUploading(false);
       }
-     
     }
   };
   const imageName = (image) => {
@@ -599,11 +595,14 @@ const ProductScreen = ({ history }) => {
                 </button>
               </Link>
 
-              <button className="btn btn btn-light btn-sm border border-black" href="#myModal"
+              <button
+                className="btn btn btn-light btn-sm border border-black"
+                href="#myModal"
                 data-toggle="modal"
                 onClick={(e) => {
                   setProductID(product.id);
-                }}>
+                }}
+              >
                 Delete
               </button>
 
@@ -638,25 +637,26 @@ const ProductScreen = ({ history }) => {
             <div className="col-12">
               <div className="card">
                 <div className="card-header">
-                  <h3 className="card-title "><strong>Products table</strong></h3>
+                  <h3 className="card-title ">
+                    <strong>Products table</strong>
+                  </h3>
                   <div className="d-flex justify-content-end">
-                  <div className="card-tools">
-                    <Search
-                      keyword={keyword}
-                      setKeyword={setKeyword}
-                      setPage={setPageNumber}
-                    />
+                    <div className="card-tools">
+                      <Search
+                        placeholder={"Search by name..."}
+                        keyword={keyword}
+                        setKeyword={setKeyword}
+                        setPage={setPageNumber}
+                      />
+                    </div>
+                    <button
+                      id="createBtn"
+                      className="btn  btn-secondary  border border-black ml-2"
+                      onClick={openModal}
+                    >
+                      Create
+                    </button>
                   </div>
-                  <button
-                    id="createBtn"
-                    className="btn  btn-secondary  border border-black ml-2"
-                    onClick={openModal}
-                  >
-                    Create
-                  </button>
-
-                  </div>
-                  
                 </div>
                 {/* /.card-header */}
                 <div className="card-body table-responsive p-0">
