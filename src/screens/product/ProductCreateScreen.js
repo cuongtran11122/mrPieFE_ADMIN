@@ -38,7 +38,7 @@ const ProductCreateScreen = ({ history, match }) => {
 
   const [errors, setErrors] = useState({});
   const [isAlert, setIsAlert] = useState(false);
-  console.log(isAlert)
+  
 
   const dispatch = useDispatch();
 
@@ -178,7 +178,7 @@ const ProductCreateScreen = ({ history, match }) => {
       setImage(data);
       setUploading(false);
     } catch (error) {
-      console.error(error);
+      
       setUploading(false);
     }
   };

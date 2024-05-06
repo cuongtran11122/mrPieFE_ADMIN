@@ -22,7 +22,7 @@ import {
 } from "../../actions/orderActions";
 
 /* Styles */
-import { modalStyles } from "../../utils/styles";
+// import { modalStyles } from "../../utils/styles";
 import "../../style/button.css";
 
 const OrderViewScreen = ({ history, match }) => {
@@ -37,7 +37,7 @@ const OrderViewScreen = ({ history, match }) => {
     { id: 0, name: "Pending" },
     { id: 1, name: "Paid" },
     { id: 2, name: "Completed" },
-    { id: 3, name: "Canceled" },
+    // { id: 3, name: "Canceled" },
   ];
 
   const formatMoney = (money) => {
@@ -50,8 +50,6 @@ const OrderViewScreen = ({ history, match }) => {
   const openModal = (value) => {
     setStatus(value);
     setModalIsOpen(true);
-
-    console.log(value);
   };
 
   const closeModal = (value) => {
@@ -108,32 +106,35 @@ const OrderViewScreen = ({ history, match }) => {
     }
   }, [dispatch, history, order, orderId, successUpdate]);
 
-  const renderModalPay = () => (
-    <Modal
-      style={modalStyles}
-      isOpen={modal}
-      onRequestClose={() => setModal(false)}
-    >
-      <h2 className="text-center">Order Payment</h2>
-      <p className="text-center">Is order already paid?.</p>
-      <form onSubmit={handlePay}>
-        <div className="d-flex justify-content-between align-items-center ">
-          <Checkbox name={"status"} data={status} setData={setStatus} />
-          <div className="d-flex justify-content-center  w-75 ">
-            <button type="submit" className="btn  btn-secondary  border border-black w-35 mx-2 ">
-              Submit
-            </button>
+  // const renderModalPay = () => (
+  //   <Modal
+  //     style={modalStyles}
+  //     isOpen={modal}
+  //     onRequestClose={() => setModal(false)}
+  //   >
+  //     <h2 className="text-center">Order Payment</h2>
+  //     <p className="text-center">Is order already paid?.</p>
+  //     <form onSubmit={handlePay}>
+  //       <div className="d-flex justify-content-between align-items-center ">
+  //         <Checkbox name={"status"} data={status} setData={setStatus} />
+  //         <div className="d-flex justify-content-center  w-75 ">
+  //           <button
+  //             type="submit"
+  //             className="btn  btn-secondary  border border-black w-35 mx-2 "
+  //           >
+  //             Submit
+  //           </button>
 
-            <ModalButton
-              modal={modal}
-              setModal={setModal}
-              classes={"custom_delete_btn w-35"}
-            />
-          </div>
-        </div>
-      </form>
-    </Modal>
-  );
+  //           <ModalButton
+  //             modal={modal}
+  //             setModal={setModal}
+  //             classes={"custom_delete_btn w-35"}
+  //           />
+  //         </div>
+  //       </div>
+  //     </form>
+  //   </Modal>
+  // );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -162,14 +163,14 @@ const OrderViewScreen = ({ history, match }) => {
     dispatch(listOrderDetails(orderId));
   };
 
-  const handleEdit = (e) => {
-    e.preventDefault();
-    history.push(`/order/${orderId}/edit`);
-  };
-  const handleSearch = (event) => {
-    console.log("Searching...", event.target.value);
-    // Add your search logic here
-  };
+  // const handleEdit = (e) => {
+  //   e.preventDefault();
+  //   history.push(`/order/${orderId}/edit`);
+  // };
+  // const handleSearch = (event) => {
+  //   console.log("Searching...", event.target.value);
+  //   // Add your search logic here
+  // };
 
   const renderModal = () => {
     return (
@@ -198,7 +199,7 @@ const OrderViewScreen = ({ history, match }) => {
                     data={status}
                     setData={setStatus}
                     items={items}
-                    search={handleSearch}
+                    // search={handleSearch}
                   />
                 </div>
               </span>
@@ -233,22 +234,21 @@ const OrderViewScreen = ({ history, match }) => {
 
   const renderCartInfo = () =>
     order &&
-    order.orderItems &&
-    order.shipment && (
+    order?.orderItems &&
+    order?.shipment && (
       <>
         <div className="d-flex flex-column flex-md-row ">
           <div className="col-12 col-md-8">
             <div className="small-box bg-light">
               <div className="inner">
-                <h4>TOTAL {formatMoney(parseInt(order.total_amount))}</h4>
+                <h4>TOTAL {formatMoney(parseInt(order?.total_amount))}</h4>
                 <p>
-                  {order.orderItems.length > 0
-                    ? totalItems(order.orderItems)
+                  {order?.orderItems.length > 0
+                    ? totalItems(order?.orderItems)
                     : 0}{" "}
                   Items in Order
                 </p>
               </div>
-              
             </div>
           </div>
           <div className="col-12 col-md-4">
@@ -271,6 +271,8 @@ const OrderViewScreen = ({ history, match }) => {
       <thead>
         <tr>
           <th>Product</th>
+          <th>Size</th>
+          <th>Type</th>
           <th>Quantity</th>
           <th>Price</th>
           <th>Total</th>
@@ -282,22 +284,22 @@ const OrderViewScreen = ({ history, match }) => {
           order?.orderItems.length > 0 &&
           order?.orderItems.map((product) => {
             return (
-              <tr key={product.id}>
-                <td>{product.product.name}</td>
+              <tr key={product?.id}>
+                <td>{product?.product?.name}</td>
+                <td>{product?.attribute?.product_size}</td>
+                <td>
+                  {product?.type === 1 ? <span>Cold</span> : <span>Hot</span>}
+                </td>
+                <td className="text-center ">{product?.quantity}</td>
                 <td className="text-center ">
-                {product.quantity}
-                  
+                  {formatMoney(parseInt(product?.attribute?.product_price))}
                 </td>
                 <td className="text-center ">
-                {formatMoney(parseInt(product.attribute.product_price))}
-                  
-                </td>
-                <td className="text-center ">
-                {formatMoney(
-                      parseInt(
-                        product.attribute.product_price * product.quantity
-                      )
-                    )}{" "}
+                  {formatMoney(
+                    parseInt(
+                      product?.attribute?.product_price * product?.quantity
+                    )
+                  )}
                 </td>
               </tr>
             );
@@ -312,37 +314,33 @@ const OrderViewScreen = ({ history, match }) => {
         <div className="row">
           <div className="col-12 col-md-6">
             <ViewBox
-              title={order.id}
+              title={order?.id}
               paragraph={"ORDER ID"}
-
               color={"bg-light"}
             />
           </div>
 
-          {order.status === 0 ? (
+          {order?.status === 0 ? (
             <div className="col-12 col-md-6">
               <ViewBox
                 title={"Pending"}
                 paragraph={"Order is pending"}
-
                 color={"bg-light"}
               />
             </div>
-          ) : order.status === 1 ? (
+          ) : order?.status === 1 ? (
             <div className="col-12 col-md-6">
               <ViewBox
                 title={"Paid"}
                 paragraph={"Order is already paid"}
-
                 color={"bg-light"}
               />
             </div>
-          ) : order.status === 2 ? (
+          ) : order?.status === 2 ? (
             <div className="col-12 col-md-6">
               <ViewBox
                 title={"Completed"}
                 paragraph={"Order is completed"}
-
                 color={"bg-light"}
               />
             </div>
@@ -351,38 +349,37 @@ const OrderViewScreen = ({ history, match }) => {
               <ViewBox
                 title={"Canceled"}
                 paragraph={"Order is canceled"}
-
                 color={"bg-light"}
               />
             </div>
           )}
 
           <div className="col-12 col-md-6">
-            {order.client && (
+            {order?.client && (
               <ViewBox
-                title={order.client.name}
-                paragraph={`ID: ${order.client.id}`}
+                title={order?.client?.name}
+                paragraph={`ID: ${order?.client.id}`}
                 icon={"fas fa-user"}
                 color={"bg-info"}
               />
             )}
           </div>
 
-          {order.table ? (
+          {order?.table ? (
             <div className="col-12 col-md-6">
               <ViewBox
-                title={order.table.name}
-                paragraph={`ID: ${order.table.id}`}
+                title={order?.table?.name}
+                paragraph={`ID: ${order?.table.id}`}
                 icon={"fas fa-utensils"}
                 color={"bg-info"}
               />
             </div>
           ) : (
             <div className="col-12 col-md-6">
-              {order.client && (
+              {order?.client && (
                 <ViewBox
                   title={"Delivery"}
-                  paragraph={order.client.address}
+                  paragraph={order?.client?.address}
                   icon={"fas fa-truck"}
                   color={"bg-primary"}
                 />
@@ -390,30 +387,44 @@ const OrderViewScreen = ({ history, match }) => {
             </div>
           )}
         </div>
-
-        {order && order.user && (
+      </>
+    );
+  const renderUserInfo = () =>
+    order && (
+      <>
+        {order && order?.user && (
           <div className="col-12">
             <div
-              className="border rounded  d-flex  mb-3  bg-light d-flex justify-content-center align-items-center "
+              className="border rounded  d-flex  mb-3 pl-2 bg-light d-flex justify-content-start align-items-center "
               style={{ minHeight: 40 }}
             >
-              <h6>
-                Customer name: <strong>{order.user.name}</strong>{" "}
-              </h6>
+              <span className="pr-1">
+                Customer name: <strong>{order?.user?.name}</strong>
+              </span>
             </div>
           </div>
         )}
 
         <div className="col-12 mt-1 ">
           <ViewBox
-            title={"Note:"}
-            paragraph={order.note}
+            title={"Address "}
+            paragraph={
+              order?.shipment?.address
+                ? order?.shipment?.address
+                : "Pickup at Store"
+            }
+            color={"bg-silver"}
+          />
+        </div>
+        <div className="col-12 mt-1 ">
+          <ViewBox
+            title={"Note "}
+            paragraph={order?.note}
             color={"bg-silver"}
           />
         </div>
       </>
     );
-
   // const renderOrderEdit = () => (
   //   <div className="card">
   //     <div className="card-header bg-warning">Edit Order</div>
@@ -439,13 +450,10 @@ const OrderViewScreen = ({ history, match }) => {
 
   const renderInfo = () => (
     <>
-      <div className="col-12 col-md-8">
-        {renderCartInfo()}
-
-        {renderOrderProducts()}
-      </div>
-
+      <div className="col-12 col-md-8">{renderCartInfo()}</div>
       <div className="col-12 col-md-4">{renderOrderInfo()}</div>
+      {renderOrderProducts()}
+      {renderUserInfo()}
     </>
   );
 

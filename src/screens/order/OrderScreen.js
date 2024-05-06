@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
-import Modal from "react-modal";
+// import Modal from "react-modal";
 
 /* Components */
 import HeaderContent from "../../components/HeaderContent";
@@ -9,7 +9,7 @@ import DataTableLoader from "../../components/loader/DataTableLoader";
 import Search from "../../components/Search";
 import LoaderHandler from "../../components/loader/LoaderHandler";
 import Pagination from "../../components/Pagination";
-
+import Select from "../../components/Select";
 import "../../style/product.css";
 import "../../style/confirmModal.css";
 import "../../style/button.css";
@@ -28,18 +28,21 @@ const OrderScreen = ({ history }) => {
   const [orderID, setOrderID] = useState(0);
   const [pageNumber, setPageNumber] = useState(1);
   const [keyword, setKeyword] = useState("");
-
   const dispatch = useDispatch();
-
   const userLogin = useSelector((state) => state.userLogin);
   const { adminInfo } = userLogin;
-
   const orderList = useSelector((state) => state.orderList);
   const { loading, error, orders, page, pages } = orderList;
   const [modal, setModal] = useState(false);
-  const [status, setStatus] = useState(0);
+  const [status, setStatus] = useState(5);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
+  const items = [
+    { id: 5, name: "All" },
+    { id: 0, name: "Pending" },
+    { id: 1, name: "Paid" },
+    { id: 2, name: "Completed" },
+    { id: 3, name: "Canceled" },
+  ];
   const openModal = (value, orderID) => {
     setStatus(value);
     setModalIsOpen(true);
@@ -54,7 +57,6 @@ const OrderScreen = ({ history }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const updatedOrder = {
       id: orderID,
       status: status,
@@ -86,25 +88,19 @@ const OrderScreen = ({ history }) => {
     if (!adminInfo) {
       history.push("/login");
     }
-
-    if (statusParams != null) {
-      dispatch(
-        listOrdersByStatus({
-          keyword,
-          pageNumber,
-          delivery: false,
-          status: statusParams,
-        })
-      );
-    } else {
-      dispatch(listOrders({ keyword, pageNumber, delivery: false }));
-    }
-  }, [dispatch, history, adminInfo, pageNumber, keyword]);
-
-  const handleSearch = (event) => {
-    console.log("Searching...", event.target.value);
-    // Add your search logic here
-  };
+    // if (statusParams != null) {
+    //   dispatch(
+    //     listOrdersByStatus({
+    //       keyword,
+    //       pageNumber,
+    //       delivery: false,
+    //       status: statusParams,
+    //     })
+    //   );
+    // } else {
+    dispatch(listOrders({ keyword, pageNumber, status }));
+    // }
+  }, [dispatch, history, adminInfo, pageNumber, keyword, status]);
 
   const renderModal = () => {
     return (
@@ -129,7 +125,7 @@ const OrderScreen = ({ history }) => {
               <span>
                 <h3 className="text-center mb-4">Change order status </h3>
                 <p className="text-center mb-4">
-                  Do you want to change order satus ?
+                  Do you want to change order status ?
                 </p>
               </span>
 
@@ -166,7 +162,9 @@ const OrderScreen = ({ history }) => {
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Phone
           </th>
-
+          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+            Type
+          </th>
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Status
           </th>
@@ -176,97 +174,120 @@ const OrderScreen = ({ history }) => {
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Created date
           </th>
-          <th className="border-right border-bottom-0 border-left-0 border-top-0 "></th>
+          <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
+            Action
+          </th>
         </tr>
       </thead>
       <tbody>
-        {orders.map((order) => (
-          <tr key={order.id}>
-            <td className="py-4 border-right border border-light">
-              {order.user ? order.user.name : ""}
-            </td>
-            <td className="py-4 border-right border border-light">
-              {order.user ? order.user.phone : ""}
-            </td>
+        {orders?.length === 0 && "No data"}
+        {orders?.length > 0 &&
+          orders?.map((order) => (
+            <tr key={order?.id}>
+              <td className="py-4 border-right border border-light">
+                {order?.user ? (
+                  order?.user?.name
+                ) : (
+                  <span className="" style={{ textDecoration: "line-through" }}>
+                    Deleted User
+                  </span>
+                )}
+              </td>
+              <td className="py-4 border-right border border-light">
+                {order?.user ? (
+                  order?.user?.phone
+                ) : (
+                  <span className="" style={{ textDecoration: "line-through" }}>
+                    Deleted User
+                  </span>
+                )}
+              </td>
+              <td className="py-4 border-right border border-light">
+                {order?.user?.userType === 1 ? (
+                  <span>Member</span>
+                ) : (
+                  <span>Guest</span>
+                )}
+              </td>
 
-            <td className="py-4 border-right border border-light d-flex justify-content-center">
-              <div className="btn-group w-75">
-                <button
-                  type="button"
-                  className={`btn btn-outline-secondary dropdown-toggle d-flex align-items-center justify-content-center  `}
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  {order.status === 0 ? (
-                    <span>
-                      <strong>Pending</strong>
-                    </span>
-                  ) : order.status === 1 ? (
-                    <span>
-                      <strong>Paid</strong>
-                    </span>
-                  ) : order.status === 2 ? (
-                    <span>
-                      <strong>Completed</strong>
-                    </span>
-                  ) : (
-                    <span>
-                      <strong>Canceled</strong>
-                    </span>
-                  )}
-                </button>
-                <div className="dropdown-menu dropdown-menu-right w-100">
+              <td className="py-4 border-right border border-light d-flex justify-content-center">
+                <div className="btn-group w-75">
                   <button
-                    value={0}
-                    className="dropdown-item"
                     type="button"
-                    onClick={() => openModal(0, order.id)}
+                    className={`btn btn-outline-secondary dropdown-toggle d-flex align-items-center justify-content-center  `}
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
                   >
-                    Pending
+                    {order?.status === 0 ? (
+                      <span>
+                        <strong>Pending</strong>
+                      </span>
+                    ) : order?.status === 1 ? (
+                      <span>
+                        <strong>Paid</strong>
+                      </span>
+                    ) : order?.status === 2 ? (
+                      <span>
+                        <strong>Completed</strong>
+                      </span>
+                    ) : (
+                      <span>
+                        <strong>Canceled</strong>
+                      </span>
+                    )}
                   </button>
-                  <button
-                    value={1}
-                    className="dropdown-item"
-                    type="button"
-                    onClick={() => openModal(1, order.id)}
-                  >
-                    Paid
-                  </button>
-                  <button
-                    value={2}
-                    className="dropdown-item"
-                    type="button"
-                    onClick={() => openModal(2, order.id)}
-                  >
-                    Completed
-                  </button>
-                  <button
-                    value={3}
-                    className="dropdown-item"
-                    type="button"
-                    onClick={() => openModal(3, order.id)}
-                  >
-                    Canceled
-                  </button>
+                  <div className="dropdown-menu dropdown-menu-right w-100">
+                    <button
+                      value={0}
+                      className="dropdown-item"
+                      type="button"
+                      onClick={() => openModal(0, order?.id)}
+                    >
+                      Pending
+                    </button>
+                    <button
+                      value={1}
+                      className="dropdown-item"
+                      type="button"
+                      onClick={() => openModal(1, order?.id)}
+                    >
+                      Paid
+                    </button>
+                    <button
+                      value={2}
+                      className="dropdown-item"
+                      type="button"
+                      onClick={() => openModal(2, order?.id)}
+                    >
+                      Completed
+                    </button>
+                    <button
+                      value={3}
+                      className="dropdown-item"
+                      type="button"
+                      onClick={() => openModal(3, order?.id)}
+                    >
+                      Canceled
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </td>
-            <td className="d-none d-sm-table-cell  py-4 border-right border border-light">
-              {formatMoney(parseInt(order.total_amount))}
-            </td>
-            <td className="py-4 border-right border border-light">
-              {order.createdAt.slice(0, 10)}
-            </td>
-            <td className="py-4 border-right border border-light  ">
-              <Link to={`/order/${order.id}/view`}>
-                <button className="btn  btn-light text-sm border border-black ">
-                  View
-                </button>
-              </Link>
-            </td>
-          </tr>
-        ))}
+              </td>
+              <td className="d-none d-sm-table-cell  py-4 border-right border border-light">
+                {formatMoney(parseInt(order?.total_amount))}
+              </td>
+              <td className="py-4 border-right border border-light">
+                {new Date(order?.createdAt).toLocaleString()}
+              </td>
+              <td className="py-4 border-right border border-light  ">
+                <Link to={`/order/${order?.id}/view`}>
+                  <button className="btn  btn-light text-sm border border-black ">
+                    View
+                  </button>
+                </Link>
+              </td>
+            </tr>
+          ))}
       </tbody>
     </table>
   );
@@ -275,15 +296,24 @@ const OrderScreen = ({ history }) => {
     <>
       <div className="card ">
         <div className="card-header">
-          <h3 className="card-title">All orders</h3>
-          <div className="card-tools">
-            <Search
-              keyword={keyword}
-              setKeyword={setKeyword}
-              setPage={setPageNumber}
-            />
+          <div className="d-flex justify-content-between align-items-center">
+            <h3 className="card-title">All orders</h3>
+            <div className="d-flex">
+              <div style={{ height: 90, marginRight: 10, width: 300 }}>
+                <Select data={status} setData={setStatus} items={items} />
+              </div>
+              <div className="card-tools">
+                <Search
+                  placeholder={"Search by customer name, phone..."}
+                  keyword={keyword}
+                  setKeyword={setKeyword}
+                  setPage={setPageNumber}
+                />
+              </div>
+            </div>
           </div>
         </div>
+
         {/* /.card-header */}
         <div className="card-body table-responsive p-0">
           <LoaderHandler
