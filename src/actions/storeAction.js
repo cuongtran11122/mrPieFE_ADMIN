@@ -190,7 +190,7 @@ export const deleteStore = (id) => async (dispatch, getState) => {
         Authorization: `Bearer ${adminInfo.token}`,
       },
     };
-    console.log("checked id action", id);
+    
     //api call to delete product
     await axios.delete(`/api/v1/admin/store/${id}`, config);
     dispatch({

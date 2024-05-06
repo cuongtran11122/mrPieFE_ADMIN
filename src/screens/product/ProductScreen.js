@@ -79,8 +79,7 @@ const ProductScreen = ({ history }) => {
     error: createError,
   } = productCreate;
 
-  console.log(createLoading);
-  console.log(createError);
+  
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -107,7 +106,7 @@ const ProductScreen = ({ history }) => {
     }
     if (createError) {
       dispatch({ type: PRODUCT_CREATE_FAIL });
-      console.log(createError);
+      
     }
     dispatch(listProducts(keyword, pageNumber));
   }, [dispatch, history, adminInfo, pageNumber, keyword, createSuccess]);
@@ -177,7 +176,7 @@ const ProductScreen = ({ history }) => {
         description: description,
         description_en: description_en,
       };
-      console.log(product);
+      
 
       dispatch(createProduct(product));
       // refershForm();
@@ -485,7 +484,7 @@ const ProductScreen = ({ history }) => {
         //stop loader
         setUploading(false);
       } catch (error) {
-        console.error(error);
+        
         setUploading(false);
       }
     }

@@ -185,7 +185,7 @@ const ProductEditScreen = ({ history, match }) => {
         //stop loader
         setUploading(false);
       } catch (error) {
-        console.error(error);
+        
         setUploading(false);
       }
     }

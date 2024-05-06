@@ -51,7 +51,7 @@ export const getStatistics = () => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
-    //console.log(error)
+    
     dispatch({
       type: ORDER_STATISTICS_FAIL,
       payload:
@@ -81,7 +81,7 @@ export const listOrdersByStatus = (options) => async (dispatch, getState) => {
         Authorization: `Bearer ${adminInfo.token}`,
       },
     };
-    console.log(adminInfo);
+    
     //get all orders
     const { data } = await axios.get(
       `/api/v1/admin/order/list?keyword=${keyword}&pageNumber=${pageNumber}&status=${status}${
@@ -242,7 +242,7 @@ export const listOrdersUserDetail =
           Authorization: `Bearer ${adminInfo.token}`,
         },
       };
-      console.log(adminInfo);
+      
       //get all orders
       const { data } = await axios.get(
         `/api/v1/admin/order/list/${userID}?keyword=${keyword}&pageNumber=${pageNumber}${
