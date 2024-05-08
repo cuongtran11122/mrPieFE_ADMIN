@@ -209,7 +209,7 @@ const CategoryScreen = ({ history, match }) => {
             </div>
             <div className="form-group">
               <Input
-                name={"English name"}
+                name={"name_en"}
                 type={"text"}
                 label={"English category name"}
                 data={name_en}
