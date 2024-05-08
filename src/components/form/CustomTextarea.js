@@ -1,10 +1,10 @@
 import React from "react";
 import { capitalize } from "../../utils/functions";
 
-const CustomTextarea = ({ name, type, data, setData, errors, classes = "" }) => {
+const CustomTextarea = ({label, name, type, data, setData, errors, classes = "" }) => {
     return (
         <div className="form-group">
-            <label htmlFor={name}>{capitalize(name)}</label>
+            <label htmlFor={label}>{capitalize(label)}</label>
             <textarea
             style={{minHeight:150}}
                 type={type}
