@@ -31,7 +31,8 @@ const UserScreen = ({ history }) => {
     const [email, setEmail] = useState("");
     // const [isAdmin, setIsAdmin] = useState(false);
     const [errors, setErrors] = useState({});
-
+    const [address, setAddress] = useState("");
+  
     const dispatch = useDispatch();
 
     const userList = useSelector((state) => state.userList);
@@ -56,7 +57,7 @@ const UserScreen = ({ history }) => {
             setPassword("");
             setEmail("");
             // setIsAdmin(false);
-
+            setAddress("");
             setModalIsOpen(false);
         }
     }, [dispatch, adminInfo, pageNumber, keyword, history, createSuccess]);
@@ -65,9 +66,9 @@ const UserScreen = ({ history }) => {
         e.preventDefault();
 
         let errorsCheck = {};
-        if (!name) {
-            errorsCheck.name = "Name is required";
-        }
+        // if (!name) {
+        //     errorsCheck.name = "Name is required";
+        // }
         if (!password) {
             errorsCheck.password = "Password is required";
         }
@@ -75,6 +76,12 @@ const UserScreen = ({ history }) => {
         if (!email) {
             errorsCheck.email = "Email is required";
         }
+        if (!name || name.length < 10 || name.length > 32 ) {
+            errorsCheck.name = "Name must be between 10 and 32 characters";
+          }
+          if (!address || address.length < 10 || address.length > 64) {
+            errorsCheck.address = "Address must be between 10 and 64 characters";
+          }
 
         if (Object.keys(errorsCheck).length > 0) {
             setErrors(errorsCheck);
@@ -88,6 +95,7 @@ const UserScreen = ({ history }) => {
                 email: email,
                 password: password,
                 // isAdmin: isAdmin,
+                address: address,
             };
 
             dispatch(register(user));
