@@ -13,7 +13,7 @@ const Search = ({ keyword, setKeyword, setPage, placeholder }) => {
     setPage(1);
   };
   return (
-    <div className="input-group " style={{ width: 360 }}>
+    <div className="input-group " style={{ width: 300 }}>
       <input
         value={searchTerm}
         type="text"
