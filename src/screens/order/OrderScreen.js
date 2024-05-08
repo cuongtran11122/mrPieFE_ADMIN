@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 // import Modal from "react-modal";
 
 /* Components */
-import CalendarComponent from "../../components/datepicker/CalendarComponent";
+
 import HeaderContent from "../../components/HeaderContent";
 import DataTableLoader from "../../components/loader/DataTableLoader";
 import Search from "../../components/Search";
@@ -14,13 +14,13 @@ import Select from "../../components/Select";
 import Input from "../../components/form/Input";
 import OrderViewScreen from "./OrderViewScreen ";
 import { DateRangePicker } from "rsuite";
-import { compareAsc, format } from "date-fns";
+
 import "rsuite/dist/rsuite-rtl.css"; // Import for right-to-left layout
 
 import "../../style/product.css";
 import "../../style/confirmModal.css";
 import "../../style/button.css";
-import "../../components/datepicker/calendar.css";
+import "../../style/calendar.css";
 
 /* Actions */
 import {
@@ -113,6 +113,20 @@ const OrderScreen = ({ history }) => {
     setCurrentStatus(status);
   };
 
+  const formatDate =(date) => {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const updatedOrder = {
@@ -166,12 +180,14 @@ const OrderScreen = ({ history }) => {
     if (!adminInfo) {
       history.push("/login");
     }
-
+    setOrderID(0);
     // Only dispatch listOrders if orderStatus changes to a value other than 5
     // and both startDate and endDate have valid values
     if (orderStatus !== 5 && startDate !== undefined && endDate !== undefined) {
-      const newStartDate = format(startDate, "yyyy-MM-dd");
-      const newEndDate = format(endDate, "yyyy-MM-dd");
+      console.log("Test ne")
+      console.log(formatDate(startDate))
+      const newStartDate = formatDate(startDate);
+      const newEndDate = formatDate(endDate);
       console.log(newEndDate)
       console.log(newStartDate)
       dispatch(
@@ -189,8 +205,8 @@ const OrderScreen = ({ history }) => {
     if (orderStatus === 5 && startDate !== undefined && endDate !== undefined) {
       console.log(startDate);
       console.log(endDate);
-      const newStartDate = format(startDate, "yyyy-MM-dd");
-      const newEndDate = format(endDate, "yyyy-MM-dd");
+      const newStartDate = formatDate(startDate);
+      const newEndDate = formatDate(endDate);
       dispatch(
         listOrders({
           keyword,
@@ -636,7 +652,7 @@ const OrderScreen = ({ history }) => {
           </div>
           {/* /.row */}
 
-          <div className="row">
+          {orderID > 0 && (<div className="row">
             <div className="col-12">
               {/* {renderOrders()} */}
               <div className="card ">
@@ -644,14 +660,18 @@ const OrderScreen = ({ history }) => {
                   <div className="d-flex justify-content-between align-items-center  ">
                     <h3 className="card-title my-2">Order Detail</h3>
                   </div>
-                  {orderID > 0 && renderOrderDetail(orderID)}
+                  {
+                    renderOrderDetail(orderID)
+                  }
+                  
                 </div>
 
                 {/* /.card-header */}
               </div>
             </div>
             {/* /.col */}
-          </div>
+          </div>) }
+          
         </div>
       </section>
     </>
