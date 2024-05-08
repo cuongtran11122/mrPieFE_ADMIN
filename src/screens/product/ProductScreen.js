@@ -129,11 +129,7 @@ const ProductScreen = ({ history }) => {
 
     // if (!price) {
     //   errorsCheck.price = "Price is required";
-    // }
-
-    if (!size || size.length > 10) {
-      errorsCheck.size = "Size is required and must be maximum 10 characters";
-    }
+    // } 
 
     if (!description || description.length > 255) {
       errorsCheck.description = "Description is required and must be maximum 255 characters";
