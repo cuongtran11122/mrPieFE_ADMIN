@@ -105,6 +105,7 @@ const ProductCreateScreen = ({ history, match }) => {
     if (!size) {
       errorsCheck.price = "size is required";
     }
+    
 
     // if (!quantity) {
     //   errorsCheck.quantity = "quantity is required";
@@ -112,6 +113,8 @@ const ProductCreateScreen = ({ history, match }) => {
     // if (!category) {
     //     errorsCheck.category = "Category is required";
     // }
+
+    
 
     if (Object.keys(errorsCheck).length > 0) {
       setErrors(errorsCheck);

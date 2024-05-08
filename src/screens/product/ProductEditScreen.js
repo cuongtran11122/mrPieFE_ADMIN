@@ -102,12 +102,12 @@ const ProductEditScreen = ({ history, match }) => {
 
     let errorsCheck = {};
 
-    if (!name) {
-      errorsCheck.name = "Name is required";
-    }
-    if (!name_en) {
-      errorsCheck.name_en = "Product english name is required";
-    }
+    // if (!name) {
+    //   errorsCheck.name = "Name is required";
+    // }
+    // if (!name_en) {
+    //   errorsCheck.name_en = "Product english name is required";
+    // }
 
     // if (!quantity) {
     //   errorsCheck.quantity = "quantity is required";
@@ -115,6 +115,39 @@ const ProductEditScreen = ({ history, match }) => {
     // if (!category) {
     //     errorsCheck.category = "Category is required";
     // }
+    if (!name || name.length > 32) {
+      errorsCheck.name = "Name is required and must be maximum 32 characters";
+    }
+
+    if (!name_en || name_en.length > 32) {
+      errorsCheck.name_en =
+        "English name is required and must be maximum 32 characters";
+    }
+
+    // if (!price) {
+    //   errorsCheck.price = "Price is required";
+    // }
+
+    if (!size || size.length > 10) {
+      errorsCheck.size = "Size is required and must be maximum 10 characters";
+    }
+
+    if (!description || description.length > 255) {
+      errorsCheck.description =
+        "Description is required and must be maximum 255 characters";
+    }
+    if (!description || description.length > 255) {
+      errorsCheck.description =
+        "Description is required and must be maximum 255 characters";
+    }
+    if (
+      !description_en ||
+      description_en.length > 255 ||
+      description_en === null
+    ) {
+      errorsCheck.description_en =
+        "English description is required and must be maximum 255 characters";
+    }
 
     if (Object.keys(errorsCheck).length > 0) {
       setErrors(errorsCheck);
@@ -133,7 +166,7 @@ const ProductEditScreen = ({ history, match }) => {
           category_id: category,
           image,
           description,
-          description_en
+          description_en,
         })
       );
     }
@@ -185,7 +218,6 @@ const ProductEditScreen = ({ history, match }) => {
         //stop loader
         setUploading(false);
       } catch (error) {
-        
         setUploading(false);
       }
     }
@@ -227,7 +259,8 @@ const ProductEditScreen = ({ history, match }) => {
       />
 
       <CustomTextarea
-        name={"Description"}
+        class="form-control item"
+        name={"description"}
         type={"text"}
         data={description}
         setData={setDescription}
@@ -235,7 +268,9 @@ const ProductEditScreen = ({ history, match }) => {
       />
 
       <CustomTextarea
-        name={"English Description"}
+        class="form-control item"
+        label={"English description"}
+        name={"description_en"}
         type={"text"}
         data={description_en}
         setData={setDescription_en}

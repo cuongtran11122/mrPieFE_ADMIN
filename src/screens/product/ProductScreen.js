@@ -113,12 +113,39 @@ const ProductScreen = ({ history }) => {
 
     let errorsCheck = {};
 
-    if (!name) {
-      errorsCheck.name = "Name is required";
+    // if (!name) {
+    //   errorsCheck.name = "Name is required";
+    // }
+    // if (!name) {
+    //   errorsCheck.name_en = "English Name is required";
+    // }
+    if (!name || name.length > 32) {
+      errorsCheck.name = "Name is required and must be maximum 32 characters";
     }
-    if (!name) {
-      errorsCheck.name_en = "English Name is required";
+
+    if (!name_en || name_en.length > 32) {
+      errorsCheck.name_en = "English name is required and must be maximum 32 characters";
     }
+
+    // if (!price) {
+    //   errorsCheck.price = "Price is required";
+    // }
+
+    if (!size || size.length > 10) {
+      errorsCheck.size = "Size is required and must be maximum 10 characters";
+    }
+
+    if (!description || description.length > 255) {
+      errorsCheck.description = "Description is required and must be maximum 255 characters";
+    }
+    if (!description || description.length > 255) {
+      errorsCheck.description = "Description is required and must be maximum 255 characters";
+    }
+    if (!description_en || description_en.length > 255 || description_en === null) {
+      errorsCheck.description_en = "English description is required and must be maximum 255 characters";
+    }
+
+
 
     // if (!size.S || !size.M || !size.L || !size.J) {
     //     errorsCheck.size = "Price for each size is required";
@@ -290,7 +317,8 @@ const ProductScreen = ({ history }) => {
             <div className="form-group">
               <CustomTextarea
                 class="form-control item"
-                name={"English description"}
+                label={"English description"}
+                name={"description_en"}
                 type={"text"}
                 data={description_en}
                 setData={setDescription_en}
