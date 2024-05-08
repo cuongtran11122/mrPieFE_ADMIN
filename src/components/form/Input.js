@@ -2,6 +2,7 @@ import React from "react";
 import { capitalize } from "../../utils/functions";
 
 const Input = ({ name, label, type, data, setData, errors, classes = "" }) => {
+  console.log(errors)
   return (
     <div className="form-group">
       <label htmlFor={label}>{capitalize(label)}</label>
@@ -14,6 +15,7 @@ const Input = ({ name, label, type, data, setData, errors, classes = "" }) => {
         value={data === null ? "" : data}
         onChange={(e) => setData(e.target.value)}
       />
+      
 
       {errors[name] && <label className="text-danger">{errors[name]} </label>}
     </div>

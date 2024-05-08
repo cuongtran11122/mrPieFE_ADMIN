@@ -18,7 +18,6 @@ const DataTableLoader = (props) => (
     <rect x="0" y="360" rx="3" ry="3"  style={{ width: '100%'}} height="55" />
 
 
-
   </ContentLoader>
 )
 

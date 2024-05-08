@@ -79,8 +79,6 @@ const ProductScreen = ({ history }) => {
     error: createError,
   } = productCreate;
 
-  
-
   const openModal = () => {
     setModalIsOpen(true);
   };
@@ -106,7 +104,6 @@ const ProductScreen = ({ history }) => {
     }
     if (createError) {
       dispatch({ type: PRODUCT_CREATE_FAIL });
-      
     }
     dispatch(listProducts(keyword, pageNumber));
   }, [dispatch, history, adminInfo, pageNumber, keyword, createSuccess]);
@@ -176,7 +173,6 @@ const ProductScreen = ({ history }) => {
         description: description,
         description_en: description_en,
       };
-      
 
       dispatch(createProduct(product));
       // refershForm();
@@ -484,7 +480,6 @@ const ProductScreen = ({ history }) => {
         //stop loader
         setUploading(false);
       } catch (error) {
-        
         setUploading(false);
       }
     }
@@ -544,7 +539,7 @@ const ProductScreen = ({ history }) => {
   );
 
   const renderProductsTable = () => (
-    <table className="table table-hover text-nowrap">
+    <table className="table table-hover text-nowrap ">
       <thead>
         <tr className="header_table">
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
@@ -566,7 +561,10 @@ const ProductScreen = ({ history }) => {
       <tbody>
         {products.map((product) => (
           <tr className="border-right border border-light" key={product.id}>
-            <td className="py-4 border-right border border-light">
+            <td
+              className="py-4 border-right border border-light"
+              style={{ tableLayout: "fixed", width: 500 }}
+            >
               {product.name}
             </td>
 

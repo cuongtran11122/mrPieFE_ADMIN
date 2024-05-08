@@ -90,10 +90,7 @@ export const createCategory = (category) => async (dispatch, getState) => {
     } catch (error) {
         dispatch({
             type: CATEGORY_CREATE_FAIL,
-            payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
+            payload: error.response.data.error,
         });
     }
 };

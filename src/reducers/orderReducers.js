@@ -40,8 +40,8 @@ export const orderListReducer = (
       return {
         loading: false,
         orders: action.payload.data.orders,
-        pages: action.payload.pages,
-        page: action.payload.page,
+        pages: action.payload.data.pages,
+        page: action.payload.data.page,
       };
     case ORDER_LIST_FAIL:
       return { loading: false, error: action.payload };

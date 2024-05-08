@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Loader from "../../components/Loader";
+import Message from "../../components/Message";
 
 /* Components */
 import HeaderContent from "../../components/HeaderContent";
@@ -182,6 +184,8 @@ const CategoryScreen = ({ history, match }) => {
             <span>
               <h1 className="text-center mb-4">Creat Category</h1>
             </span>
+            {loading && <Loader variable={loading} />}
+            {createError && <Message message={createError} color={"danger"} />}
             <div className="form-group">
               {/* <input
               type="text"
@@ -193,6 +197,7 @@ const CategoryScreen = ({ history, match }) => {
               <Input
                 name={"name"}
                 type={"text"}
+                label={"Category name"}
                 data={name}
                 setData={setName}
                 errors={errors}
@@ -202,6 +207,7 @@ const CategoryScreen = ({ history, match }) => {
               <Input
                 name={"name English"}
                 type={"text"}
+                label={"English category name"}
                 data={name_en}
                 setData={setNameEn}
                 errors={errors}

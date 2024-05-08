@@ -4,7 +4,7 @@ const ViewBox = ({ title, paragraph, icon, color }) => {
   return (
     <div className={`small-box ${color}`}>
       <div className="inner">
-        <h4>{title}</h4>
+        <strong>{title}</strong>
         <p className="pr-2">{paragraph} </p>
       </div>
       <div className="icon">

@@ -210,6 +210,7 @@ const UserScreen = ({ history }) => {
             <section className="content">
                 <div className="container-fluid">
                     {/* {renderModalCreateUser()} */}
+
                     <div className="row">
                         <div className="col-12">
                             <div className="card">

@@ -25,8 +25,8 @@ import {
 // import { modalStyles } from "../../utils/styles";
 import "../../style/button.css";
 
-const OrderViewScreen = ({ history, match }) => {
-  const orderId = parseInt(match.params.id);
+const OrderViewScreen = ({ history, orderID }) => {
+  const orderId = parseInt(orderID);
 
   const dispatch = useDispatch();
 
@@ -85,6 +85,7 @@ const OrderViewScreen = ({ history, match }) => {
   //     setTotalPrice(0); // Set to 0 if no order items
   //   }
   // };
+  
 
   useEffect(() => {
     if (successUpdate) {
@@ -237,11 +238,26 @@ const OrderViewScreen = ({ history, match }) => {
     order?.orderItems &&
     order?.shipment && (
       <>
-        <div className="d-flex flex-column flex-md-row ">
-          <div className="col-12 col-md-8">
-            <div className="small-box bg-light">
+
+          <div className="w-100  d-flex justify-content-between ">
+          <div style={{width: "30%"}} className=" small-box bg-light ">
               <div className="inner">
-                <h4>TOTAL {formatMoney(parseInt(order?.total_amount))}</h4>
+              <span className="pr-1">
+                          Customer name: <strong>{order?.user?.name}</strong>
+                        </span>
+
+              </div>
+            </div>
+
+            <div style={{width: "30%"}} className=" small-box bg-light ">
+              <div className="inner">
+                <p>Shipping fee: <strong>{formatMoney(parseInt(order?.shipment?.fee))}</strong> </p>
+                
+              </div>
+            </div>
+            <div style={{width: "30%"}} className=" small-box bg-light ">
+              <div className="inner">
+                <p>Total: <strong>{formatMoney(parseInt(order?.total_amount))}</strong> </p>
                 <p>
                   {order?.orderItems.length > 0
                     ? totalItems(order?.orderItems)
@@ -250,16 +266,11 @@ const OrderViewScreen = ({ history, match }) => {
                 </p>
               </div>
             </div>
+            
+            
           </div>
-          <div className="col-12 col-md-4">
-            <ViewBox
-              title={formatMoney(parseInt(order.shipment.fee))}
-              paragraph={"Fee shipping"}
-              icon={"fas fa-truck"}
-              color={"bg-light"}
-            />
-          </div>
-        </div>
+
+
       </>
     );
 
@@ -313,7 +324,7 @@ const OrderViewScreen = ({ history, match }) => {
       <>
         <div className="row">
           <div className="col-12 col-md-6">
-            <ViewBox
+            <historyBox
               title={order?.id}
               paragraph={"ORDER ID"}
               color={"bg-light"}
@@ -322,7 +333,7 @@ const OrderViewScreen = ({ history, match }) => {
 
           {order?.status === 0 ? (
             <div className="col-12 col-md-6">
-              <ViewBox
+              <historyBox
                 title={"Pending"}
                 paragraph={"Order is pending"}
                 color={"bg-light"}
@@ -330,7 +341,7 @@ const OrderViewScreen = ({ history, match }) => {
             </div>
           ) : order?.status === 1 ? (
             <div className="col-12 col-md-6">
-              <ViewBox
+              <historyBox
                 title={"Paid"}
                 paragraph={"Order is already paid"}
                 color={"bg-light"}
@@ -389,22 +400,12 @@ const OrderViewScreen = ({ history, match }) => {
         </div>
       </>
     );
+
+  
+
   const renderUserInfo = () =>
     order && (
       <>
-        {order && order?.user && (
-          <div className="col-12">
-            <div
-              className="border rounded  d-flex  mb-3 pl-2 bg-light d-flex justify-content-start align-items-center "
-              style={{ minHeight: 40 }}
-            >
-              <span className="pr-1">
-                Customer name: <strong>{order?.user?.name}</strong>
-              </span>
-            </div>
-          </div>
-        )}
-
         <div className="col-12 mt-1 ">
           <ViewBox
             title={"Address "}
@@ -450,9 +451,10 @@ const OrderViewScreen = ({ history, match }) => {
 
   const renderInfo = () => (
     <>
-      <div className="col-12 col-md-8">{renderCartInfo()}</div>
-      <div className="col-12 col-md-4">{renderOrderInfo()}</div>
+      
+      {/* <div className="col-12 col-md-4">{renderOrderInfo()}</div> */}
       {renderOrderProducts()}
+      <div className="col-12 ">{renderCartInfo()}</div>
       {renderUserInfo()}
     </>
   );
@@ -472,7 +474,7 @@ const OrderViewScreen = ({ history, match }) => {
   return (
     <>
       {/* Content Header (Page header) */}
-      <HeaderContent name={"Orders"} />
+
       <LoaderHandler loading={loadingUpdate} error={errorUpdate} />
       {/* Main content */}
       <section className="content">
@@ -480,27 +482,8 @@ const OrderViewScreen = ({ history, match }) => {
           <div className="row">
             {renderModal()}
             <div className="col-12">
-              <div className="card">
-                <div className="card-header ">
-                  <div className="d-flex justify-content-between">
-                    <div className="d-flex align-items-center">
-                      <ButtonGoBack history={history} />
-                      <h3 className="card-title ml-4">
-                        <strong>View Order</strong>{" "}
-                      </h3>
-                    </div>
-
-                    <button
-                      className="btn  btn-secondary  border border-black
-"
-                      onClick={() => openModal(status)}
-                    >
-                      Update
-                    </button>
-                  </div>
-                </div>
-                {/* /.card-header */}
-                <div className="card-body">
+              {/* /.card-header */}
+              <div className="card-body">
                   <div className="row d-flex justify-content-center">
                     <LoaderHandler
                       loading={loading}
@@ -510,8 +493,7 @@ const OrderViewScreen = ({ history, match }) => {
                     />
                   </div>
                 </div>
-                {/* /.card-body */}
-              </div>
+              
             </div>
             {/* /.col */}
           </div>

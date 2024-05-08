@@ -34,7 +34,7 @@ const Menu = ({ history }) => {
         {/* Sidebar user panel (optional) */}
         <Link
           to={"/dashboard"}
-          className="brand-link  d-flex justify-content-center "
+          className="brand-link pb-3 d-flex justify-content-center  "
         >
           <img
             src="/logo.png"
@@ -44,23 +44,9 @@ const Menu = ({ history }) => {
           />
           <span className="brand-text font-weight-light"></span>
         </Link>
-        <div className="user-panel w-full mt-3 pb-3 mb-3 d-flex ">
-          <div className="image">
-            <img
-              // src={adminInfo ? adminInfo.image : "/avatar.png"}
-              src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
-              className="img-circle elevation-2"
-              alt="User"
-            />
-          </div>
-          <div className="info">
-            <Link to="/profile" className="d-block">
-              {adminInfo ? adminInfo.username : ""}
-            </Link>
-          </div>
-        </div>
+        
         {/* Sidebar Menu */}
-        <nav className="mt-2">
+        <nav className="">
           <ul
             className="nav nav-pills nav-sidebar flex-column"
             data-widget="treeview"
@@ -107,7 +93,7 @@ const Menu = ({ history }) => {
                 <i className="nav-icon fas fa-hamburger" /> <p> Products</p>
               </Link>
             </li>
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <Link to="/store/list" className="nav-link">
                 <i className="nav-icon fas fa-store" /> <p> Store</p>
               </Link>
@@ -116,7 +102,7 @@ const Menu = ({ history }) => {
               <Link to="/dashboard" className="nav-link">
                 <i className="nav-icon fas fa-tachometer-alt" /> <p> Report</p>
               </Link>
-            </li>
+            </li> */}
 
             {/* <li className="nav-item">
                             <Link to="/client" className="nav-link">
