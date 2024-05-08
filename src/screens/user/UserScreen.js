@@ -26,13 +26,14 @@ const UserScreen = ({ history }) => {
   const [keyword, setKeyword] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
 
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  // const [isAdmin, setIsAdmin] = useState(false);
-  const [errors, setErrors] = useState({});
-
-  const dispatch = useDispatch();
+    const [name, setName] = useState("");
+    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState("");
+    // const [isAdmin, setIsAdmin] = useState(false);
+    const [errors, setErrors] = useState({});
+    const [address, setAddress] = useState("");
+  
+    const dispatch = useDispatch();
 
   const userList = useSelector((state) => state.userList);
   const { loading, error, users, page, pages } = userList;
@@ -47,34 +48,40 @@ const UserScreen = ({ history }) => {
     error: createError,
   } = userRegister;
 
-  useEffect(() => {
-    if (adminInfo) {
-      dispatch(listUsers(keyword, pageNumber));
-    }
-    if (createSuccess) {
-      setName("");
-      setPassword("");
-      setEmail("");
-      // setIsAdmin(false);
-
-      setModalIsOpen(false);
-    }
-  }, [dispatch, adminInfo, pageNumber, keyword, history, createSuccess]);
+    useEffect(() => {
+        if (adminInfo) {
+            dispatch(listUsers(keyword, pageNumber));
+        }
+        if (createSuccess) {
+            setName("");
+            setPassword("");
+            setEmail("");
+            // setIsAdmin(false);
+            setAddress("");
+            setModalIsOpen(false);
+        }
+    }, [dispatch, adminInfo, pageNumber, keyword, history, createSuccess]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    let errorsCheck = {};
-    if (!name) {
-      errorsCheck.name = "Name is required";
-    }
-    if (!password) {
-      errorsCheck.password = "Password is required";
-    }
+        let errorsCheck = {};
+        // if (!name) {
+        //     errorsCheck.name = "Name is required";
+        // }
+        if (!password) {
+            errorsCheck.password = "Password is required";
+        }
 
-    if (!email) {
-      errorsCheck.email = "Email is required";
-    }
+        if (!email) {
+            errorsCheck.email = "Email is required";
+        }
+        if (!name || name.length < 10 || name.length > 32 ) {
+            errorsCheck.name = "Name must be between 10 and 32 characters";
+          }
+          if (!address || address.length < 10 || address.length > 64) {
+            errorsCheck.address = "Address must be between 10 and 64 characters";
+          }
 
     if (Object.keys(errorsCheck).length > 0) {
       setErrors(errorsCheck);
@@ -82,13 +89,14 @@ const UserScreen = ({ history }) => {
       setErrors({});
     }
 
-    if (Object.keys(errorsCheck).length === 0) {
-      const user = {
-        name: name,
-        email: email,
-        password: password,
-        // isAdmin: isAdmin,
-      };
+        if (Object.keys(errorsCheck).length === 0) {
+            const user = {
+                name: name,
+                email: email,
+                password: password,
+                // isAdmin: isAdmin,
+                address: address,
+            };
 
       dispatch(register(user));
     }

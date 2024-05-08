@@ -80,8 +80,12 @@ const UserEditScreen = ({ history, match }) => {
     e.preventDefault();
 
     let errorsCheck = {};
-    if (!name) {
-      errorsCheck.name = "Name is required.";
+    if (!name || name.length < 10 || name.length > 32) {
+      errorsCheck.name = "Name must be between 10 and 32 characters";
+    }
+
+    if (!address || address.length < 10 || address.length > 64) {
+      errorsCheck.address = "Address must be between 10 and 64 characters";
     }
 
     
