@@ -1,7 +1,7 @@
 import React from "react";
 import { capitalize } from "../../utils/functions";
 
-const Input = ({ name, label, type, data, setData, errors, classes = "" }) => {
+const Input = ({ label, name, type, data, setData, errors, classes = "" }) => {
   console.log(errors)
   return (
     <div className="form-group">
