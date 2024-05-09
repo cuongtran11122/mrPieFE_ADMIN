@@ -3,10 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 /* Components */
-import HeaderContent from "../../components/HeaderContent";
-// import Input from "../../components/form/Input";
-// import ModalButton from "../../components/ModalButton";
-// import Modal from "react-modal";
+ import HeaderContent from "../../components/HeaderContent";
+ import Input from "../../components/form/Input";
+ import ModalButton from "../../components/ModalButton";
+ import Modal from "react-modal";
 
 import DataTableLoader from "../../components/loader/DataTableLoader";
 import Search from "../../components/Search";
@@ -19,7 +19,7 @@ import "../../style/button.css";
 import { listUsers, register } from "../../actions/userActions";
 
 /* Styles */
-// import { modalStyles } from "../../utils/styles";
+ import { modalStyles } from "../../utils/styles";
 
 const UserScreen = ({ history }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
