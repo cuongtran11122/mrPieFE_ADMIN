@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 
 import ButtonGoBack from "../../components/ButtonGoBack";
 
 import HeaderContent from "../../components/HeaderContent";
 import DataTableLoader from "../../components/loader/DataTableLoader";
-import Search from "../../components/Search";
+// import Search from "../../components/Search";
 import LoaderHandler from "../../components/loader/LoaderHandler";
 import Pagination from "../../components/Pagination";
 
 import { listOrdersUserDetail } from "../../actions/orderActions";
+import OrderViewScreen from "../order/OrderViewScreen ";
 
 import "../../style/button.css"
 
@@ -19,6 +20,7 @@ const UserListOrders = ({ history, match }) => {
 
   const [pageNumber, setPageNumber] = useState(1);
   const [keyword, setKeyword] = useState("");
+  const [orderID, setOrderID] = useState(0);
 
   const dispatch = useDispatch();
 
@@ -28,6 +30,15 @@ const UserListOrders = ({ history, match }) => {
   //order details state
   const orderUserList = useSelector((state) => state.orderUserList);
   const { loading, error, orders, page, pages } = orderUserList;
+
+  const handleSetOrderID = (orderID) =>{
+    setOrderID(orderID)
+  }
+
+  const renderOrderDetail = (orderID) => {
+
+    return <OrderViewScreen orderID={parseInt(orderID)}></OrderViewScreen>;
+  };
 
   const formatMoney = (money) => {
     return money.toLocaleString("it-IT", {
@@ -51,6 +62,7 @@ const UserListOrders = ({ history, match }) => {
     <table className="table table-hover text-nowrap">
       <thead>
         <tr className="header_table">
+        <th className="border-right border-bottom-0 border-left-0 border-top-0 "></th>
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Customer name
           </th>
@@ -67,20 +79,33 @@ const UserListOrders = ({ history, match }) => {
           <th className="border-right border-bottom-0 border-left-0 border-top-0 ">
             Created date
           </th>
-          <th className="border-right border-bottom-0 border-left-0 border-top-0 "></th>
+          
         </tr>
       </thead>
       <tbody>
         {orders.map((order) => (
           <tr key={order.id}>
-            <td className="py-4 border-right border border-light">
+            <td className="py-2 border-right border border-light text-center pl-1">
+                <input
+                  id="option-disabled"
+                  type="radio"
+                  name="Order"
+                  value={order?.id}
+                  onClick={() => handleSetOrderID(order?.id)}
+                  style={{ cursor: "pointer" }}
+                  className=" border-gray-200 focus:ring-2 focus:ring-blue-300"
+                  aria-labelledby="option-disabled"
+                  aria-describedby="option-disabled"
+                />
+              </td>
+            <td className="py-2 border-right border border-light">
               {order.user ? order.user.name : ""}
             </td>
-            <td className="py-4 border-right border border-light">
+            <td className="py-2 border-right border border-light">
               {order.user ? order.user.phone : ""}
             </td>
 
-            <td className="py-4 border-right border border-light">
+            <td className="py-2 border-right border border-light">
               {/* {order.status}
               {/* {order.isPaid ? (
                             <h4 className="text-success">
@@ -116,24 +141,13 @@ const UserListOrders = ({ history, match }) => {
                 </div>
               </div>
             </td>
-            <td className="d-none d-sm-table-cell  py-4 border-right border border-light">
+            <td className="d-none d-sm-table-cell  py-2 border-right border border-light">
             {formatMoney(parseInt(order.total_amount))}
             </td>
-            <td className="py-4 border-right border border-light">
+            <td className="py-2 border-right border border-light">
               {order.createdAt.slice(0, 10)}
             </td>
-            <td className="py-4 border-right border border-light d-flex justify-content-center">
-              <Link
-                to={`/order/${order.id}/view`}
-
-              >
-                <button type="button" className="btn  btn-light text-sm border border-black">
-                View
-              </button>
-              </Link>
-
-              
-            </td>
+            
           </tr>
         ))}
       </tbody>
@@ -161,13 +175,13 @@ const UserListOrders = ({ history, match }) => {
           </div>
         
 
-          <div className="card-tools">
+          {/* <div className="card-tools">
             <Search
               keyword={keyword}
               setKeyword={setKeyword}
               setPage={setPageNumber}
             />
-          </div>
+          </div> */}
           </div>
           
           
@@ -204,6 +218,25 @@ const UserListOrders = ({ history, match }) => {
             {/* /.col */}
           </div>
           {/* /.row */}
+          {orderID > 0 && (<div className="row">
+            <div className="col-12">
+              {/* {renderOrders()} */}
+              <div className="card ">
+                <div className="card-header">
+                  <div className="d-flex justify-content-between align-items-center  ">
+                    <h3 className="card-title my-2">Order Detail</h3>
+                  </div>
+                  {
+                    renderOrderDetail(orderID)
+                  }
+                  
+                </div>
+
+                {/* /.card-header */}
+              </div>
+            </div>
+            {/* /.col */}
+          </div>) }
         </div>
         {/* /.container-fluid */}
       </section>

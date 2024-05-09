@@ -74,17 +74,7 @@ const OrderViewScreen = ({ history, orderID }) => {
     errorUpdate,
   } = orderUpdate;
 
-  // const calculateTotalPrice = () => {
-  //   if (order && order.orderItems && order.orderItems.length > 0) {
-  //     const total = order.orderItems.reduce((acc, item) => {
-  //       return acc + item.attribute.product_price * item.quantity;
-  //     }, 0);
-  //     console.log(total);
-  //     setTotalPrice(total);
-  //   } else {
-  //     setTotalPrice(0); // Set to 0 if no order items
-  //   }
-  // };
+
   
 
   useEffect(() => {
@@ -164,14 +154,7 @@ const OrderViewScreen = ({ history, orderID }) => {
     dispatch(listOrderDetails(orderId));
   };
 
-  // const handleEdit = (e) => {
-  //   e.preventDefault();
-  //   history.push(`/order/${orderId}/edit`);
-  // };
-  // const handleSearch = (event) => {
-  //   console.log("Searching...", event.target.value);
-  //   // Add your search logic here
-  // };
+
 
   const renderModal = () => {
     return (

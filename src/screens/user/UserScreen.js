@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 
 /* Components */
 import HeaderContent from "../../components/HeaderContent";
-import Input from "../../components/form/Input";
-import ModalButton from "../../components/ModalButton";
-import Modal from "react-modal";
+// import Input from "../../components/form/Input";
+// import ModalButton from "../../components/ModalButton";
+// import Modal from "react-modal";
 
 import DataTableLoader from "../../components/loader/DataTableLoader";
 import Search from "../../components/Search";
@@ -19,12 +19,13 @@ import "../../style/button.css"
 import { listUsers, register } from "../../actions/userActions";
 
 /* Styles */
-import { modalStyles } from "../../utils/styles";
+// import { modalStyles } from "../../utils/styles";
 
 const UserScreen = ({ history }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [keyword, setKeyword] = useState("");
     const [pageNumber, setPageNumber] = useState(1);
+
 
     const [name, setName] = useState("");
     const [password, setPassword] = useState("");
@@ -47,6 +48,8 @@ const UserScreen = ({ history }) => {
         error: createError,
     } = userRegister;
 
+    
+
     useEffect(() => {
         if (adminInfo) {
             dispatch(listUsers(keyword, pageNumber));
@@ -61,38 +64,38 @@ const UserScreen = ({ history }) => {
         }
     }, [dispatch, adminInfo, pageNumber, keyword, history, createSuccess]);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
 
-        let errorsCheck = {};
-        if (!name) {
-            errorsCheck.name = "Name is required";
-        }
-        if (!password) {
-            errorsCheck.password = "Password is required";
-        }
+    //     let errorsCheck = {};
+    //     if (!name) {
+    //         errorsCheck.name = "Name is required";
+    //     }
+    //     if (!password) {
+    //         errorsCheck.password = "Password is required";
+    //     }
 
-        if (!email) {
-            errorsCheck.email = "Email is required";
-        }
+    //     if (!email) {
+    //         errorsCheck.email = "Email is required";
+    //     }
 
-        if (Object.keys(errorsCheck).length > 0) {
-            setErrors(errorsCheck);
-        } else {
-            setErrors({});
-        }
+    //     if (Object.keys(errorsCheck).length > 0) {
+    //         setErrors(errorsCheck);
+    //     } else {
+    //         setErrors({});
+    //     }
 
-        if (Object.keys(errorsCheck).length === 0) {
-            const user = {
-                name: name,
-                email: email,
-                password: password,
-                // isAdmin: isAdmin,
-            };
+    //     if (Object.keys(errorsCheck).length === 0) {
+    //         const user = {
+    //             name: name,
+    //             email: email,
+    //             password: password,
+    //             // isAdmin: isAdmin,
+    //         };
 
-            dispatch(register(user));
-        }
-    };
+    //         dispatch(register(user));
+    //     }
+    // };
 
     const renderTable = () => (
         <table className="table table-hover text-nowrap">
@@ -113,16 +116,16 @@ const UserScreen = ({ history }) => {
                 {users.map((user) => (
                     <tr className="border-right border border-light" key={user.id}>
                         {/* <td className="d-none d-sm-table-cell">{user.id}</td> */}
-                        <td className="py-4 border-right border border-light">{user.name}</td>
-                        <td className="py-4 border-right border border-light">{user.username}</td>
-                        <td className="py-4 border-right border border-light">{user.email}</td>
-                        <td className="py-4 border-right border border-light">{user.phone}</td>
-                        <td className="py-4 border-right border border-light">{user.address}</td>
+                        <td className="py-2 border-right border border-light">{user.name}</td>
+                        <td className="py-2 border-right border border-light">{user.username}</td>
+                        <td className="py-2 border-right border border-light">{user.email}</td>
+                        <td className="py-2 border-right border border-light">{user.phone}</td>
+                        <td className="py-2 border-right border border-light">{user.address}</td>
                         
-                        <td className="d-none d-sm-table-cell py-4 border-right border border-light">
+                        <td className="d-none d-sm-table-cell py-2 border-right border border-light">
                             {user.username ? 'registered' : 'unregistered'}
                         </td>
-                        <td className="py-4 border-right border border-light d-flex justify-content-center align items-center">
+                        <td className="py-2 border-right border border-light d-flex justify-content-center align items-center">
                         <Link
                             to={`/list/${user.id}/orders`}
                             className="btn  btn-light text-sm border border-black mr-4"
@@ -131,6 +134,9 @@ const UserScreen = ({ history }) => {
                             
                             List Orders
                         </Link>
+                        {/* <div  className="btn  btn-light text-sm border border-black mr-4" onClick={()=> handleViewAction(user?.id)}>
+                        List Orders
+                        </div> */}
                         <Link
                             to={`/user/${user.id}/edit`}
                             className="btn  btn-light text-sm border border-black mr-4"
@@ -145,61 +151,61 @@ const UserScreen = ({ history }) => {
         </table>
     );
 
-    const renderModalCreateUser = () => (
-        <>
-            <ModalButton
-                modal={modalIsOpen}
-                setModal={setModalIsOpen}
-                classes={"btn-success btn-lg mb-2"}
-            />
-            <Modal
-                style={modalStyles}
-                isOpen={modalIsOpen}
-                onRequestClose={() => setModalIsOpen(false)}
-            >
-                <h2>Create Form</h2>
-                <LoaderHandler loading={createLoading} error={createError} />
-                <form onSubmit={handleSubmit}>
-                    <Input
-                        name={"name"}
-                        type={"text"}
-                        data={name}
-                        setData={setName}
-                        errors={errors}
-                    />
-                    <Input
-                        name={"email"}
-                        type={"email"}
-                        data={email}
-                        setData={setEmail}
-                        errors={errors}
-                    />
-                    <Input
-                        name={"password"}
-                        type={"password"}
-                        data={password}
-                        setData={setPassword}
-                        errors={errors}
-                    />
-                    {/* <Checkbox
-                        name={"Admin"}
-                        data={isAdmin}
-                        setData={setIsAdmin}
-                    /> */}
+    // const renderModalCreateUser = () => (
+    //     <>
+    //         <ModalButton
+    //             modal={modalIsOpen}
+    //             setModal={setModalIsOpen}
+    //             classes={"btn-success btn-lg mb-2"}
+    //         />
+    //         <Modal
+    //             style={modalStyles}
+    //             isOpen={modalIsOpen}
+    //             onRequestClose={() => setModalIsOpen(false)}
+    //         >
+    //             <h2>Create Form</h2>
+    //             <LoaderHandler loading={createLoading} error={createError} />
+    //             <form onSubmit={handleSubmit}>
+    //                 <Input
+    //                     name={"name"}
+    //                     type={"text"}
+    //                     data={name}
+    //                     setData={setName}
+    //                     errors={errors}
+    //                 />
+    //                 <Input
+    //                     name={"email"}
+    //                     type={"email"}
+    //                     data={email}
+    //                     setData={setEmail}
+    //                     errors={errors}
+    //                 />
+    //                 <Input
+    //                     name={"password"}
+    //                     type={"password"}
+    //                     data={password}
+    //                     setData={setPassword}
+    //                     errors={errors}
+    //                 />
+    //                 {/* <Checkbox
+    //                     name={"Admin"}
+    //                     data={isAdmin}
+    //                     setData={setIsAdmin}
+    //                 /> */}
 
-                    <hr />
-                    <button type="submit" className="btn btn-primary">
-                        Submit
-                    </button>
-                    <ModalButton
-                        modal={modalIsOpen}
-                        setModal={setModalIsOpen}
-                        classes={"btn-danger float-right"}
-                    />
-                </form>
-            </Modal>
-        </>
-    );
+    //                 <hr />
+    //                 <button type="submit" className="btn btn-primary">
+    //                     Submit
+    //                 </button>
+    //                 <ModalButton
+    //                     modal={modalIsOpen}
+    //                     setModal={setModalIsOpen}
+    //                     classes={"btn-danger float-right"}
+    //                 />
+    //             </form>
+    //         </Modal>
+    //     </>
+    // );
 
     return (
         <>
@@ -244,6 +250,7 @@ const UserScreen = ({ history }) => {
                         {/* /.col */}
                     </div>
                     {/* /.row */}
+                    
                 </div>
                 {/* /.container-fluid */}
             </section>

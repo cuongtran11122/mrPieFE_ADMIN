@@ -393,15 +393,7 @@ const DashboardScreen = ({ history }) => {
                                         />
                                     </ul>
                                 </div>
-                                <div className="card-footer text-center">
-                                    <span onClick={()=>{console.log(orders)}}>Test</span>
-                                    {/* <Link
-                                        to={"/delivery"}
-                                        className="uppercase"
-                                    >
-                                        View All Delivery Orders
-                                    </Link> */}
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

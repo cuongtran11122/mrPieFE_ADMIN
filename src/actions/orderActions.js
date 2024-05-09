@@ -107,19 +107,14 @@ export const listOrdersByStatus = (options) => async (dispatch, getState) => {
 
 export const listOrders = (options) => async (dispatch, getState) => {
   const { keyword, pageNumber, status,userType,newStartDate,newEndDate } = options;
-  console.log(userType)
-  console.log("vcmz")
-  console.log(status)
+
   const spageNumber = pageNumber ? pageNumber : "";
   const sstatus = status === 5 ? "" : status;
   const ssuserType = userType === "2" ? "" : userType;
   const skeyword = keyword ? keyword : "";
   const sstartDate = newStartDate === null ? "" : newStartDate;
   const sendDate = newEndDate === null ? "" : newEndDate;
-  console.log("Hello")
-  console.log(sstatus)
-  console.log(sstartDate )
-  console.log(sendDate )
+
   try {
     dispatch({
       type: ORDER_LIST_REQUEST,
