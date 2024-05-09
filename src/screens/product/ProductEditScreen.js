@@ -108,22 +108,23 @@ const ProductEditScreen = ({ history, match }) => {
         "English name is required and must be maximum 32 characters";
     }
 
-    if (size.S !== "") {
+    if(size.S !== ""){
       if (!validatePrice(size.S)) {
         errorsCheck.size_S = "Price must be less than or equal to 10 digits";
       }
     }
-    if (size.M !== "") {
-      if (!validatePrice(size.M) ) {
+    
+    if(size.M !== ""){
+      if (!validatePrice(size.M)) {
         errorsCheck.size_M = "Price must be less than or equal to 10 digits";
       }
     }
-    if (size.L !== "") {
+    if(size.L !== ""){
       if (!validatePrice(size.L)) {
         errorsCheck.size_L = "Price must be less than or equal to 10 digits";
       }
     }
-    if (size.J !== "") {
+    if(size.J !== ""){
       if (!validatePrice(size.J)) {
         errorsCheck.size_J = "Price must be less than or equal to 10 digits";
       }
@@ -142,6 +143,11 @@ const ProductEditScreen = ({ history, match }) => {
       errorsCheck.description_en =
         "English description is required and must be maximum 255 characters";
     }
+
+    setErrors(errorsCheck);
+    setTimeout(() => {
+      setErrors({});
+    }, 2000);
     
 
     if (Object.keys(errorsCheck).length > 0) {
@@ -278,7 +284,7 @@ const ProductEditScreen = ({ history, match }) => {
         }}
       >
         <div className="form-group">
-          <CustomInput
+        <CustomInput
             class="form-control item"
             name={"size S"}
             type={"text"}

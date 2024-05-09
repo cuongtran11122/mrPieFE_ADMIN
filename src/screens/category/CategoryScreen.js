@@ -87,6 +87,10 @@ const CategoryScreen = ({ history, match }) => {
     if (!name_en || name_en.length > 32) {
       errorsCheck.name_en = "English name is required and should be less than 32 characters";
     }
+    setErrors(errorsCheck);
+    setTimeout(() => {
+      setErrors({});
+    }, 2000); 
   
     if (Object.keys(errorsCheck).length > 0) {
       setErrors(errorsCheck);

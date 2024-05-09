@@ -102,6 +102,7 @@ const ProductScreen = ({ history }) => {
       setDescription("");
       setDescription_en("");
       setImage("");
+      setErrors({})
     }
     if (createError) {
       dispatch({ type: PRODUCT_CREATE_FAIL });
@@ -119,55 +120,61 @@ const ProductScreen = ({ history }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     let errorsCheck = {};
-
+  
     if (!name || name.length > 32) {
       errorsCheck.name = "Name is required and must be maximum 32 characters";
     }
-
+  
     if (!name_en || name_en.length > 32) {
-      errorsCheck.name_en =
-        "English name is required and must be maximum 32 characters";
+      errorsCheck.name_en = "English name is required and must be maximum 32 characters";
     }
-
+  
     if (!description || description.length > 255) {
-      errorsCheck.description =
-        "Description is required and must be maximum 255 characters";
+      errorsCheck.description = "Description is required and must be maximum 255 characters";
     }
-    if (!description || description.length > 255) {
-      errorsCheck.description =
-        "Description is required and must be maximum 255 characters";
+  
+    if (!description_en || description_en.length > 255 || description_en === null) {
+      errorsCheck.description_en = "English description is required and must be maximum 255 characters";
     }
-    if (
-      !description_en ||
-      description_en.length > 255 ||
-      description_en === null
-    ) {
-      errorsCheck.description_en =
-        "English description is required and must be maximum 255 characters";
-    }
-
+  
     if (size.S !== "") {
       if (!validatePrice(size.S)) {
         errorsCheck.size_S = "Price must be less than or equal to 10 digits";
       }
     }
+  
     if (size.M !== "") {
-      if (!validatePrice(size.M) ) {
+      if (!validatePrice(size.M)) {
         errorsCheck.size_M = "Price must be less than or equal to 10 digits";
       }
     }
+  
     if (size.L !== "") {
       if (!validatePrice(size.L)) {
         errorsCheck.size_L = "Price must be less than or equal to 10 digits";
       }
     }
+  
     if (size.J !== "") {
       if (!validatePrice(size.J)) {
         errorsCheck.size_J = "Price must be less than or equal to 10 digits";
       }
     }
+  
+    
+    setErrors(errorsCheck);
+    setTimeout(() => {
+      setErrors({});
+    }, 2000); 
+  
+    
+    
+    
+    
+
+
 
     // if (!size.S || !size.M || !size.L || !size.J) {
     //     errorsCheck.size = "Price for each size is required";
