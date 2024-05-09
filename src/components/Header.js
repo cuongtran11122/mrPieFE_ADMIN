@@ -2,7 +2,7 @@ import React from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../actions/userActions";
-import { Link } from "react-router-dom/cjs/react-router-dom";
+
 
 const Header = () => {
   const userLogin = useSelector((state) => state.userLogin);
@@ -27,7 +27,7 @@ const Header = () => {
       <ul className="navbar-nav ml-auto">
         <li className="nav-item">
           <div className="user-panel  mr-3 d-flex pb-2 align-items-center">
-            <div className="d-flex mr-3">
+            <div className="d-flex mr-4">
               <div className="image">
                 <img
                   // src={adminInfo ? adminInfo.image : "/avatar.png"}
@@ -37,9 +37,10 @@ const Header = () => {
                 />
               </div>
               <div className="info">
-                <Link to="/profile" className="d-block">
-                  {adminInfo ? adminInfo.username : ""}
-                </Link>
+                <p>
+                {adminInfo ? adminInfo.username : ""}
+                </p>
+                
               </div>
             </div>
 
