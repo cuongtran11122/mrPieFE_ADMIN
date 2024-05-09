@@ -92,9 +92,9 @@ const LoginScreen = ({ history }) => {
                   </button>
                 </div>
               </div>
-              <div className="row justify-content-around mt-4">
+              {/* <div className="row justify-content-around mt-4">
                 <h6>Are you <Link to="/forgot_password"><span className="text-primary " style={{cursor:"pointer"}}> Forgot password </span></Link>  ? </h6>
-              </div>
+              </div> */}
               <br />
               {/* <div className="alert alert-info alert-dismissible">
                 <button
