@@ -75,14 +75,13 @@ const CategoryEditScreen = ({ history, match }) => {
         e.preventDefault();
         let errorsCheck = {};
 
-        if (!name) {
-            errorsCheck.name = "Name is required";
-        }
-
-        if(!name_en){
-            errorsCheck.name_en = "Name english is required"
-        }
-        
+        if (!name || name.length > 32) {
+            errorsCheck.name = "Name is required and should be less than 32 characters";
+          }
+      
+          if (!name_en || name_en.length > 32) {
+            errorsCheck.name_en = "English name is required and should be less than 32 characters";
+          }
 
         if (Object.keys(errorsCheck).length > 0) {
             setErrors(errorsCheck);
@@ -114,7 +113,7 @@ const CategoryEditScreen = ({ history, match }) => {
             />
             <div className="form-group">
               <ErrorInput
-                name={"Category english name"}
+                name={"English category name"}
                 type={"text"}
                 data={name_en}
                 setData={setNameEn}

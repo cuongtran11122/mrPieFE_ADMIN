@@ -62,6 +62,7 @@ const CategoryScreen = ({ history, match }) => {
 
     if (createSuccess) {
       setName("");
+      setNameEn("");
       setModalIsOpen(false);
     }
   }, [
@@ -79,24 +80,27 @@ const CategoryScreen = ({ history, match }) => {
 
     let errorsCheck = {};
 
-    if (!name) {
-      errorsCheck.name = "Name is required";
+    if (!name || name.length > 32) {
+      errorsCheck.name = "Name is required and should be less than 32 characters";
     }
 
+    if (!name_en || name_en.length > 32) {
+      errorsCheck.name_en = "English name is required and should be less than 32 characters";
+    }
+  
     if (Object.keys(errorsCheck).length > 0) {
       setErrors(errorsCheck);
     } else {
       setErrors({});
     }
-
+  
     if (Object.keys(errorsCheck).length === 0) {
       const category = {
         name: name,
-        name_en,
+        name_en: name_en,
         status: status ? 1 : 0,
       };
-      //console.log(category);return false;
-
+  
       dispatch(createCategory(category));
       refershForm();
     }
@@ -210,7 +214,7 @@ const CategoryScreen = ({ history, match }) => {
             </div>
             <div className="form-group">
               <Input
-                name={"name English"}
+                name={"name_en"}
                 type={"text"}
                 label={"English category name"}
                 data={name_en}
