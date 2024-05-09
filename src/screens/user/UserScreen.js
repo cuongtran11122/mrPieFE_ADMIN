@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import Input from "../../components/form/Input";
+import ModalButton from "../../components/ModalButton";
+import { modalStyles } from "../../utils/styles";
+import Modal from "react-modal";
 
 /* Components */
 import HeaderContent from "../../components/HeaderContent";
