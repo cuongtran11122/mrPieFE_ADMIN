@@ -131,12 +131,12 @@ const ProductScreen = ({ history }) => {
       errorsCheck.name_en = "English name is required and must be maximum 32 characters";
     }
   
-    if (!description || description.length > 255) {
-      errorsCheck.description = "Description is required and must be maximum 255 characters";
+    if (!description ) {
+      errorsCheck.description = "Description is required ";
     }
   
-    if (!description_en || description_en.length > 255 || description_en === null) {
-      errorsCheck.description_en = "English description is required and must be maximum 255 characters";
+    if (!description_en || description_en === null) {
+      errorsCheck.description_en = "English description is required ";
     }
   
     if (size.S !== "") {
