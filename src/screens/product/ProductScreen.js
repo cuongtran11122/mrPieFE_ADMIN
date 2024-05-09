@@ -22,9 +22,7 @@ import {
   deleteProduct,
 } from "../../actions/productActions";
 import { listCategories } from "../../actions/categoryActions";
-import {
-  PRODUCT_CREATE_FAIL
-} from "../../constants/productConstants";
+import { PRODUCT_CREATE_FAIL } from "../../constants/productConstants";
 
 /* Styles */
 
@@ -93,7 +91,6 @@ const ProductScreen = ({ history }) => {
   };
 
   useEffect(() => {
-    
     if (createSuccess) {
       setName("");
       setNameEn("");
@@ -123,57 +120,55 @@ const ProductScreen = ({ history }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     let errorsCheck = {};
-
+  
     if (!name || name.length > 32) {
       errorsCheck.name = "Name is required and must be maximum 32 characters";
     }
-
+  
     if (!name_en || name_en.length > 32) {
-      errorsCheck.name_en =
-        "English name is required and must be maximum 32 characters";
+      errorsCheck.name_en = "English name is required and must be maximum 32 characters";
     }
-
-    if (!description || description.length > 255) {
-      errorsCheck.description =
-        "Description is required and must be maximum 255 characters";
+  
+    if (!description ) {
+      errorsCheck.description = "Description is required ";
     }
-    if (!description || description.length > 255) {
-      errorsCheck.description =
-        "Description is required and must be maximum 255 characters";
+  
+    if (!description_en || description_en === null) {
+      errorsCheck.description_en = "English description is required ";
     }
-    if (
-      !description_en ||
-      description_en.length > 255 ||
-      description_en === null
-    ) {
-      errorsCheck.description_en =
-        "English description is required and must be maximum 255 characters";
-    }
-
-    if(size.S !== ""){
+  
+    if (size.S !== "") {
       if (!validatePrice(size.S)) {
         errorsCheck.size_S = "Price must be less than or equal to 10 digits";
       }
     }
-    
-    if(size.M !== ""){
+  
+    if (size.M !== "") {
       if (!validatePrice(size.M)) {
         errorsCheck.size_M = "Price must be less than or equal to 10 digits";
       }
     }
-    if(size.L !== ""){
+  
+    if (size.L !== "") {
       if (!validatePrice(size.L)) {
         errorsCheck.size_L = "Price must be less than or equal to 10 digits";
       }
     }
-    if(size.J !== ""){
+  
+    if (size.J !== "") {
       if (!validatePrice(size.J)) {
         errorsCheck.size_J = "Price must be less than or equal to 10 digits";
       }
     }
-
+  
+    
+    setErrors(errorsCheck);
+    setTimeout(() => {
+      setErrors({});
+    }, 2000); 
+  
     
     
     
@@ -245,13 +240,14 @@ const ProductScreen = ({ history }) => {
   //   dispatch(deleteProduct(id));
   //   console.log(id);
   //   setRerender(!rerender);
-    
+
   //   // dispatch(listProducts(keyword, pageNumber));
   // };
 
   const deleteRow = (id) => {
-    dispatch(deleteProduct(id))
-      .then(() => dispatch(listProducts(keyword, pageNumber))); 
+    dispatch(deleteProduct(id)).then(() =>
+      dispatch(listProducts(keyword, pageNumber))
+    );
   };
 
   const searchCategories = (e) => {
@@ -261,7 +257,6 @@ const ProductScreen = ({ history }) => {
     const regex = /^\d{1,10}$/;
     return regex.test(price);
   };
-  
 
   const renderCategoriesSelect = () => (
     <>
@@ -375,86 +370,86 @@ const ProductScreen = ({ history }) => {
               />
             </div>
             <div
-        style={{
-          display: "flex",
-          gap: 4,
-          justifyContent: "space-between",
-        }}
-      >
-        <div className="form-group">
-          <CustomInput
-            class="form-control item"
-            name={"size S"}
-            type={"text"}
-            placeholder={"price"}
-            data={size && size.S}
-            setData={(newValue) =>
-              setSize({ ...size, S: parseFloat(newValue) || "" })
-            }
-            errors={errors}
-          />
-          {errors.size_S && (
-            <span className="text-danger text-bold">{errors.size_S}</span>
-          )}
-        </div>
-        <div className="form-group">
-          <CustomInput
-            class="form-control item"
-            name={"size M"}
-            type={"text"}
-            placeholder={"price"}
-            data={size && size.M}
-            setData={(newValue) =>
-              setSize({ ...size, M: parseFloat(newValue) || "" })
-            }
-            errors={errors}
-          />
-          {errors.size_M && (
-            <span className="text-danger text-bold">{errors.size_M}</span>
-          )}
-        </div>
-      </div>
+              style={{
+                display: "flex",
+                gap: 4,
+                justifyContent: "space-between",
+              }}
+            >
+              <div className="form-group">
+                <CustomInput
+                  class="form-control item"
+                  name={"size S"}
+                  type={"text"}
+                  placeholder={"price"}
+                  data={size && size.S}
+                  setData={(newValue) =>
+                    setSize({ ...size, S: parseFloat(newValue) || "" })
+                  }
+                  errors={errors}
+                />
+                {errors.size_S && (
+                  <span className="text-danger text-bold">{errors.size_S}</span>
+                )}
+              </div>
+              <div className="form-group">
+                <CustomInput
+                  class="form-control item"
+                  name={"size M"}
+                  type={"text"}
+                  placeholder={"price"}
+                  data={size.M}
+                  setData={(newValue) =>
+                    setSize({ ...size, M: parseFloat(newValue) || "" })
+                  }
+                  errors={errors}
+                />
+                {errors.size_M && (
+                  <span className="text-danger text-bold">{errors.size_M}</span>
+                )}
+              </div>
+            </div>
 
-      <div
-        style={{
-          display: "flex",
-          gap: 4,
-          justifyContent: "space-between",
-        }}
-      >
-        <div className="form-group">
-          <CustomInput
-            class="form-control item"
-            name={"size L"}
-            type={"text"}
-            placeholder={"price"}
-            data={size && size.L}
-            setData={(newValue) =>
-              setSize({ ...size, L: parseFloat(newValue) || "" })
-            }
-            errors={errors}
-          />
-          {errors.size_L && (
-            <span className="text-danger text-bold">{errors.size_L}</span>
-          )}
-        </div>
-        <div className="form-group">
-          <CustomInput
-            class="form-control item"
-            name={"size J"}
-            type={"text"}
-            placeholder={"price"}
-            data={size && size.J}
-            setData={(newValue) =>
-              setSize({ ...size, J: parseFloat(newValue) || "" })
-            }
-            errors={errors}
-          />
-          {errors.size_J && (
-            <span className="text-danger text-bold">{errors.size_J}</span>
-          )}
-        </div>
-      </div>
+            <div
+              style={{
+                display: "flex",
+                gap: 4,
+                justifyContent: "space-between",
+              }}
+            >
+              <div className="form-group">
+                <CustomInput
+                  class="form-control item"
+                  name={"size L"}
+                  type={"text"}
+                  placeholder={"price"}
+                  data={size && size.L}
+                  setData={(newValue) =>
+                    setSize({ ...size, L: parseFloat(newValue) || "" })
+                  }
+                  errors={errors}
+                />
+                {errors.size_L && (
+                  <span className="text-danger text-bold">{errors.size_L}</span>
+                )}
+              </div>
+              <div className="form-group">
+                <CustomInput
+                  class="form-control item"
+                  name={"size J"}
+                  type={"text"}
+                  placeholder={"price"}
+                  data={size && size.J}
+                  setData={(newValue) =>
+                    setSize({ ...size, J: parseFloat(newValue) || "" })
+                  }
+                  errors={errors}
+                />
+                {errors.size_J && (
+                  <span className="text-danger text-bold">{errors.size_J}</span>
+                )}
+              </div>
+            </div>
 
             {/* <div className="form-group">
               <CustomInput

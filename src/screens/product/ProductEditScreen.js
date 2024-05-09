@@ -130,19 +130,22 @@ const ProductEditScreen = ({ history, match }) => {
       }
     }
 
-    if (!description || description.length > 255) {
+    if (!description ) {
       errorsCheck.description =
-        "Description is required and must be maximum 255 characters";
+        "Description is required ";
     }
 
     if (
-      !description_en ||
-      description_en.length > 255 ||
-      description_en === null
+      !description_en || description_en === null
     ) {
       errorsCheck.description_en =
-        "English description is required and must be maximum 255 characters";
+        "English description is required ";
     }
+
+    setErrors(errorsCheck);
+    setTimeout(() => {
+      setErrors({});
+    }, 2000);
     
 
     if (Object.keys(errorsCheck).length > 0) {
@@ -279,7 +282,7 @@ const ProductEditScreen = ({ history, match }) => {
         }}
       >
         <div className="form-group">
-          <CustomInput
+        <CustomInput
             class="form-control item"
             name={"size S"}
             type={"text"}
