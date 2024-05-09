@@ -134,7 +134,19 @@ const ProductScreen = ({ history }) => {
       errorsCheck.description_en = "English description is required and must be maximum 255 characters";
     }
 
-
+    if (!validatePrice(size.S)) {
+      errorsCheck.size_S = "Price must be less than or equal to 10 digits";
+    }
+    if (!validatePrice(size.M)) {
+      errorsCheck.size_M = "Price must be less than or equal to 10 digits";
+    }
+    if (!validatePrice(size.L)) {
+      errorsCheck.size_L = "Price must be less than or equal to 10 digits";
+    }
+    if (!validatePrice(size.J)) {
+      errorsCheck.size_J = "Price must be less than or equal to 10 digits";
+    }
+    
 
     // if (!size.S || !size.M || !size.L || !size.J) {
     //     errorsCheck.size = "Price for each size is required";
@@ -203,6 +215,11 @@ const ProductScreen = ({ history }) => {
   const searchCategories = (e) => {
     dispatch(listCategories(e.target.value));
   };
+  const validatePrice = (price) => {
+    const regex = /^\d{1,10}$/;
+    return regex.test(price);
+  };
+  
 
   const renderCategoriesSelect = () => (
     <>
@@ -295,6 +312,7 @@ const ProductScreen = ({ history }) => {
             <div className="form-group">
               <CustomTextarea
                 class="form-control item"
+                label={"Description"}
                 name={"description"}
                 type={"text"}
                 data={description}
@@ -315,74 +333,86 @@ const ProductScreen = ({ history }) => {
               />
             </div>
             <div
-              style={{
-                display: "flex",
-                gap: 4,
-                justifyContent: "space-between",
-              }}
-            >
-              <div className="form-group">
-                <CustomInput
-                  class="form-control item"
-                  name={"size S"}
-                  type={"text"}
-                  placeholder={"price"}
-                  data={size.S}
-                  setData={(newValue) =>
-                    setSize({ ...size, S: parseFloat(newValue) || "" })
-                  }
-                  errors={errors}
-                />
-              </div>
-              <div className="form-group">
-                <CustomInput
-                  class="form-control item"
-                  name={"size M"}
-                  type={"text"}
-                  placeholder={"price"}
-                  data={size.M}
-                  setData={(newValue) =>
-                    setSize({ ...size, M: parseFloat(newValue) || "" })
-                  }
-                  errors={errors}
-                />
-              </div>
-            </div>
+        style={{
+          display: "flex",
+          gap: 4,
+          justifyContent: "space-between",
+        }}
+      >
+        <div className="form-group">
+          <CustomInput
+            class="form-control item"
+            name={"size S"}
+            type={"text"}
+            placeholder={"price"}
+            data={size && size.S}
+            setData={(newValue) =>
+              setSize({ ...size, S: parseFloat(newValue) || "" })
+            }
+            errors={errors}
+          />
+          {errors.size_S && (
+            <span className="text-danger text-bold">{errors.size_S}</span>
+          )}
+        </div>
+        <div className="form-group">
+          <CustomInput
+            class="form-control item"
+            name={"size M"}
+            type={"text"}
+            placeholder={"price"}
+            data={size && size.M}
+            setData={(newValue) =>
+              setSize({ ...size, M: parseFloat(newValue) || "" })
+            }
+            errors={errors}
+          />
+          {errors.size_M && (
+            <span className="text-danger text-bold">{errors.size_M}</span>
+          )}
+        </div>
+      </div>
 
-            <div
-              style={{
-                display: "flex",
-                gap: 4,
-                justifyContent: "space-between",
-              }}
-            >
-              <div className="form-group">
-                <CustomInput
-                  class="form-control item"
-                  name={"size L"}
-                  type={"text"}
-                  placeholder={"price"}
-                  data={size.L}
-                  setData={(newValue) =>
-                    setSize({ ...size, L: parseFloat(newValue) || "" })
-                  }
-                  errors={errors}
-                />
-              </div>
-              <div className="form-group">
-                <CustomInput
-                  class="form-control item"
-                  name={"size J"}
-                  type={"text"}
-                  placeholder={"price"}
-                  data={size.J}
-                  setData={(newValue) =>
-                    setSize({ ...size, J: parseFloat(newValue) || "" })
-                  }
-                  errors={errors}
-                />
-              </div>
-            </div>
+      <div
+        style={{
+          display: "flex",
+          gap: 4,
+          justifyContent: "space-between",
+        }}
+      >
+        <div className="form-group">
+          <CustomInput
+            class="form-control item"
+            name={"size L"}
+            type={"text"}
+            placeholder={"price"}
+            data={size && size.L}
+            setData={(newValue) =>
+              setSize({ ...size, L: parseFloat(newValue) || "" })
+            }
+            errors={errors}
+          />
+          {errors.size_L && (
+            <span className="text-danger text-bold">{errors.size_L}</span>
+          )}
+        </div>
+        <div className="form-group">
+          <CustomInput
+            class="form-control item"
+            name={"size J"}
+            type={"text"}
+            placeholder={"price"}
+            data={size && size.J}
+            setData={(newValue) =>
+              setSize({ ...size, J: parseFloat(newValue) || "" })
+            }
+            errors={errors}
+          />
+          {errors.size_J && (
+            <span className="text-danger text-bold">{errors.size_J}</span>
+          )}
+        </div>
+      </div>
 
             {/* <div className="form-group">
               <CustomInput

@@ -32,8 +32,6 @@ const ProductEditScreen = ({ history, match }) => {
 
   const [name, setName] = useState("");
   const [name_en, setNameEn] = useState("");
-
-  // const [quantity, setQuantity] = useState(0);
   const [size, setSize] = useState({ S: "", M: "", L: "", J: "" });
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
@@ -80,7 +78,6 @@ const ProductEditScreen = ({ history, match }) => {
         //set states
         setName(product.name);
         setNameEn(product.name_en);
-        // setQuantity(product.quantity);
         setCategory(product.category_id);
         setImage(product.image);
         setDescription(product.description);
@@ -102,19 +99,6 @@ const ProductEditScreen = ({ history, match }) => {
 
     let errorsCheck = {};
 
-    // if (!name) {
-    //   errorsCheck.name = "Name is required";
-    // }
-    // if (!name_en) {
-    //   errorsCheck.name_en = "Product english name is required";
-    // }
-
-    // if (!quantity) {
-    //   errorsCheck.quantity = "quantity is required";
-    // }
-    // if (!category) {
-    //     errorsCheck.category = "Category is required";
-    // }
     if (!name || name.length > 32) {
       errorsCheck.name = "Name is required and must be maximum 32 characters";
     }
@@ -124,22 +108,24 @@ const ProductEditScreen = ({ history, match }) => {
         "English name is required and must be maximum 32 characters";
     }
 
-    // if (!price) {
-    //   errorsCheck.price = "Price is required";
-    // }
-
-    if (!size || size.length > 10) {
-      errorsCheck.size = "Size is required and must be maximum 10 characters";
+    if (!validatePrice(size.S)) {
+      errorsCheck.size_S = "Price must be less than or equal to 10 digits";
+    }
+    if (!validatePrice(size.M)) {
+      errorsCheck.size_M = "Price must be less than or equal to 10 digits";
+    }
+    if (!validatePrice(size.L)) {
+      errorsCheck.size_L = "Price must be less than or equal to 10 digits";
+    }
+    if (!validatePrice(size.J)) {
+      errorsCheck.size_J = "Price must be less than or equal to 10 digits";
     }
 
     if (!description || description.length > 255) {
       errorsCheck.description =
         "Description is required and must be maximum 255 characters";
     }
-    if (!description || description.length > 255) {
-      errorsCheck.description =
-        "Description is required and must be maximum 255 characters";
-    }
+
     if (
       !description_en ||
       description_en.length > 255 ||
@@ -148,6 +134,7 @@ const ProductEditScreen = ({ history, match }) => {
       errorsCheck.description_en =
         "English description is required and must be maximum 255 characters";
     }
+    
 
     if (Object.keys(errorsCheck).length > 0) {
       setErrors(errorsCheck);
@@ -161,7 +148,6 @@ const ProductEditScreen = ({ history, match }) => {
           id: productId,
           name,
           name_en,
-          // quantity,
           size,
           category_id: category,
           image,
@@ -172,16 +158,18 @@ const ProductEditScreen = ({ history, match }) => {
     }
   };
 
+  const validatePrice = (price) => {
+    const pricePattern = /^\d{1,10}$/;
+    return pricePattern.test(price);
+  };
+
   const searchCategories = (e) => {
     dispatch(listCategories(e.target.value));
   };
 
-  // upload file
   const uploadingFileHandler = async (e) => {
-    // e.preventDefault();
     let validFile = true;
     let errorsUp = "";
-    //get first element from files which one is the image
     const file = e.target.files[0];
 
     const validImageTypes = ["image/gif", "image/jpeg", "image/png"];
@@ -196,32 +184,27 @@ const ProductEditScreen = ({ history, match }) => {
       errorsUp = " The image maximum size is 5MB";
       setErrorsUpload(errorsUp);
     }
-    //form instance
+
     if (validFile) {
       setErrorsUpload("");
       const formData = new FormData();
-      //add file
       formData.append("image", file);
-      //start loader
       setUploading(true);
       try {
-        //form config
         const config = {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         };
-        //api call to upload image
         const { data } = await axios.post("/api/v1/upload", formData, config);
-        //set image path
         setImage(data);
-        //stop loader
         setUploading(false);
       } catch (error) {
         setUploading(false);
       }
     }
   };
+
   const imageName = (image) => {
     const imageArray = image.split(`uploads`);
     return imageArray[1];
@@ -249,7 +232,8 @@ const ProductEditScreen = ({ history, match }) => {
         errors={errors}
         nameError={"name"}
       />
-      <ErrorInput
+     
+     <ErrorInput
         name={"Product english name"}
         type={"text"}
         data={name_en}
@@ -261,6 +245,7 @@ const ProductEditScreen = ({ history, match }) => {
       <CustomTextarea
         class="form-control item"
         name={"description"}
+        label={"Description"}
         type={"text"}
         data={description}
         setData={setDescription}
@@ -285,28 +270,20 @@ const ProductEditScreen = ({ history, match }) => {
         }}
       >
         <div className="form-group">
-          {/* <CustomInput
-                  class="form-control item"
-                  name={"size_S"}
-                  type={"text"}
-                  placeholder={"price"}
-                  data={size.S}
-                  setData={(newValue) =>
-                    setSize({ ...size, S: parseFloat(newValue) || "" })
-                  }
-                  errors={errors}
-                /> */}
           <CustomInput
             class="form-control item"
             name={"size S"}
             type={"text"}
             placeholder={"price"}
-            data={size && size.S} // Check if size is not null or undefined before accessing its properties
-            setData={
-              (newValue) => setSize({ ...size, S: parseFloat(newValue) || "" }) // Update only the 'S' property
+            data={size && size.S}
+            setData={(newValue) =>
+              setSize({ ...size, S: parseFloat(newValue) || "" })
             }
             errors={errors}
           />
+          {errors.size_S && (
+            <span className="text-danger text-bold">{errors.size_S}</span>
+          )}
         </div>
         <div className="form-group">
           <CustomInput
@@ -314,12 +291,15 @@ const ProductEditScreen = ({ history, match }) => {
             name={"size M"}
             type={"text"}
             placeholder={"price"}
-            data={size && size.M} // Check if size is not null or undefined before accessing its properties
-            setData={
-              (newValue) => setSize({ ...size, M: parseFloat(newValue) || "" }) // Update only the 'S' property
+            data={size && size.M}
+            setData={(newValue) =>
+              setSize({ ...size, M: parseFloat(newValue) || "" })
             }
             errors={errors}
           />
+          {errors.size_M && (
+            <span className="text-danger text-bold">{errors.size_M}</span>
+          )}
         </div>
       </div>
 
@@ -331,28 +311,20 @@ const ProductEditScreen = ({ history, match }) => {
         }}
       >
         <div className="form-group">
-          {/* <CustomInput
-                  class="form-control item"
-                  name={"size_S"}
-                  type={"text"}
-                  placeholder={"price"}
-                  data={size.S}
-                  setData={(newValue) =>
-                    setSize({ ...size, S: parseFloat(newValue) || "" })
-                  }
-                  errors={errors}
-                /> */}
           <CustomInput
             class="form-control item"
             name={"size L"}
             type={"text"}
             placeholder={"price"}
-            data={size && size.L} // Check if size is not null or undefined before accessing its properties
-            setData={
-              (newValue) => setSize({ ...size, L: parseFloat(newValue) || "" }) // Update only the 'S' property
+            data={size && size.L}
+            setData={(newValue) =>
+              setSize({ ...size, L: parseFloat(newValue) || "" })
             }
             errors={errors}
           />
+          {errors.size_L && (
+            <span className="text-danger text-bold">{errors.size_L}</span>
+          )}
         </div>
         <div className="form-group">
           <CustomInput
@@ -360,47 +332,27 @@ const ProductEditScreen = ({ history, match }) => {
             name={"size J"}
             type={"text"}
             placeholder={"price"}
-            data={size && size.J} // Check if size is not null or undefined before accessing its properties
-            setData={
-              (newValue) => setSize({ ...size, J: parseFloat(newValue) || "" }) // Update only the 'S' property
+            data={size && size.J}
+            setData={(newValue) =>
+              setSize({ ...size, J: parseFloat(newValue) || "" })
             }
             errors={errors}
           />
+          {errors.size_J && (
+            <span className="text-danger text-bold">{errors.size_J}</span>
+          )}
         </div>
       </div>
-
-      {/* <div className="form-group">
-        <CustomInput
-          class="form-control item"
-          name={"quantity"}
-          type={"number"}
-          data={quantity}
-          setData={setQuantity}
-          errors={errors}
-        />
-      </div> */}
-
-      {/* <Input
-        name={"quantity"}
-        type={"number"}
-        data={quantity}
-        setData={setQuantity}
-        errors={errors}
-      /> */}
 
       {renderCategoriesSelect()}
       {errors.category && (
         <Message message={errors.category} color={"warning"} />
       )}
+
       <div className="d-flex mt-5">
-        {/* <img
-          className="profile-user-img img-fluid"
-          src={image}
-          alt="User profile picture"
-        /> */}
         <div className="w-25 h-25">
           <img
-            className="profile-user-img img-fluid w-75  "
+            className="profile-user-img img-fluid w-75"
             src={
               image.length > 0
                 ? image
@@ -432,10 +384,7 @@ const ProductEditScreen = ({ history, match }) => {
 
   return (
     <>
-      {/* Content Header (Page header) */}
       <HeaderContent name={"Products"} />
-
-      {/* Main content */}
       <section className="content">
         <div className="container-fluid">
           <ButtonGoBack history={history} />
@@ -447,7 +396,6 @@ const ProductEditScreen = ({ history, match }) => {
                     <strong>Edit Product</strong>
                   </h3>
                 </div>
-                {/* /.card-header */}
                 <div className="card-body">
                   <LoaderHandler loading={loadingUpdate} error={errorUpdate} />
                   <LoaderHandler
@@ -456,14 +404,10 @@ const ProductEditScreen = ({ history, match }) => {
                     render={renderForm}
                   />
                 </div>
-                {/* /.card-body */}
               </div>
             </div>
-            {/* /.col */}
           </div>
-          {/* /.row */}
         </div>
-        {/* /.container-fluid */}
       </section>
     </>
   );
