@@ -105,6 +105,7 @@ const ProductScreen = ({ history }) => {
       setDescription("");
       setDescription_en("");
       setImage("");
+      setErrors({})
     }
     if (createError) {
       dispatch({ type: PRODUCT_CREATE_FAIL });
@@ -151,19 +152,31 @@ const ProductScreen = ({ history }) => {
         "English description is required and must be maximum 255 characters";
     }
 
+    if(size.S !== ""){
+      if (!validatePrice(size.S)) {
+        errorsCheck.size_S = "Price must be less than or equal to 10 digits";
+      }
+    }
+    
+    if(size.M !== ""){
+      if (!validatePrice(size.M)) {
+        errorsCheck.size_M = "Price must be less than or equal to 10 digits";
+      }
+    }
+    if(size.L !== ""){
+      if (!validatePrice(size.L)) {
+        errorsCheck.size_L = "Price must be less than or equal to 10 digits";
+      }
+    }
+    if(size.J !== ""){
+      if (!validatePrice(size.J)) {
+        errorsCheck.size_J = "Price must be less than or equal to 10 digits";
+      }
+    }
 
-    if (!validatePrice(size.S)) {
-      errorsCheck.size_S = "Price must be less than or equal to 10 digits";
-    }
-    if (!validatePrice(size.M)) {
-      errorsCheck.size_M = "Price must be less than or equal to 10 digits";
-    }
-    if (!validatePrice(size.L)) {
-      errorsCheck.size_L = "Price must be less than or equal to 10 digits";
-    }
-    if (!validatePrice(size.J)) {
-      errorsCheck.size_J = "Price must be less than or equal to 10 digits";
-    }
+    
+    
+    
     
 
 
