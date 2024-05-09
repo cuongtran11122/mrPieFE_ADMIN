@@ -5,7 +5,7 @@ import axios from "axios";
 /* Components */
 import HeaderContent from "../../components/HeaderContent";
 import Modal from "react-modal";
-import Input from "../../components/form/Input";
+
 import FileInput from "../../components/form/FileInput";
 
 import Loader from "../../components/Loader";
@@ -22,7 +22,9 @@ import {
   deleteProduct,
 } from "../../actions/productActions";
 import { listCategories } from "../../actions/categoryActions";
-import { PRODUCT_CREATE_FAIL } from "../../constants/productConstants";
+import {
+  PRODUCT_CREATE_FAIL
+} from "../../constants/productConstants";
 
 /* Styles */
 
@@ -73,6 +75,7 @@ const ProductScreen = ({ history }) => {
   const { adminInfo } = userLogin;
 
   const productCreate = useSelector((state) => state.productCreate);
+  const [rerender, setRerender] = useState(false);
   const {
     loading: createLoading,
     success: createSuccess,
@@ -90,6 +93,7 @@ const ProductScreen = ({ history }) => {
   };
 
   useEffect(() => {
+    
     if (createSuccess) {
       setName("");
       setNameEn("");
@@ -106,33 +110,47 @@ const ProductScreen = ({ history }) => {
       dispatch({ type: PRODUCT_CREATE_FAIL });
     }
     dispatch(listProducts(keyword, pageNumber));
-  }, [dispatch, history, adminInfo, pageNumber, keyword, createSuccess]);
+  }, [
+    dispatch,
+    history,
+    adminInfo,
+    pageNumber,
+    keyword,
+    createSuccess,
+    rerender,
+  ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     let errorsCheck = {};
 
-   
     if (!name || name.length > 32) {
       errorsCheck.name = "Name is required and must be maximum 32 characters";
     }
 
     if (!name_en || name_en.length > 32) {
-      errorsCheck.name_en = "English name is required and must be maximum 32 characters";
+      errorsCheck.name_en =
+        "English name is required and must be maximum 32 characters";
     }
 
-    
+    if (!description || description.length > 255) {
+      errorsCheck.description =
+        "Description is required and must be maximum 255 characters";
+    }
+    if (!description || description.length > 255) {
+      errorsCheck.description =
+        "Description is required and must be maximum 255 characters";
+    }
+    if (
+      !description_en ||
+      description_en.length > 255 ||
+      description_en === null
+    ) {
+      errorsCheck.description_en =
+        "English description is required and must be maximum 255 characters";
+    }
 
-    if (!description || description.length > 255) {
-      errorsCheck.description = "Description is required and must be maximum 255 characters";
-    }
-    if (!description || description.length > 255) {
-      errorsCheck.description = "Description is required and must be maximum 255 characters";
-    }
-    if (!description_en || description_en.length > 255 || description_en === null) {
-      errorsCheck.description_en = "English description is required and must be maximum 255 characters";
-    }
 
     if (!validatePrice(size.S)) {
       errorsCheck.size_S = "Price must be less than or equal to 10 digits";
@@ -147,6 +165,8 @@ const ProductScreen = ({ history }) => {
       errorsCheck.size_J = "Price must be less than or equal to 10 digits";
     }
     
+
+
 
     // if (!size.S || !size.M || !size.L || !size.J) {
     //     errorsCheck.size = "Price for each size is required";
@@ -203,13 +223,22 @@ const ProductScreen = ({ history }) => {
       };
 
       dispatch(createProduct(product));
+
       // refershForm();
     }
   };
 
+  // const deleteRow = (id) => {
+  //   dispatch(deleteProduct(id));
+  //   console.log(id);
+  //   setRerender(!rerender);
+    
+  //   // dispatch(listProducts(keyword, pageNumber));
+  // };
+
   const deleteRow = (id) => {
-    dispatch(deleteProduct(id));
-    dispatch(listProducts(keyword, pageNumber));
+    dispatch(deleteProduct(id))
+      .then(() => dispatch(listProducts(keyword, pageNumber))); 
   };
 
   const searchCategories = (e) => {

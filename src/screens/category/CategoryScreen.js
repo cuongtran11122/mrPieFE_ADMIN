@@ -35,7 +35,7 @@ const CategoryScreen = ({ history, match }) => {
   const [categoryID, setCategoryID] = useState(null);
 
   const dispatch = useDispatch();
-
+  const [rerender, setRerender] = useState(false);
   const categoryList = useSelector((state) => state.categoryList);
   const { loading, error, categories, page, pages } = categoryList;
 
@@ -48,9 +48,6 @@ const CategoryScreen = ({ history, match }) => {
     success: createSuccess,
     error: createError,
   } = categoryCreate;
-
-  console.log(createLoading);
-  console.log(createError);
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -68,7 +65,15 @@ const CategoryScreen = ({ history, match }) => {
       setNameEn("");
       setModalIsOpen(false);
     }
-  }, [dispatch, history, adminInfo, pageNumber, keyword, createSuccess]);
+  }, [
+    dispatch,
+    history,
+    adminInfo,
+    pageNumber,
+    keyword,
+    createSuccess,
+    rerender,
+  ]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -103,7 +108,7 @@ const CategoryScreen = ({ history, match }) => {
 
   const deleteRow = (id) => {
     dispatch(deleteCategory(id));
-    dispatch(listCategories(keyword, pageNumber));
+    setRerender(!rerender);
   };
 
   const refershForm = () => {
@@ -275,7 +280,7 @@ const CategoryScreen = ({ history, match }) => {
               className="btn btn-danger"
               data-dismiss="modal"
               onClick={(e) => {
-                console.log(categoryID);
+
                 deleteRow(categoryID);
                 setCategoryID(null);
               }}
@@ -360,7 +365,7 @@ const CategoryScreen = ({ history, match }) => {
                 href="#myModal"
                 data-toggle="modal"
                 onClick={(e) => {
-                  console.log(category.id);
+
                   setCategoryID(category.id);
                 }}
               >

@@ -43,7 +43,7 @@ const OrderScreen = ({ history }) => {
   const { adminInfo } = userLogin;
   const orderList = useSelector((state) => state.orderList);
   const { loading, error, orders, page, pages } = orderList;
-  console.log(orderList);
+
   const [modal, setModal] = useState(false);
   const [status, setStatus] = useState("");
   const [orderStatus, setOrderStatus] = useState(5);
@@ -60,7 +60,7 @@ const OrderScreen = ({ history }) => {
   const handleChange = (range) => {
     // Check if both start and end dates are cleared by the user
     if (!range || range.length === 0) {
-      console.log("wtf")
+
       setDateRange([]); // Set state to empty array when selection is cleared
       return; // Prevent further processing if selection is cleared
     }
@@ -133,7 +133,7 @@ const OrderScreen = ({ history }) => {
       id: orderID,
       status: status,
     };
-    console.log(updatedOrder);
+
     dispatch(updateOrderToPaid(updatedOrder));
     setOrderID(0);
     setOrderStatus(5);
@@ -160,7 +160,7 @@ const OrderScreen = ({ history }) => {
   };
 
   const renderOrderDetail = (orderID) => {
-    console.log(orderID);
+
     return <OrderViewScreen orderID={parseInt(orderID)}></OrderViewScreen>;
   };
 
@@ -184,12 +184,11 @@ const OrderScreen = ({ history }) => {
     // Only dispatch listOrders if orderStatus changes to a value other than 5
     // and both startDate and endDate have valid values
     if (orderStatus !== 5 && startDate !== undefined && endDate !== undefined) {
-      console.log("Test ne")
-      console.log(formatDate(startDate))
+
+
       const newStartDate = formatDate(startDate);
       const newEndDate = formatDate(endDate);
-      console.log(newEndDate)
-      console.log(newStartDate)
+
       dispatch(
         listOrders({
           keyword,
@@ -203,8 +202,7 @@ const OrderScreen = ({ history }) => {
       );
     }
     if (orderStatus === 5 && startDate !== undefined && endDate !== undefined) {
-      console.log(startDate);
-      console.log(endDate);
+
       const newStartDate = formatDate(startDate);
       const newEndDate = formatDate(endDate);
       dispatch(
@@ -220,8 +218,7 @@ const OrderScreen = ({ history }) => {
       );
     } 
     if(startDate === undefined && endDate === undefined){
-       // If orderStatus is 5 or dates are not set, dispatch listOrders without dates\
-       console.log("vvvvvvvv");
+
 
        dispatch(
          listOrders({
@@ -246,68 +243,8 @@ const OrderScreen = ({ history }) => {
     endDate,
   ]);
 
-  // useEffect(() => {
-  //   if (!adminInfo) {
-  //     history.push("/login");
-  //   }
 
-  //   if (orderStatus != 5) {
-  //     dispatch(
-  //       listOrders({
-  //         keyword,
-  //         pageNumber,
-  //         delivery: false,
-  //         status: orderStatus,
-  //         userType: userType,
-  //       })
-  //     );
-  //   } else {
-  //     console.log(endDate);
-  //     console.log(startDate);
-  //     console.log("----")
-  //     if(startDate != null && startDate != undefined && endDate !=null && endDate != undefined){
-  //       console.log(startDate)
-  //       console.log(endDate)
-  //       console.log("vvvvvvvv")
-  //       const newStartDate = format(startDate,"yyyy-MM-dd")
-  //       const newEndDate = format(endDate,"yyyy-MM-dd")
-  //       console.log(newStartDate)
-  //       console.log(newEndDate)
-
-  //       dispatch(
-  //         listOrders({
-  //           keyword,
-  //           pageNumber,
-  //           orderStatus,
-  //           userType,
-  //           newStartDate,
-  //           newEndDate,
-  //         })
-  //       );
-  //    }else{
-  //     dispatch(
-  //       listOrders({
-  //         keyword,
-  //         pageNumber,
-  //         orderStatus,
-  //         userType
-  //       })
-  //     );
-  //    }
-
-  //   }
-  // }, [
-  //   dispatch,
-  //   history,
-  //   adminInfo,
-  //   pageNumber,
-  //   keyword,
-  //   orderStatus,
-  //   userType,
-  //   startDate,
-  //   endDate
-  // ]);
-
+  
   const renderModal = () => {
     return (
       <>
