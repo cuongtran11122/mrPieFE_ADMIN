@@ -98,7 +98,7 @@ const ProductEditScreen = ({ history, match }) => {
     e.preventDefault();
 
     let errorsCheck = {};
-
+    let sizeError = false;
     if (!name || name.length > 32) {
       errorsCheck.name = "Name is required and must be maximum 32 characters";
     }
@@ -108,45 +108,47 @@ const ProductEditScreen = ({ history, match }) => {
         "English name is required and must be maximum 32 characters";
     }
 
-    if(size.S !== ""){
+    if (!size.S && !size.M && !size.L && !size.J) {
+      sizeError = true;
+    }
+    if (sizeError) {
+      errorsCheck.size = "At least one size must be filled";
+    }
+
+    if (size.S !== "") {
       if (!validatePrice(size.S)) {
         errorsCheck.size_S = "Price must be less than or equal to 10 digits";
       }
     }
-    
-    if(size.M !== ""){
+
+    if (size.M !== "") {
       if (!validatePrice(size.M)) {
         errorsCheck.size_M = "Price must be less than or equal to 10 digits";
       }
     }
-    if(size.L !== ""){
+    if (size.L !== "") {
       if (!validatePrice(size.L)) {
         errorsCheck.size_L = "Price must be less than or equal to 10 digits";
       }
     }
-    if(size.J !== ""){
+    if (size.J !== "") {
       if (!validatePrice(size.J)) {
         errorsCheck.size_J = "Price must be less than or equal to 10 digits";
       }
     }
 
-    if (!description ) {
-      errorsCheck.description =
-        "Description is required ";
+    if (!description) {
+      errorsCheck.description = "Description is required ";
     }
 
-    if (
-      !description_en || description_en === null
-    ) {
-      errorsCheck.description_en =
-        "English description is required ";
+    if (!description_en || description_en === null) {
+      errorsCheck.description_en = "English description is required ";
     }
 
     setErrors(errorsCheck);
     setTimeout(() => {
       setErrors({});
     }, 2000);
-    
 
     if (Object.keys(errorsCheck).length > 0) {
       setErrors(errorsCheck);
@@ -244,8 +246,8 @@ const ProductEditScreen = ({ history, match }) => {
         errors={errors}
         nameError={"name"}
       />
-     
-     <ErrorInput
+
+      <ErrorInput
         name={"Product english name"}
         type={"text"}
         data={name_en}
@@ -274,6 +276,11 @@ const ProductEditScreen = ({ history, match }) => {
         errors={errors}
       />
 
+      <div className="form-group">
+        {errors.size && (
+          <span className="text-danger text-bold">{errors.size}</span>
+        )}
+      </div>
       <div
         style={{
           display: "flex",
@@ -282,7 +289,7 @@ const ProductEditScreen = ({ history, match }) => {
         }}
       >
         <div className="form-group">
-        <CustomInput
+          <CustomInput
             class="form-control item"
             name={"size S"}
             type={"text"}
