@@ -19,7 +19,6 @@ import {
 /* Actions */
 import { listUserDetails, updateUser } from "../../actions/userActions";
 
-
 const UserEditScreen = ({ history, match }) => {
   const userId = parseInt(match.params.id);
 
@@ -36,8 +35,6 @@ const UserEditScreen = ({ history, match }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { adminInfo } = userLogin;
 
- 
-
   //user details state
   const userDetails = useSelector((state) => state.userDetails);
   const { loading, error, user } = userDetails;
@@ -52,7 +49,7 @@ const UserEditScreen = ({ history, match }) => {
 
   useEffect(() => {
     //after update redirect to users
-    console.log(userDetails)
+    console.log(userDetails);
     console.log(userId);
     if (successUpdate) {
       dispatch({ type: USER_UPDATE_RESET });
@@ -70,7 +67,6 @@ const UserEditScreen = ({ history, match }) => {
         setEmail(user.email);
         setPhone(user.phone);
         setAddress(user.address);
-
       }
     }
     //load product data
@@ -87,8 +83,6 @@ const UserEditScreen = ({ history, match }) => {
     if (!address || address.length < 10 || address.length > 64) {
       errorsCheck.address = "Address must be between 10 and 64 characters";
     }
-
-    
 
     if (Object.keys(errorsCheck).length > 0) {
       setErrors(errorsCheck);
@@ -110,6 +104,7 @@ const UserEditScreen = ({ history, match }) => {
   const renderForm = () => (
     <form onSubmit={handleSubmit}>
       <Input
+        label={"Name"}
         name={"name"}
         type={"text"}
         data={name}
@@ -144,6 +139,7 @@ const UserEditScreen = ({ history, match }) => {
         errors={errors}
       />
       <Input
+        label={"Address"}
         name={"address"}
         type={"text"}
         data={address}
@@ -155,7 +151,10 @@ const UserEditScreen = ({ history, match }) => {
             <hr />
             <Checkbox name={"Admin"} data={isAdmin} setData={setIsAdmin} />
             <hr /> */}
-      <button type="submit" className="btn  btn-secondary  border border-black w-25">
+      <button
+        type="submit"
+        className="btn  btn-secondary  border border-black w-25"
+      >
         Submit
       </button>
     </form>
