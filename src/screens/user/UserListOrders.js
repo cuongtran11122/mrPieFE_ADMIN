@@ -55,7 +55,7 @@ const UserListOrders = ({ history, match }) => {
     dispatch(
       listOrdersUserDetail({ keyword, pageNumber, delivery: false }, userId)
     );
-    console.log(orders);
+  
   }, [dispatch, history, adminInfo, pageNumber, keyword]);
 
   const renderTable = () => (

@@ -176,7 +176,7 @@ const ProfileScreen = ({ history }) => {
             //stop loader
             setUploading(false);
         } catch (error) {
-            console.error(error);
+         
             setUploading(false);
         }
     };

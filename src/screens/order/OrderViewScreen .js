@@ -74,9 +74,6 @@ const OrderViewScreen = ({ history, orderID }) => {
     errorUpdate,
   } = orderUpdate;
 
-
-  
-
   useEffect(() => {
     if (successUpdate) {
       dispatch({ type: ORDER_UPDATE_RESET });
@@ -154,8 +151,6 @@ const OrderViewScreen = ({ history, orderID }) => {
     dispatch(listOrderDetails(orderId));
   };
 
-
-
   const renderModal = () => {
     return (
       <>
@@ -221,39 +216,43 @@ const OrderViewScreen = ({ history, orderID }) => {
     order?.orderItems &&
     order?.shipment && (
       <>
-
-          <div className="w-100  d-flex justify-content-between ">
-          <div style={{width: "30%"}} className=" small-box bg-light ">
-              <div className="inner">
+        <div className="w-100  d-flex justify-content-between ">
+          <div style={{ width: "30%" }} className=" small-box bg-light ">
+            <div className="inner">
               <span className="pr-1">
-                          Customer name: <strong>{order?.user?.name}</strong>
-                        </span>
-
-              </div>
+                Customer name: <strong>{order?.user?.name}</strong>
+              </span>
             </div>
-
-            <div style={{width: "30%"}} className=" small-box bg-light ">
-              <div className="inner">
-                <p>Shipping fee: <strong>{formatMoney(parseInt(order?.shipment?.fee))}</strong> </p>
-                
-              </div>
-            </div>
-            <div style={{width: "30%"}} className=" small-box bg-light ">
-              <div className="inner">
-                <p>Total: <strong>{formatMoney(parseInt(order?.total_amount))}</strong> </p>
-                <p>
-                  {order?.orderItems.length > 0
-                    ? totalItems(order?.orderItems)
-                    : 0}{" "}
-                  Items in Order
-                </p>
-              </div>
-            </div>
-            
-            
           </div>
 
-
+          <div style={{ width: "30%" }} className=" small-box bg-light ">
+            <div className="inner">
+              <p>
+                Shipping fee:{" "}
+                <strong>{formatMoney(parseInt(order?.shipment?.fee))}</strong>{" "}
+              </p>
+              <strong>
+                {order?.shipment?.isCod === null ? "At Store ":  order?.shipment?.isCod === 1
+                  ? "Cash on Delivery Fee 10,000 VND"
+                  : "Payment Online"}
+              </strong>
+            </div>
+          </div>
+          <div style={{ width: "30%" }} className=" small-box bg-light ">
+            <div className="inner">
+              <p>
+                Total:{" "}
+                <strong>{formatMoney(parseInt(order?.total_amount))}</strong>{" "}
+              </p>
+              <p>
+                {order?.orderItems.length > 0
+                  ? totalItems(order?.orderItems)
+                  : 0}{" "}
+                Items in Order
+              </p>
+            </div>
+          </div>
+        </div>
       </>
     );
 
@@ -384,8 +383,6 @@ const OrderViewScreen = ({ history, orderID }) => {
       </>
     );
 
-  
-
   const renderUserInfo = () =>
     order && (
       <>
@@ -434,7 +431,6 @@ const OrderViewScreen = ({ history, orderID }) => {
 
   const renderInfo = () => (
     <>
-      
       {/* <div className="col-12 col-md-4">{renderOrderInfo()}</div> */}
       {renderOrderProducts()}
       <div className="col-12 ">{renderCartInfo()}</div>
@@ -467,16 +463,15 @@ const OrderViewScreen = ({ history, orderID }) => {
             <div className="col-12">
               {/* /.card-header */}
               <div className="card-body">
-                  <div className="row d-flex justify-content-center">
-                    <LoaderHandler
-                      loading={loading}
-                      error={error}
-                      render={renderInfo}
-                      loader={<BigSpin />}
-                    />
-                  </div>
+                <div className="row d-flex justify-content-center">
+                  <LoaderHandler
+                    loading={loading}
+                    error={error}
+                    render={renderInfo}
+                    loader={<BigSpin />}
+                  />
                 </div>
-              
+              </div>
             </div>
             {/* /.col */}
           </div>
