@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../actions/userActions";
 import Loader from "../../components/Loader";
 import Message from "../../components/Message";
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
 
 const LoginScreen = ({ history }) => {
   const [username, setUsername] = useState("");
@@ -11,23 +11,20 @@ const LoginScreen = ({ history }) => {
 
   const dispatch = useDispatch();
 
+  //get user from state
+  const userLogin = useSelector((state) => state.userLogin);
+  const { adminInfo, error, loading } = userLogin;
 
-    //get user from state
-    const userLogin = useSelector((state) => state.userLogin);
-    const { adminInfo, error, loading } = userLogin;
-
-    useEffect(() => {
-        //if user is logged
-        if (adminInfo) {
-            history.push("/order");
-        }
-    }, [history, adminInfo]);
-
+  useEffect(() => {
+    //if user is logged
+    if (adminInfo) {
+      history.push("/my-order");
+    }
+  }, [history, adminInfo]);
 
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(login(username, password));
-
   };
 
   return (
@@ -85,7 +82,6 @@ const LoginScreen = ({ history }) => {
               </div>
 
               <div className="row justify-content-around">
-                 
                 <div className="col-4">
                   <button type="submit" className="btn btn-primary btn-block">
                     Sign In
