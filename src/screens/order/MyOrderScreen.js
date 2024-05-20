@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 // import Modal from "react-modal";
 
 /* Components */
@@ -11,7 +11,7 @@ import Search from "../../components/Search";
 import LoaderHandler from "../../components/loader/LoaderHandler";
 import Pagination from "../../components/Pagination";
 import Select from "../../components/Select";
-import Input from "../../components/form/Input";
+// import Input from "../../components/form/Input";
 import OrderViewScreen from "./OrderViewScreen ";
 import { DateRangePicker } from "rsuite";
 
@@ -26,10 +26,10 @@ import "../../style/calendar.css";
 import {
   listOrders,
   updateOrderToPaid,
-  listOrdersByStatus,
+  // listOrdersByStatus,
 } from "../../actions/orderActions";
-import Checkbox from "../../components/form/Checkbox";
-import CustomCheckBox from "../../components/form/CustomCheckbox";
+// import Checkbox from "../../components/form/Checkbox";
+// import CustomCheckBox from "../../components/form/CustomCheckbox";
 
 const MyOrderScreen = ({ history }) => {
   const location = useLocation();
@@ -43,7 +43,6 @@ const MyOrderScreen = ({ history }) => {
   const { adminInfo } = userLogin;
   const orderList = useSelector((state) => state.orderList);
   const { loading, error, orders, page, pages } = orderList;
-
   const [modal, setModal] = useState(false);
   const [status, setStatus] = useState("");
   const [orderStatus, setOrderStatus] = useState(6);
@@ -53,7 +52,7 @@ const MyOrderScreen = ({ history }) => {
 
   const [newStartDate, setNewStartDate] = useState(null);
   const [newEndDate, setNewEndDate] = useState(null);
-
+  const [update, setUpdate] = useState(false);
   const [dateRange, setDateRange] = useState([]); // State for start and end dates
 
   // Handle date range selection and validation
@@ -128,13 +127,11 @@ const MyOrderScreen = ({ history }) => {
       id: orderID,
       status: status,
     };
-
     dispatch(updateOrderToPaid(updatedOrder));
     setOrderID(0);
     setOrderStatus(6);
+    setUpdate(!update);
     closeModal(0, 0);
-
-    dispatch(listOrders({ keyword, pageNumber }));
   };
   const formatMoney = (money) => {
     return money.toLocaleString("it-IT", {
@@ -215,6 +212,7 @@ const MyOrderScreen = ({ history }) => {
     userType,
     startDate,
     endDate,
+    update,
   ]);
 
   const renderModal = () => {
