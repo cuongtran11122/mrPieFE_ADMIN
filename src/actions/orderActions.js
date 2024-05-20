@@ -51,7 +51,6 @@ export const getStatistics = () => async (dispatch, getState) => {
       payload: data,
     });
   } catch (error) {
-    
     dispatch({
       type: ORDER_STATISTICS_FAIL,
       payload:
@@ -81,7 +80,7 @@ export const listOrdersByStatus = (options) => async (dispatch, getState) => {
         Authorization: `Bearer ${adminInfo.token}`,
       },
     };
-    
+
     //get all orders
     const { data } = await axios.get(
       `/api/v1/admin/order/list?keyword=${keyword}&pageNumber=${pageNumber}&status=${status}${
@@ -106,10 +105,12 @@ export const listOrdersByStatus = (options) => async (dispatch, getState) => {
 };
 
 export const listOrders = (options) => async (dispatch, getState) => {
-  const { keyword, pageNumber, status,userType,newStartDate,newEndDate } = options;
+  const { keyword, pageNumber, status, userType, newStartDate, newEndDate } =
+    options;
 
   const spageNumber = pageNumber ? pageNumber : "";
-  const sstatus = status === 5 ? "" : status;
+  let sstatus = status === 5 ? 5 : status;
+  sstatus = status === 6 ? 6 : status;
   const ssuserType = userType === "2" ? "" : userType;
   const skeyword = keyword ? keyword : "";
   const sstartDate = newStartDate === null ? "" : newStartDate;
@@ -133,7 +134,7 @@ export const listOrders = (options) => async (dispatch, getState) => {
       keyword: skeyword,
       userType: ssuserType,
       startDate: sstartDate,
-      endDate: sendDate
+      endDate: sendDate,
     };
     //get all orders
     const { data } = await axios.get(`/api/v1/admin/order/list`, {
@@ -248,7 +249,7 @@ export const listOrdersUserDetail =
           Authorization: `Bearer ${adminInfo.token}`,
         },
       };
-      
+
       //get all orders
       const { data } = await axios.get(
         `/api/v1/admin/order/list/${userID}?keyword=${keyword}&pageNumber=${pageNumber}${

@@ -31,7 +31,7 @@ import {
 import Checkbox from "../../components/form/Checkbox";
 import CustomCheckBox from "../../components/form/CustomCheckbox";
 
-const OrderScreen = ({ history }) => {
+const MyOrderScreen = ({ history }) => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const statusParams = queryParams.get("status");
@@ -46,8 +46,8 @@ const OrderScreen = ({ history }) => {
 
   const [modal, setModal] = useState(false);
   const [status, setStatus] = useState("");
-  const [orderStatus, setOrderStatus] = useState(5);
-  const [currentStatus, setCurrentStatus] = useState(5);
+  const [orderStatus, setOrderStatus] = useState(6);
+  const [currentStatus, setCurrentStatus] = useState(6);
   const [userType, setUserType] = useState("2");
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -60,7 +60,6 @@ const OrderScreen = ({ history }) => {
   const handleChange = (range) => {
     // Check if both start and end dates are cleared by the user
     if (!range || range.length === 0) {
-
       setDateRange([]); // Set state to empty array when selection is cleared
       return; // Prevent further processing if selection is cleared
     }
@@ -70,11 +69,9 @@ const OrderScreen = ({ history }) => {
   const [startDate, endDate] = dateRange;
 
   const orderStatusItems = [
-    { id: 5, name: "All" },
+    { id: 6, name: "All" },
     { id: 0, name: "Pending" },
     { id: 1, name: "Paid" },
-    { id: 2, name: "Completed" },
-    { id: 3, name: "Canceled" },
     { id: 4, name: "Shipping" },
   ];
   const userTypeItems = [
@@ -113,19 +110,17 @@ const OrderScreen = ({ history }) => {
     setCurrentStatus(status);
   };
 
-  const formatDate =(date) => {
+  const formatDate = (date) => {
     var d = new Date(date),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
 
-    if (month.length < 2) 
-        month = '0' + month;
-    if (day.length < 2) 
-        day = '0' + day;
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
 
-    return [year, month, day].join('-');
-}
+    return [year, month, day].join("-");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -136,21 +131,10 @@ const OrderScreen = ({ history }) => {
 
     dispatch(updateOrderToPaid(updatedOrder));
     setOrderID(0);
-    setOrderStatus(5);
+    setOrderStatus(6);
     closeModal(0, 0);
 
-    // if (orderStatus != null) {
-    //   dispatch(
-    //     listOrdersByStatus({
-    //       keyword,
-    //       pageNumber,
-    //       delivery: false,
-    //       status: orderStatus,
-    //     })
-    //   );
-    // } else {
-    dispatch(listOrders({ keyword, pageNumber, delivery: false }));
-    // }
+    dispatch(listOrders({ keyword, pageNumber }));
   };
   const formatMoney = (money) => {
     return money.toLocaleString("it-IT", {
@@ -160,8 +144,7 @@ const OrderScreen = ({ history }) => {
   };
 
   const renderOrderDetail = (orderID) => {
-
-    return <OrderViewScreen orderID={parseInt(orderID)}></OrderViewScreen>;
+    return <OrderViewScreen orderID={parseInt(orderID)} />;
   };
 
   const renderDateRangePicker = () => {
@@ -184,8 +167,6 @@ const OrderScreen = ({ history }) => {
     // Only dispatch listOrders if orderStatus changes to a value other than 5
     // and both startDate and endDate have valid values
     if (orderStatus !== 5 && startDate !== undefined && endDate !== undefined) {
-
-
       const newStartDate = formatDate(startDate);
       const newEndDate = formatDate(endDate);
 
@@ -193,7 +174,6 @@ const OrderScreen = ({ history }) => {
         listOrders({
           keyword,
           pageNumber,
-          delivery: false,
           status: orderStatus,
           userType,
           newStartDate,
@@ -201,35 +181,29 @@ const OrderScreen = ({ history }) => {
         })
       );
     }
-    if (orderStatus === 5 && startDate !== undefined && endDate !== undefined) {
-
+    if (orderStatus === 6 && startDate !== undefined && endDate !== undefined) {
       const newStartDate = formatDate(startDate);
       const newEndDate = formatDate(endDate);
       dispatch(
         listOrders({
           keyword,
           pageNumber,
-          delivery: false,
           status: orderStatus,
           userType,
           newStartDate,
           newEndDate,
         })
       );
-    } 
-    if(startDate === undefined && endDate === undefined){
-
-
-       dispatch(
-         listOrders({
-           keyword,
-           pageNumber,
-           delivery: false,
-           status: orderStatus,
-           userType: userType,
-         })
-       );
- 
+    }
+    if (startDate === undefined && endDate === undefined) {
+      dispatch(
+        listOrders({
+          keyword,
+          pageNumber,
+          status: orderStatus,
+          userType: userType,
+        })
+      );
     }
   }, [
     dispatch,
@@ -243,8 +217,6 @@ const OrderScreen = ({ history }) => {
     endDate,
   ]);
 
-
-  
   const renderModal = () => {
     return (
       <>
@@ -383,73 +355,7 @@ const OrderScreen = ({ history }) => {
                     <strong>Canceled</strong>
                   </span>
                 )}
-                {/* <button
-                    type="button"
-                    className={`btn btn-outline-secondary dropdown-toggle d-flex align-items-center justify-content-center  `}
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
-                  >
-                    {order?.status === 0 ? (
-                      <span>
-                        <strong>Pending</strong>
-                      </span>
-                    ) : order?.status === 1 ? (
-                      <span>
-                        <strong>Paid</strong>
-                      </span>
-                    ) : order?.status === 2 ? (
-                      <span>
-                        <strong>Completed</strong>
-                      </span>
-                    ) : (
-                      <span>
-                        <strong>Canceled</strong>
-                      </span>
-                    )}
-                  </button>
-                  <div className="dropdown-menu dropdown-menu-right w-100">
-                    <button
-                      value={0}
-                      className="dropdown-item"
-                      type="button"
-                      onClick={() => openModal(0, order?.id)}
-                    >
-                      Pending
-                    </button>
-                    <button
-                      value={1}
-                      className="dropdown-item"
-                      type="button"
-                      onClick={() => openModal(1, order?.id)}
-                    >
-                      Paid
-                    </button>
-                    <button
-                      value={2}
-                      className="dropdown-item"
-                      type="button"
-                      onClick={() => openModal(2, order?.id)}
-                    >
-                      Completed
-                    </button>
-                    <button
-                      value={3}
-                      className="dropdown-item"
-                      type="button"
-                      onClick={() => openModal(3, order?.id)}
-                    >
-                      Canceled
-                    </button>
-                  </div> */}
               </td>
-              {/* <td className="py-2 border-right border border-light  ">
-                <Link to={`/order/${order?.id}/view`}>
-                  <button className="btn  btn-light text-sm border border-black ">
-                    View
-                  </button>
-                </Link>
-              </td> */}
             </tr>
           ))}
       </tbody>
@@ -461,14 +367,14 @@ const OrderScreen = ({ history }) => {
       <div className="card ">
         <div className="card-header">
           <div className="d-flex justify-content-between align-items-center border-bottom mb-4">
-            <h3 className="card-title my-2">All orders</h3>
+            <h3 className="card-title my-2">My Orders</h3>
             {orderID === 0 ? (
               <div className="d-flex col-5 justify-content-end">
                 <button
                   disabled
                   className="btn  btn-light text-sm border border-black mr-4 w-25"
                 >
-                  Pending
+                  Cancel
                 </button>
                 <button
                   disabled
@@ -493,11 +399,11 @@ const OrderScreen = ({ history }) => {
             ) : (
               <div className="d-flex col-5">
                 <button
-                  onClick={() => openModal(0, orderID)}
+                  onClick={() => openModal(3, orderID)}
                   className="btn btn-light text-sm border border-black mr-4 w-25"
-                  disabled={isButtonDisabled(0)}
+                  disabled={isButtonDisabled(3)}
                 >
-                  Pending
+                  Cancel
                 </button>
                 <button
                   onClick={() => openModal(1, orderID)}
@@ -543,14 +449,16 @@ const OrderScreen = ({ history }) => {
                   items={userTypeItems}
                 />
               </div>
-              <div style={{ height: 90, marginRight: 30, width: 300 }}>
-                <p>Order Date</p>
-                {renderDateRangePicker()}
+              <div className="">
+                <p className="pl-4">Order Date</p>
+                <div style={{ height: 90, marginRight: 30, width: 300 }}>
+                  {renderDateRangePicker()}
+                </div>
               </div>
               <div className="card-tools">
-                <p>Username</p>
+                <p>Customer name</p>
                 <Search
-                  placeholder={"Search by customer name, phone..."}
+                  placeholder={"Search by customer name"}
                   keyword={keyword}
                   setKeyword={setKeyword}
                   setPage={setPageNumber}
@@ -578,7 +486,7 @@ const OrderScreen = ({ history }) => {
 
   return (
     <>
-      <HeaderContent name={"Orders"} />
+      <HeaderContent name={"My Orders"} />
 
       <section className="content">
         <div className="container-fluid">
@@ -589,30 +497,28 @@ const OrderScreen = ({ history }) => {
           </div>
           {/* /.row */}
 
-          {orderID > 0 && (<div className="row">
-            <div className="col-12">
-              {/* {renderOrders()} */}
-              <div className="card ">
-                <div className="card-header">
-                  <div className="d-flex justify-content-between align-items-center  ">
-                    <h3 className="card-title my-2">Order Detail</h3>
+          {orderID > 0 && (
+            <div className="row">
+              <div className="col-12">
+                {/* {renderOrders()} */}
+                <div className="card ">
+                  <div className="card-header">
+                    <div className="d-flex justify-content-between align-items-center  ">
+                      <h3 className="card-title my-2">Order Detail</h3>
+                    </div>
+                    {renderOrderDetail(orderID)}
                   </div>
-                  {
-                    renderOrderDetail(orderID)
-                  }
-                  
-                </div>
 
-                {/* /.card-header */}
+                  {/* /.card-header */}
+                </div>
               </div>
+              {/* /.col */}
             </div>
-            {/* /.col */}
-          </div>) }
-          
+          )}
         </div>
       </section>
     </>
   );
 };
 
-export default OrderScreen;
+export default MyOrderScreen;

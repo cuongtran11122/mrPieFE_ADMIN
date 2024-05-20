@@ -238,7 +238,7 @@ const ProductScreen = ({ history }) => {
 
   // const deleteRow = (id) => {
   //   dispatch(deleteProduct(id));
-  //   console.log(id);
+  
   //   setRerender(!rerender);
 
   //   // dispatch(listProducts(keyword, pageNumber));

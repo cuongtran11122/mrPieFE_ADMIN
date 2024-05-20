@@ -2,7 +2,7 @@ import React from "react";
 import { capitalize } from "../../utils/functions";
 
 const Input = ({ label, name, type, data, setData, errors, classes = "" }) => {
-  console.log(errors)
+  
   return (
     <div className="form-group">
       <label htmlFor={label}>{capitalize(label)}</label>

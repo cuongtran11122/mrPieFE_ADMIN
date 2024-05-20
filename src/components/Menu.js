@@ -42,9 +42,8 @@ const Menu = ({ history }) => {
             className="brand-image img-circle elevation-3"
             style={{ opacity: ".8" }}
           />
-          <span className="brand-text font-weight-light"></span>
         </Link>
-        
+
         {/* Sidebar Menu */}
         <nav className="">
           <ul
@@ -54,45 +53,55 @@ const Menu = ({ history }) => {
             data-accordion="false"
           >
             <li className="nav-header"></li>
-            {/* <li className="nav-item">
-                            <Link to="/active" className="nav-link">
-                                <i className="nav-icon fas fa-bell" />{" "}
-                                <p> Active Orders</p>
-                            </Link>
-                        </li>
-
-                        <li className="nav-item">
-                            <Link to="/delivery" className="nav-link">
-                                <i className="nav-icon fas fa-truck" />{" "}
-                                <p> Delivery</p>
-                            </Link>
-                        </li> */}
 
             <li className="nav-header">MANAGEMENT</li>
 
-            <li className="nav-item">
-              <Link to="/order" className="nav-link">
-                <i className="nav-icon far fa-clipboard" /> <p> Orders</p>
+            {/**Order */}
+            <li className="nav-item has-treeview ">
+              <Link className="nav-link ">
+                <i className="nav-icon far fa-clipboard" />
+                <p>
+                  Orders
+                  <i className="fas fa-angle-left right"></i>
+                </p>
               </Link>
-            </li>
 
-            <li className="nav-item">
+              <span className="brand-text font-weight-light "></span>
+              <ul className=" nav-treeview ">
+                <li className="nav-item pl-4">
+                  <Link to="/all-order" className="nav-link">
+                    <i className="fa fa-shopping-basket nav-icon"></i>
+                    <p>All Orders</p>
+                  </Link>
+                </li>
+
+                <li className="nav-item pl-4">
+                  <Link to="/my-order" className="nav-link">
+                    <i className="fa fa-hourglass-half  nav-icon"></i>
+                    <p>My Orders</p>
+                  </Link>
+                </li>
+              </ul>
+            </li>
+            <div class="dropdown-divider"></div>
+            <li className="nav-item ">
               <Link to="/user" className="nav-link">
                 <i className="nav-icon fas fa-users" /> <p> Users</p>
               </Link>
             </li>
-
+            <div class="dropdown-divider"></div>
             <li className="nav-item">
               <Link to="/category" className="nav-link">
                 <i className="nav-icon fas fa-list-alt" /> <p> Categories</p>
               </Link>
             </li>
-
+            <div class="dropdown-divider"></div>
             <li className="nav-item">
               <Link to="/product" className="nav-link">
                 <i className="nav-icon fas fa-hamburger" /> <p> Products</p>
               </Link>
             </li>
+
             {/* <li className="nav-item">
               <Link to="/store/list" className="nav-link">
                 <i className="nav-icon fas fa-store" /> <p> Store</p>
@@ -103,20 +112,6 @@ const Menu = ({ history }) => {
                 <i className="nav-icon fas fa-tachometer-alt" /> <p> Report</p>
               </Link>
             </li> */}
-
-            {/* <li className="nav-item">
-                            <Link to="/client" className="nav-link">
-                                <i className="nav-icon fas fa-user" />{" "}
-                                <p> Clients</p>
-                            </Link>
-                        </li>
-
-                        <li className="nav-item">
-                            <Link to="/table" className="nav-link">
-                                <i className="nav-icon fas fa-border-all" />{" "}
-                                <p> Tables</p>
-                            </Link>
-                        </li> */}
           </ul>
         </nav>
         {/* /.sidebar-menu */}

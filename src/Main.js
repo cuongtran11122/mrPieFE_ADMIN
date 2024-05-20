@@ -6,7 +6,8 @@ import Menu from "./components/Menu";
 import Footer from "./components/Footer";
 
 /* SCREENS */
-import OrderScreen from "./screens/order/OrderScreen";
+import AllOrderScreen from "./screens/order/AllOrderScreen";
+import MyOrderScreen from "./screens/order/MyOrderScreen";
 import DeliveryScreen from "./screens/order/DeliveryScreen";
 import OrderCreateScreen from "./screens/order/OrderCreateScreen";
 import OrderViewScreen from "./screens/order/OrderViewScreen ";
@@ -110,7 +111,8 @@ const Main = () => {
             exact
           />
           <PrivateRoute path="/order/create" component={OrderCreateScreen} />
-          <PrivateRoute path="/order" component={OrderScreen} />
+          <PrivateRoute path="/all-order" component={AllOrderScreen} />
+          <PrivateRoute path="/my-order" component={MyOrderScreen} />
           <PrivateRoute
             path="/not-authorized"
             component={NotAuthorizedScreen}

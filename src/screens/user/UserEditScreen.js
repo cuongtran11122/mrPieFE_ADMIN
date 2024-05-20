@@ -49,8 +49,7 @@ const UserEditScreen = ({ history, match }) => {
 
   useEffect(() => {
     //after update redirect to users
-    console.log(userDetails);
-    console.log(userId);
+
     if (successUpdate) {
       dispatch({ type: USER_UPDATE_RESET });
       dispatch({ type: USER_DETAILS_RESET });
